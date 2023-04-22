@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,13 +15,16 @@
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 
 
     <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="assets/css/fontawesome.css">
-    <link rel="stylesheet" href="assets/css/templatemo-cyborg-gaming.css">
-    <link rel="stylesheet" href="assets/css/owl.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
+    <link rel="stylesheet" href="~/assets/css/fontawesome.css">
+    <link rel="stylesheet" href="~/assets/css/templatemo-cyborg-gaming.css">
+    <link rel="stylesheet" href="~/assets/css/owl.css">
+    <link rel="stylesheet" href="~/assets/css/animate.css">
+  
+    @*<link rel="stylesheet" href="~/assets/css/style.css">*@
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
     <!--
 
@@ -27,52 +35,45 @@
     -->
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <h1 class="logo me-auto me-lg-0">
-                    <a asp-page="/Index">
-                        <span class="material-icons">
-                            account_balance
-                        </span></i> MB
-                    </a>
-                </h1>
-                @*<a class="navbar-brand" asp-area="" asp-page="/Index"><i class="account_balance"></i>MandemBank</a>*@
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                      
-                        @if (User.IsInRole("Admin"))
-                        {
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Users/Users"><i class="fas fa-users"></i> &nbsp; User</a>
-                            </li>
-                        }
-                         @if (User.IsInRole("cashier"))
-                        {
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Customers/Customers"><i class="fas fa-users"></i> &nbsp; The Mandem</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Accounts/Accounts"><i class="fas fa-file-invoice-dollar"></i> &nbsp; Accounts</a>
-                            </li>
-                        }
-                    </ul>
-                    <div class="navbar order-last order-lg-0">
-                        <partial name="_LoginPartial"></partial>
-                    </div>
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <h1 class="logo me-auto me-lg-0">
+                            <a asp-page="/Index">
+                                <span class="material-icons">
+                                    account_balance
+                                </span></i> MB
+                            </a>
+                        </h1>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                           
+                            @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Cashier"))
+                             {
+                              <li><a class="nav-link scrollto" asp-page="/Customers/Customers" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; The ManDem</a></li>
+                              @*<li><a class="nav-link scrollto" asp-page="/Accounts/Accounts"><i class="fas fa-file-invoice-dollar"></i> &nbsp Accounts</a></li>*@
+                             }
+                            <div class="navbar order-last order-lg-0">
+                                <partial name="_LoginPartial"></partial>
+                            </div>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
                 </div>
             </div>
-        </nav>
+        </div>
     </header>
+   
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -81,11 +82,11 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-           @* &copy; 2023 - BankWebApp - <a asp-area="" asp-page="/Privacy">Privacy</a>*@
+            @* &copy; 2023 - BankWebApp - <a asp-area="" asp-page="/Privacy">Privacy</a>*@
             <div class="row">
                 <div class="col-lg-12">
                     <p>
-                        Copyright © 2036 <a href="#">Mandem Bank</a> Company. All rights reserved.
+                        Copyright © 2023 <a href="#">Mandem Bank</a> Company. All rights reserved.
 
                     </p>
                 </div>

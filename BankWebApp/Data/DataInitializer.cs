@@ -24,14 +24,14 @@ namespace BankWebApp.Data
         private void SeedUsers()
         {
             AddUserIfNotExists("richard.chalk@systementor.se", "Hejsan123#", new string[] { "Admin" });
-            AddUserIfNotExists("richard.chalk@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
+            AddUserIfNotExists("richard.erdos.chalk@gmail.se", "Hejsan123#", new string[] { "Cashier" });
         }
 
        
         private void SeedRoles()
         {
             AddRoleIfNotExisting("Admin");
-            AddRoleIfNotExisting("Customer");
+            AddRoleIfNotExisting("Cashier");
         }
 
         private void AddRoleIfNotExisting(string roleName)

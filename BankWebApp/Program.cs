@@ -1,6 +1,10 @@
+using BankWebApp.BankAppData;
 using BankWebApp.Data;
+using BankWebApp.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +20,19 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 
+builder.Services.AddDbContext<BankAppDataContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); 
+
+
 builder.Services.AddTransient<DataInitializer>();
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.AddTransient<ICustomerService, CustomerService>();
+
+//builder.Services.AddTransient<ICustomerService,CustomerService>();
+
+
 
 var app = builder.Build();
 
@@ -24,6 +40,8 @@ using (var scope = app.Services.CreateScope())
 {
     scope.ServiceProvider.GetService<DataInitializer>().SeedData();
 }
+
+
 
 
 // Configure the HTTP request pipeline.
