@@ -9,4 +9,5 @@ namespace BankWebApp.Services
         IEnumerable<Customer> GetCustomers();
         Customer GetCustomer(int customerId);
     }
+
 }

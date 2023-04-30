@@ -6,99 +6,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - BankWebApp</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Cyborg - Awesome HTML5 Template</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  @*  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">*@
+   @* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">*@
 
-
-    <!-- Additional CSS Files -->
+    @*css*@
     <link rel="stylesheet" href="~/assets/css/fontawesome.css">
-    <link rel="stylesheet" href="~/assets/css/templatemo-cyborg-gaming.css">
     <link rel="stylesheet" href="~/assets/css/owl.css">
     <link rel="stylesheet" href="~/assets/css/animate.css">
-  
-    @*<link rel="stylesheet" href="~/assets/css/style.css">*@
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
-    <!--
-
-    TemplateMo 579 Cyborg Gaming
-
-    https://templatemo.com/tm-579-cyborg-gaming
-
-    -->
+    <link rel="stylesheet" href="~/assets/css/indexstyle.css">
+    <link rel="stylesheet" href="~/assets/css/layoutstyle.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
 </head>
 <body>
-
-    <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
                         <h1 class="logo me-auto me-lg-0">
                             <a asp-page="/Index">
-                                <span class="material-icons">
-                                    account_balance
-                                </span></i> MB
+                                <span class="material-icons">account_balance</span> MB
                             </a>
                         </h1>
-                        <!-- ***** Logo End ***** -->
-                        <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                           
                             @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Cashier"))
-                             {
-                              <li><a class="nav-link scrollto" asp-page="/Customers/Customers" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; The ManDem</a></li>
-                              @*<li><a class="nav-link scrollto" asp-page="/Accounts/Accounts"><i class="fas fa-file-invoice-dollar"></i> &nbsp Accounts</a></li>*@
-                             }
+                            {
+                                <li><a class="nav-link scrollto" asp-page="/Customers/Customers" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; The ManDem</a></li>
+                                <li><a class="nav-link scrollto" asp-page="/Accounts/Accounts"><i class="fas fa-file-invoice-dollar"></i> &nbsp Accounts</a></li>
+                            }
                             <div class="navbar order-last order-lg-0">
                                 <partial name="_LoginPartial"></partial>
                             </div>
                         </ul>
-                        <a class='menu-trigger'>
-                            <span>Menu</span>
-                        </a>
-                        <!-- ***** Menu End ***** -->
+                        <a class="menu-trigger"><span>Menu</span></a>
                     </nav>
                 </div>
             </div>
         </div>
     </header>
-   
-
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
-            @* &copy; 2023 - BankWebApp - <a asp-area="" asp-page="/Privacy">Privacy</a>*@
             <div class="row">
                 <div class="col-lg-12">
-                    <p>
-                        Copyright © 2023 <a href="#">Mandem Bank</a> Company. All rights reserved.
-
-                    </p>
+                    <p>Copyright © 2023 <a href="#">Mandem Bank</a> Company. All rights reserved.</p>
                 </div>
             </div>
         </div>
     </footer>
-
-    <!-- Scripts -->
-    <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
     <script src="assets/js/isotope.min.js"></script>
     <script src="assets/js/owl-carousel.js"></script>
     <script src="assets/js/tabs.js"></script>
