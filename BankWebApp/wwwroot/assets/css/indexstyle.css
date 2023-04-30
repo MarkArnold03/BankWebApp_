@@ -47,7 +47,7 @@ body {
 }
 
 /* Preloader styles */
-/*.preloader {
+.preloader {
     position: fixed;
     top: 0;
     left: 0;
@@ -91,7 +91,7 @@ body {
     .dots div:nth-child(3) {
         animation-delay: 0.2s;
     }
-*/
+
 /* Popular section styles */
 .popular {
     padding: 40px;
