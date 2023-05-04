@@ -20,53 +20,22 @@
         <div class="popular-inner">
             <h2>Top Banking Countries</h2>
             <div class="popular-items">
-                <div class="item">
-                    <a href="/Countries/Top10?countryId=SE">
-                        <img src="assets/images/sweden-flag-png-large.png" alt="Flag of Sweden">
-                        <span>View top 10 banks in Sweden</span>
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="/Countries/Top10?countryId=NO">
-                        <img src="assets/images/norway-flag-png-large.png" alt="Flag of Norway">
-                        <span>View top 10 banks in Norway</span>
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="/Countries/Top10?countryId=FI">
-                        <img src="assets/images/finland-flag-png-large.png" alt="Flag of Finland">
-                        <span>View top 10 banks in Finland</span>
-                    </a>
-                </div>
-                <div class="item">
-                    <a href="/Countries/Top10?countryId=DK">
-                        <img src="assets/images/denmark-flag-png-large.png" alt="Flag of Denmark">
-                        <span>View top 10 banks in Denmark</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="loading">
-                <div class="spinner"></div>
-            </div>
-            <div class="row gy-4 mt-5 justify-content-center" data-aos="zoom-in" data-aos-delay="250">
-
                 @foreach (var country in Model.ViewModels.Keys)
                 {
                     var viewModel = Model.ViewModels[country];
 
-                    <div class="col-xl-2 col-md-3">
-                        <div class="icon-box">
-                            <i class="ri-user-line"></i>
-                            <h3 class="mt-0 mb-3" style="color:white">Clients <br /> @viewModel.NumberOfClients</h3>
-                            <i class="ri-bar-chart-box-line"></i>
-                            <h3 class="mt-0 mb-3" style="color:white">Accounts <br /> @viewModel.NumberOfAccounts</h3>
-                            <i class="ri-money-dollar-circle-line"></i>
-                            <h3 class="mt-0 mb-3" style="color:white">Capital <br /> @string.Format("{0:n0}", viewModel.TotalAccountValue) kr</h3>
+                    <div class="item">
+                        <a href="/Countries/Top10?countryId=@country">
+                            <img src="assets/images/@country-flag-png-large.png" alt="Flag of @country">
+                            <span>View top 10 banks in @country</span>
+                        </a>
+                        <div class="country-stats">
+                            <p>Clients: @viewModel.NumberOfClients</p>
+                            <p>Accounts: @viewModel.NumberOfAccounts</p>
+                            <p>Capital: @string.Format("{0:n0}", viewModel.TotalAccountValue) kr</p>
                         </div>
                     </div>
                 }
-
             </div>
         </div>
     </section>
@@ -81,6 +50,7 @@
         document.querySelector('.loading').style.display = 'none';
     });
 </script>
+
 
 
 

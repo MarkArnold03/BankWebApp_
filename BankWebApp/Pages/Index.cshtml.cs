@@ -26,7 +26,7 @@ namespace BankWebApp.Pages
             _countryDataService = countryDataService;
         }
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             var countries = new[] { "SE", "FI", "DK", "NO" };
 
@@ -34,9 +34,9 @@ namespace BankWebApp.Pages
             {
                 var viewModel = new IndexViewModel
                 {
-                    NumberOfClients = await _countryDataService.GetCountryCustomersCount(country),
-                    NumberOfAccounts = await _countryDataService.GetCountryAccountsCount(country),
-                    TotalAccountValue = await _countryDataService.GetCountryBalance(country),
+                    NumberOfClients = _countryDataService.GetCountryCustomersCount(country),
+                    NumberOfAccounts = _countryDataService.GetCountryAccountsCount(country),
+                    TotalAccountValue = _countryDataService.GetCountryBalance(country),
                 };
 
                 ViewModels[country] = viewModel;
