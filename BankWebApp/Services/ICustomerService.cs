@@ -8,6 +8,7 @@ namespace BankWebApp.Services
         PagedResult<Customer> GetCustomers(int customerId, string sortColumn, string sortOrder, string searchText, int page);
         IEnumerable<Customer> GetCustomers();
         Customer GetCustomer(int customerId);
+       
     }
 
 }

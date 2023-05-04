@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BankWebApp.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BankWebApp.Services;
 
 namespace BankWebApp.Pages
 {
+    [AllowAnonymous]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;

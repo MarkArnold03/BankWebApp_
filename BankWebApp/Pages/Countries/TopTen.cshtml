@@ -1,0 +1,54 @@
+﻿@page
+@model BankWebApp.Pages.Countries.TopTenModel
+@{
+}
+
+
+<section id="account" class="d-flex align-items-center justify-content-center">
+    <div class="container" data-aos="fade-up">
+
+        <div class="d-flex justify-content-between">
+            <div class="section-title">
+                <h2>Accounts</h2>
+                <p id="account-info">Top 10 Accounts overview: </p>
+            </div>
+            <div>
+                <img style="width:150px" src="@Model.Flag">
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <a class="btn back-btn m-3 text-center button-link" asp-page="/Index">
+                <h3 class="m-0px font-w-600">
+                    <i class="fas fa-chevron-circle-left"></i> Back
+                </h3>
+            </a>
+        </div>
+
+        <div class="content">
+            <table class="table custom-table table-fixed" id="posts-table">
+                <thead>
+                    <tr>
+                        <th class="st-header">Account Id</th>
+                        <th class="st-header">Name</th>
+                        <th class="st-header">Email</th>
+                        <th class="st-header">Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var customer in Model.Top10Customers)
+                    {
+                        <tr>
+                            <td>@customer.Id</td>
+                            <td>@customer.Name</td>
+                            <td>@customer.Emailaddress</td>
+                            <td>@string.Format("{0:n0}", customer.Balance) kr</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+

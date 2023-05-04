@@ -50,6 +50,8 @@ namespace BankWebApp.Services
         public IEnumerable<Customer> GetCustomers() => _dbContext.Customers;
 
         public Customer GetCustomer(int customerId) => _dbContext.Customers.Include(c => c.Dispositions).First(c => c.CustomerId == customerId);
+
+       
     }
 
 }
