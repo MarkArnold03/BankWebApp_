@@ -4,70 +4,86 @@
     ViewData["Title"] = "Home page";
 }
 
-
-<html lang="en">
-<head>
-    <title>Home page</title>
-</head>
-
-<body>
-     <div class="preloader">
-    <div class="preloader-inner">
-    <div class="dot"></div>
-    <div class="dots">
-    <div></div>
-    <div></div>
-    <div></div>
-    </div>
-    </div>
-    </div>
-
-    <header class="header">
-        <div class="banner">
-            <div class="banner-inner">
-                <div class="banner-text">
-                    <h1>Welcome To The ManDem Bank</h1>
-                    <h2>Bank For The Mandem Around The World</h2>
-                </div>
+<header class="header">
+    <div class="banner">
+        <div class="banner-inner">
+            <div class="banner-text">
+                <h1>Welcome To The ManDem Bank</h1>
+                <h2>Bank For The Mandem Around The World</h2>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <main class="main">
-        <section class="popular">
-            <div class="popular-inner">
-                <h2>Most Popular Right Now</h2>
-                <div class="popular-items">
-                    <div class="item">
-                        <a asp-page="/Countries/Top10"
-                           asp-route-countryId="SE">
-                            <img src="assets/images/sweden-flag-png-large.png" alt="">
-                        </a>
-                        <img src="assets/images/sweden-flag-png-large.png" alt="">
-
-                    </div>
-                    <div class="item">
-                        <a asp-page="/Countries/Top10"
-                           asp-route-countryId="NO">
-                            <img src="assets/images/norway-flag-png-large.png" alt="">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a asp-page="/Countries/Top10"
-                           asp-route-countryId="FI">
-                            <img src="assets/images/finland-flag-png-large.png" alt="">
-                        </a>
-                    </div>
-                    <div class="item">
-                         <a asp-page="/Countries/Top10"
-                           asp-route-countryId="dk">
-                            <img src="assets/images/denmark-flag-png-large.png" alt="">
-                        </a>
-                    </div>
+<main class="main">
+    <section class="popular">
+        <div class="popular-inner">
+            <h2>Top Banking Countries</h2>
+            <div class="popular-items">
+                <div class="item">
+                    <a href="/Countries/Top10?countryId=SE">
+                        <img src="assets/images/sweden-flag-png-large.png" alt="Flag of Sweden">
+                        <span>View top 10 banks in Sweden</span>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="/Countries/Top10?countryId=NO">
+                        <img src="assets/images/norway-flag-png-large.png" alt="Flag of Norway">
+                        <span>View top 10 banks in Norway</span>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="/Countries/Top10?countryId=FI">
+                        <img src="assets/images/finland-flag-png-large.png" alt="Flag of Finland">
+                        <span>View top 10 banks in Finland</span>
+                    </a>
+                </div>
+                <div class="item">
+                    <a href="/Countries/Top10?countryId=DK">
+                        <img src="assets/images/denmark-flag-png-large.png" alt="Flag of Denmark">
+                        <span>View top 10 banks in Denmark</span>
+                    </a>
                 </div>
             </div>
-        </section>
-    </main>
-</body>
-</html>
+
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+            <div class="row gy-4 mt-5 justify-content-center" data-aos="zoom-in" data-aos-delay="250">
+
+                @foreach (var country in Model.ViewModels.Keys)
+                {
+                    var viewModel = Model.ViewModels[country];
+
+                    <div class="col-xl-2 col-md-3">
+                        <div class="icon-box">
+                            <i class="ri-user-line"></i>
+                            <h3 class="mt-0 mb-3" style="color:white">Clients <br /> @viewModel.NumberOfClients</h3>
+                            <i class="ri-bar-chart-box-line"></i>
+                            <h3 class="mt-0 mb-3" style="color:white">Accounts <br /> @viewModel.NumberOfAccounts</h3>
+                            <i class="ri-money-dollar-circle-line"></i>
+                            <h3 class="mt-0 mb-3" style="color:white">Capital <br /> @string.Format("{0:n0}", viewModel.TotalAccountValue) kr</h3>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    // Show loading
+    document.querySelector('.loading').style.display = 'flex';
+
+    // Hide loading
+    window.addEventListener('load', function () {
+        document.querySelector('.loading').style.display = 'none';
+    });
+</script>
+
+
+
+
+
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace BankWebApp.Data
 {
@@ -57,5 +58,26 @@ namespace BankWebApp.Data
             _userManager.CreateAsync(user, password).Wait();
             _userManager.AddToRolesAsync(user, roles).Wait();
         }
+
+        //private void SeedCountries()
+        //{
+        //    CountryDoesNotExist("SE", "Sweden");
+        //    CountryDoesNotExist("NO", "Norway");
+        //    CountryDoesNotExist("DK", "Denmark");
+        //    CountryDoesNotExist("FI", "Finland");
+        //}
+
+        //private void CountryDoesNotExist(string countryCode, string countryLabel)
+        //{
+        //    // Check to see if country already exists in db
+        //    if (_dbContext.Countries.Any(c => c.CountryCode == countryCode)) return;
+        //    _dbContext.Countries
+        //        .Add(new Country
+        //        {
+        //            CountryCode = countryCode,
+        //            CountryLabel = countryLabel
+        //        });
+        //    _dbContext.SaveChanges();
+        //}
     }
 }

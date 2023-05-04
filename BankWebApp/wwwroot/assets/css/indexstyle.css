@@ -1,262 +1,130 @@
-﻿/* Reset styles */
+﻿<!--
+
+CSS Styles -->
+<style >
+/* Global Styles */
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
-/* Basic styles */
 body {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    color: #333;
+    font-family: sans-serif;
 }
 
-/* Header styles */
+/* Header Styles */
 .header {
-    background-color: #f8f8f8;
-    padding: 20px;
-    text-align: center;
+    background-color: #0D1B2A;
+    color: #fff;
+    padding: 1rem;
 }
 
 .banner {
-    max-width: 1200px;
-    margin: 0 auto;
+    background-image: url('https://via.placeholder.com/1200x400');
+    background-size: cover;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .banner-text {
-    margin-top: 60px;
-}
-
-.banner h1 {
-    font-size: 3em;
-    font-weight: 700;
-    margin-bottom: 20px;
-}
-
-.banner h2 {
-    font-size: 1.5em;
-    font-weight: 400;
-}
-
-/* Main styles */
-.main {
-    max-width: 1200px;
-    margin: 40px auto;
-}
-
-/* Preloader styles */
-.preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    z-index: 99999;
-}
-
-.preloader-inner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #333;
-    margin-right: 10px;
-    display: inline-block;
-    animation: pulse 1s ease-in-out infinite;
-}
-
-.dots div {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: #333;
-    margin-right: 10px;
-    display: inline-block;
-    animation: pulse 1s ease-in-out infinite;
-}
-
-    .dots div:nth-child(2) {
-        animation-delay: 0.1s;
-    }
-
-    .dots div:nth-child(3) {
-        animation-delay: 0.2s;
-    }
-
-/* Popular section styles */
-.popular {
-    padding: 40px;
-    background-color: #f8f8f8;
     text-align: center;
 }
 
-    .popular h2 {
-        font-size: 2em;
-        font-weight: 700;
-        margin-bottom: 40px;
+    .banner-text h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
     }
+
+    .banner-text h2 {
+        font-size: 1.5rem;
+    }
+
+/* Main Styles */
+.main {
+    padding: 1rem;
+}
+
+.popular-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
 
 .popular-items {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .item {
-    margin: 20px;
-    width: 200px;
-    height: 200px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #fff;
+    width: 23%;
+    margin-bottom: 2rem;
     position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease-in-out;
 }
 
     .item img {
         width: 100%;
-        height: 100%;
-        border-radius: 10px;
-    }
-
-    .item:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .item:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -200px;
-        height: 100%;
-        width: 200px;
-        background-color: rgba(0, 0, 0, 0.7);
-        transition: all 0.3s ease-in-out;
-    }
-
-    .item:hover:before {
-        left: 0;
-    }
-
-    .item:after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: -200px;
-        height: 100%;
-        width: 200px;
-        background-color: rgba(0, 0, 0, 0.7);
-        transition: all 0.3s ease-in-out;
-    }
-
-    .item:hover:after {
-        right: 0;
-    }
-
-    .item .item-text {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        padding: 20px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: #fff;
-        transition: all 0.3s ease-in-out;
-        transform: translateY(100%);
-    }
-
-    .item:hover .item-text {
-        transform: translateY(0);
-    }
-
-    .item h4 {
-        font-size: 1.2em;
-        font-weight: 700;
-        margin-bottom: 10px;
+        height: auto;
     }
 
     .item span {
-        font-size: 0.8em;
-        font-weight: 400;
-        margin-left: 5px;
-    }
-
-    .item ul {
-        list-style: none;
-        margin-bottom: 0;
-        display: flex;
-        align-items: center;
-    }
-
-    .item li {
-        font-size: 0.8em;
-        font-weight: 400;
-        margin-right: 10px;
-    }
-
-        .item li i {
-            margin-right: 5px;
-            color: #ffc107;
-        }
-
-/* Popular button styles */
-.popular-button {
-    margin-top: 40px;
-}
-
-    .popular-button a {
-        display: inline-block;
-        padding: 12px 24px;
-        border-radius: 25px;
-        background-color: #333;
+        background-color: rgba(0, 0, 0, 0.8);
         color: #fff;
-        font-size: 1.2em;
-        font-weight: 700;
-        text-decoration: none;
-        transition: all 0.3s ease-in-out;
+        font-size: 1rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
     }
 
-        .popular-button a:hover {
-            background-color: #fff;
-            color: #333;
-        }
+    .item:hover span {
+        opacity: 1;
+    }
 
-/* Footer styles */
-.footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
+.loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-    .footer p {
-        font-size: 1em;
-        font-weight: 400;
-    }
+.spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
 
-/* Animations */
-@keyframes pulse {
+@keyframes spin {
     0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.2);
+        transform: rotate(0deg);
     }
 
     100% {
-        transform: scale(1);
+        transform: rotate(360deg);
     }
 }
 
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .item {
+        width: 48%;
+    }
+}
+
+</style >
