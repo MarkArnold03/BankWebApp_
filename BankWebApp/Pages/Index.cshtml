@@ -15,6 +15,10 @@
     </div>
 </header>
 
+<div class="loading">
+    <div class="loading-icon"></div>
+</div>
+
 <main class="main">
     <section class="popular">
         <div class="popular-inner">
@@ -25,9 +29,9 @@
                     var viewModel = Model.ViewModels[country];
 
                     <div class="item">
-                        <a href="/Countries/Top10?countryId=@country">
+                        <a href="/Countries/TopTen?countryId=@country">
                             <img src="assets/images/@country-flag-png-large.png" alt="Flag of @country">
-                            <span>View top 10 banks in @country</span>
+                            <span>View top 10 Accounts in @country</span>
                         </a>
                         <div class="country-stats">
                             <p>Clients: @viewModel.NumberOfClients</p>
@@ -50,10 +54,5 @@
         document.querySelector('.loading').style.display = 'none';
     });
 </script>
-
-
-
-
-
 
 

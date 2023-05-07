@@ -33,7 +33,7 @@ builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<ICountryDataService, CountryDataService>();
 
 
-
+builder.Services.AddResponseCaching();
 
 
 var app = builder.Build();
@@ -65,6 +65,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseResponseCaching();
 
 app.MapRazorPages();
 
