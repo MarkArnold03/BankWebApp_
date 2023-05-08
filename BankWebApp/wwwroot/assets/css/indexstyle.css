@@ -6,6 +6,7 @@
 }
 
 body {
+   
     font-family: Arial, sans-serif;
     line-height: 1.6;
 }
@@ -33,7 +34,6 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('path/to/your/banner-image.jpg') no-repeat center center;
         background-size: cover;
         opacity: 0.3;
         z-index: -1;
