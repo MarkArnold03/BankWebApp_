@@ -4,7 +4,7 @@ body {
     font-size: 16px;
     line-height: 1.5;
     color: #333;
-    background-color: #fff;
+    background-image: url(../images/cool-background.png);
 }
 
 a {
