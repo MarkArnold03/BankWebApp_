@@ -43,6 +43,18 @@ namespace BankWebApp.Pages.Accounts
 
         }
 
+         public IActionResult OnGetFetchMore(int accountId, int lastTransactionId)
+        {
+            var moreTransactions = _accountService.GetAccountTransactions(accountId)
+                .Where(t => t.TransactionId < lastTransactionId)
+                .OrderByDescending(t => t.Date)
+                .Take(10)
+                .ToList();
+
+            var moreTransactionsViewModel = _mapper.Map<List<TransactionViewModel>>(moreTransactions);
+
+            return new JsonResult(moreTransactionsViewModel);
+        }
 
         public void OnGet(string sortColumn, string sortOrder, string searchText, int pageNo)
         {

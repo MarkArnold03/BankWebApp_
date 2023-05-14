@@ -17,6 +17,9 @@ namespace BankWebApp.Infrastructure.Profiles
 
             CreateMap<BankAppData.Transaction, BankWebApp.Pages.Accounts.AccountsModel.TransactionViewModel>()
            .ReverseMap();
+
+            CreateMap<BankAppData.Transaction, BankWebApp.Pages.Transactions.TransactionModel.TransactionViewModel>()
+          .ReverseMap();
         }
     }
 }

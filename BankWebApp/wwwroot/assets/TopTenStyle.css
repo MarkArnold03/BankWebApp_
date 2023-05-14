@@ -3,12 +3,12 @@ body {
     font-family: Arial, sans-serif;
     font-size: 14px;
     line-height: 1.6;
-    background-image: url(../images/cool-background.png);
+    /*background:url(images/cool-background.png);*/
 }
 
 /* Account section */
 #account {
-    background-color: #f8f9fa;
+    /*background-color: #f8f9fa;*/
     padding: 50px 0;
 }
 

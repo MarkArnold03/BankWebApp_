@@ -58,7 +58,7 @@ namespace BankWebApp.Pages.Accounts
 
                 TempData["success"] = "Deposit made successfully!";
 
-                return RedirectToPage("/Customers/Customer", new { customerId = customerId });
+                return RedirectToPage("/Customers/CustomerCard", new { customerId = customerId });
             }
 
             Deposit = _accountService.CreateNewDepositViewModel();
