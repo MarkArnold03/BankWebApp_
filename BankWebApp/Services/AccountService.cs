@@ -74,11 +74,6 @@ namespace BankWebApp.Services
             return account.Transactions.ToList();
         }
 
-        public Account CreateNewAccount()
-        {
-            return new Account();
-        }
-
         public Disposition CreateNewDisposition()
         {
             return new Disposition();
