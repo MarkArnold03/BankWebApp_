@@ -159,27 +159,7 @@ namespace BankWebApp.Services
             _context.SaveChanges();
         }
 
-        public void AddAccount(int customerId, string frequency, decimal initialBalance)
-        {
-            var customer = _context.Customers.FirstOrDefault(c => c.CustomerId == customerId);
-            var account = CreateNewAccount();
-            var disposition = CreateNewDisposition();
-
-            disposition.CustomerId = customer.CustomerId;
-            disposition.Account = account;
-            disposition.AccountId = account.AccountId;
-            disposition.Type = "OWNER";
-
-            account.Frequency = frequency;
-
-            Deposit(account, initialBalance);
-
-            account.Created = DateTime.Now;
-
-            customer.Dispositions.Add(disposition);
-
-            _context.SaveChanges();
-        }
+       
 
     }
 

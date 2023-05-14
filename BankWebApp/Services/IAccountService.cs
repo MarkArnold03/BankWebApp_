@@ -15,7 +15,6 @@ namespace BankWebApp.Services
         IEnumerable<Account> GetAccountsForCustomer(int customerId);
         Account GetAccountForCustomer(int accountId);
         IEnumerable<Transaction> GetAccountTransactions(int accountId);
-        Account CreateNewAccount();
         Disposition CreateNewDisposition();
         DepositViewModel CreateNewDepositViewModel();
         WithdrawalViewModel CreateNewWithdrawalViewModel();
