@@ -63,7 +63,7 @@ namespace BankWebApp.Pages.Accounts
 
                 TempData["success"] = "Withdrawal made successfully!";
 
-                return RedirectToPage("/Customers/Customer", new { customerId = customerId });
+                return RedirectToPage("/Customers/CustomerCard", new { customerId = customerId });
             }
 
             Withdrawal = _accountService.CreateNewWithdrawalViewModel();

@@ -75,7 +75,7 @@ namespace BankWebApp.Pages.Accounts
 
                 TempData["success"] = "Transfer made successfully!";
 
-                return RedirectToPage("/Customers/Customer", new { customerId = customerId });
+                return RedirectToPage("/Customers/CustomerCard", new { customerId = customerId });
             }
 
             Transfer = _accountService.CreateNewTransferViewModel();

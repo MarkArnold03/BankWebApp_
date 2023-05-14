@@ -1,64 +1,47 @@
-//using BankWebApp.Services;
-//using BankWebApp.ViewModel;
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.RazorPages;
-//using System.Data;
+using AutoMapper;
+using BankWebApp.BankAppData;
+using BankWebApp.ViewModel;
+using BankWebApp.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Data;
 
-//namespace BankWebApp.Pages.Customers
-//{
-//    [Authorize(Roles = "Cashier")]
-//    public class CustomerModel : PageModel
-//    {
-//        private readonly ICustomerService _customerService;
-//        private readonly IAccountService _accountService;
+namespace BankWebApp.Pages.Customers
+{
+    [Authorize(Roles = "Cashier")]
+    public class CustomerCardModel : PageModel
+    {
+            private readonly ICustomerService _customerService;
+            private readonly IAccountService _accountService;
+            private readonly IMapper _mapper;
 
-//        public CustomerModel(ICustomerService customerService, IAccountService accountService)
-//        {
-//            _customerService = customerService;
-//            _accountService = accountService;
-//        }
+            public CustomerCardModel(ICustomerService customerService, IAccountService accountService, IMapper mapper)
+            {
+                _customerService = customerService;
+                _accountService = accountService;
+                _mapper = mapper;
+            }
 
-//        public CustomersViewModel Customer { get; set; } = new CustomersViewModel();
+            public CustomerCardViewModel Customer { get; set; }
 
-//        public class AccountViewModel
-//        {
-//            public int Id { get; set; }
-//            public string Type { get; set; } = null!;
-//            public decimal Balance { get; set; }
-//        }
 
-//        public IActionResult OnGet(int customerId)
-//        {
-//            var customer = _customerService.GetCustomer(customerId);
+            
 
-//            if (customer == null)
-//            {
-//                return NotFound();
-//            }
+            public void OnGet(int customerId)
+            {
+                var customer = _customerService.GetCustomer(customerId);
+                Customer = _mapper.Map<CustomerCardViewModel>(customer);
 
-//            var customerAccounts = _accountService.GetAccountsForCustomer(customerId);
-//            var accountViewModels = customerAccounts.Select(a => new AccountViewModel
-//            {
-//                Id = a.Id,
-//                Type = a.Type,
-//                Balance = a.Balance
-//            }).ToList();
+                Customer.Name = $"{Customer.GivenName} {Customer.Surname}";
+                Customer.Age = DateTime.Now.Year - Customer.Birthday.Year;
+                Customer.Accounts = _accountService.GetAccountsForCustomer(customerId)
+                    .Select(a => new AccountViewModel { Id = a.AccountId, Balance = a.Balance })
+                    .ToList();
+                Customer.TotalAccountValue = Customer.Accounts.Sum(a => a.Balance);
+            }
+    }
 
-//            var viewModel = new CustomersViewModel
-//            {
-//                Id = customerId,
-//                Name = $"{customer.Givenname} {customer.Surname}",
-//                Address = $"{customer.Streetaddress}, {customer.Zipcode} {customer.City}, {customer.Country}",
-//                ContactInfo = $"Email: {customer.Emailaddress}, Phone: {customer.Telephonenumber}",
-//                Accounts = accountViewModels,
-//                TotalAccountValue = Math.Round(accountViewModels.Sum(a => a.Balance), 2)
-//            };
 
-//            Customer = viewModel;
+    }
 
-//            return Page();
-//        }
-//    }
-
-//}

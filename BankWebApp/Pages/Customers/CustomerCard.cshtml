@@ -1,172 +1,70 @@
-﻿@*@page
-@model BankWebApp.Pages.Customers.CustomerCardModel
+﻿@page "{customerId:int}"
+@model CustomerCardModel
 @{
+    ViewData["Title"] = "Customer Card";
 }
+
 <section id="customer" class="d-flex align-items-center justify-content-center">
     <div class="container" data-aos="fade-up">
-        <!-- Used for verification popups -->
-        <!-- Tempdata disappears after refreshing the page -->
-        <!-- <partial name="_Notification"/> -->
-
         <div class="section-title">
             <h2>Customer</h2>
             <p id="customer-info">Customer profile</p>
         </div>
 
-        <div class="col-12 col-lg-6 d-flex justify-content-start">
-            <div class="btn back-btn m-3 text-center button-link">
-                <h3 class="m-0px font-w-600">
-                    <a asp-page="/Customers/Customers">
-                        <i class="fas fa-chevron-circle-left"></i> Back
-                    </a>
-                </h3>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3>@Model.Customer.Name</h3>
+                <p>@Model.Customer.Age years old</p>
+                <p>@Model.Customer.Birthday.ToShortDateString()</p>
+                <p>@Model.Customer.Gender</p>
+                <p>@Model.Customer.TelephoneNumber</p>
+                <p>@Model.Customer.NationalId</p>
+                <p>@Model.Customer.StreetAddress, @Model.Customer.ZipCode, @Model.Customer.City</p>
+                <p>@Model.Customer.Country</p>
+            </div>
+
+            <div class="col-lg-6">
+                <h3>Accounts</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Account ID</th>
+                            <th>Balance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var account in Model.Customer.Accounts)
+                        {
+                            <tr>
+                                <td>@account.Id</td>
+                                <td>@account.Balance.ToString("C")</td>
+                                <td>
+                                    <a asp-page="/Accounts/Transactions" asp-route-accountId="@account.Id" title="Show account transactions">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <a asp-page="/Accounts/Deposit" asp-route-accountId="@account.Id" title="Make a deposit">
+                                        <i class="fas fa-plus-square"></i>
+                                    </a>
+                                    <a asp-page="/Accounts/Withdrawal" asp-route-accountId="@account.Id" title="Make a withdrawal">
+                                        <i class="fas fa-minus-square"></i>
+                                    </a>
+                                    <a asp-page="/Accounts/Transfer" asp-route-accountId="@account.Id" title="Make a transfer">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="content">
-            <div class="card custom-table">
-                <div class="row align-items-center flex-row-reverse">
-                    <!-- 2 columns - 1 for avatar & 1 for customer info -->
-
-                    <!-- About me -->
-                    <div class="col-lg-6">
-                        <div class="about-text go-to">
-                            <h6 class="text-light mt-3">@Model.Customer.Streetaddress</h6>
-                            <h6 class="text-light">@Model.Customer.Zipcode @Model.Customer.City</h6>
-                            <h6 class="text-light mb-4">@Model.Customer.Country</h6>
-
-                            <div class="row about-list">
-                                <div class="col-md-6">
-                                    <div class="media">
-                                        <label>Birthday</label>
-                                        <p>@Model.Customer.Birthday.ToShortDateString()</p>
-                                    </div>
-                                    <div class="media">
-                                        <label>Email</label>
-                                        <p>@Model.Customer.Emailaddress</p>
-                                    </div>
-                                    <div class="media">
-                                        <label>Gender</label>
-                                        <p>@Model.Customer.Gender</p>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="media">
-                                        <label>Age</label>
-                                        <p>@Model.Customer.Age</p>
-                                    </div>
-                                    <div class="media">
-                                        <label>Phone</label>
-                                        <p>@Model.Customer.Telephonenumber</p>
-                                    </div>
-                                    <div class="media">
-                                        <label>Social security number</label>
-                                        <p>@Model.Customer.NationalId</p>
-                                    </div>
-                                    <div class="media">
-                                        <label></label>
-                                        <p></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 text-center">
-                        <h1 class="mb-3 about-text-primary">@Model.Customer.Name</h1>
-
-                        <table class="table" style="width:100%">
-                            <thead class="about-text">
-                                <tr>
-                                    <th>Account Id</th>
-                                    <th>Balance</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var account in Model.Customer.Accounts)
-                                {
-                                    <tr>
-                                        <td class="about-text" width="30%">@account.AccountId</td>
-                                        <td class="about-text" width="30%">@account.Balance kr</td>
-                                        <td width="5%">
-                                            <a asp-page="/Accounts/Account"
-                                                asp-route-accountId="@account.AccountId"
-                                           asp-route-customerId="@Model.Customer.Id"
-                                           title="Show account transactions"
-                                           class="more">
-                                                <i class="fas fa-2x fa-info-circle"></i>
-                                            </a>
-                                        </td>
-                                        <td width="5%">
-                                            <a asp-page="/Accounts/Deposit"
-                                           asp-route-accountId="@account.AccountId"
-                                           asp-route-customerId="@Model.Customer.Id"
-                                           title="Make a deposit"
-                                           class="more">
-                                                <i class="far fa-2x fa-plus-square"></i>
-                                            </a>
-                                        </td>
-                                        <td width="5%">
-                                            <a asp-page="/Accounts/Withdrawal"
-                                           asp-route-accountId="@account.AccountId"
-                                           asp-route-customerId="@Model.Customer.Id"
-                                           title="Make a withdrawal"
-                                           class="more">
-                                                <i class="far fa-2x fa-minus-square"></i>
-                                            </a>
-                                        </td>
-                                        <td width="5%">
-                                            <a asp-page="/Accounts/Transfer"
-                                           asp-route-accountId="@account.AccountId"
-                                           asp-route-customerId="@Model.Customer.Id"
-                                           title="Make a transfer"
-                                           class="more">
-                                                <i class="fas fa-2x fa-exchange-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-
-                        <div class="media about-text">
-                            <label>Total assets</label>
-                            <p id="customer-profile-total-assets">@Model.Customer.TotalAccountValue kr</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Button at bottom -->
-                <div class="counter">
-                    <div class="row">
-                        <div class="col-12 col-lg-6 d-flex justify-content-center">
-                            <div class="btn get-started-btn m-3 text-center button-link">
-                                <h3 class="m-0px font-w-600">
-                                    <a asp-page="/Accounts/Create"
-                                       asp-route-customerId="@Model.Customer.Id">
-                                        <i class="far fa-plus-square"></i> Create Account
-                                    </a>
-                                </h3>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-6 d-flex justify-content-center">
-                            <div class="btn get-started-btn m-3 text-center button-link">
-                                <h3 class="m-0px font-w-600">
-                                    <a asp-page="/Customers/EditCustomer"
-                                       asp-route-customerId="@Model.Customer.Id">
-                                        <i class="fas fa-edit"></i> Edit Customer
-                                    </a>
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-12">
+                <h3>Total Account Value</h3>
+                <p>@Model.Customer.TotalAccountValue.ToString("C")</p>
             </div>
         </div>
     </div>
-</section>*@
+</section>
