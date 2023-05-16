@@ -7,13 +7,13 @@
 <section id="customer" class="d-flex align-items-center justify-content-center">
     <div class="container" data-aos="fade-up">
         <div class="section-title">
-            <h2>Customer</h2>
+            <h3>@Model.Customer.Name</h3>
             <p id="customer-info">Customer profile</p>
         </div>
 
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h3>@Model.Customer.Name</h3>
+                
                 <p>@Model.Customer.Age years old</p>
                 <p>@Model.Customer.Birthday.ToShortDateString()</p>
                 <p>@Model.Customer.Gender</p>
@@ -40,16 +40,16 @@
                                 <td>@account.Id</td>
                                 <td>@account.Balance.ToString("C")</td>
                                 <td>
-                                    <a asp-page="/Accounts/Transactions" asp-route-accountId="@account.Id" title="Show account transactions">
+                                    <a asp-page="/Accounts/Transactions" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@account.Id" title="Show account transactions">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
-                                    <a asp-page="/Accounts/Deposit" asp-route-accountId="@account.Id" title="Make a deposit">
+                                    <a asp-page="/Accounts/Deposit" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@account.Id" title="Make a deposit">
                                         <i class="fas fa-plus-square"></i>
                                     </a>
-                                    <a asp-page="/Accounts/Withdrawal" asp-route-accountId="@account.Id" title="Make a withdrawal">
+                                    <a asp-page="/Accounts/Withdrawal" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@account.Id" title="Make a withdrawal">
                                         <i class="fas fa-minus-square"></i>
                                     </a>
-                                    <a asp-page="/Accounts/Transfer" asp-route-accountId="@account.Id" title="Make a transfer">
+                                    <a asp-page="/Accounts/Transfer" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@account.Id" title="Make a transfer">
                                         <i class="fas fa-exchange-alt"></i>
                                     </a>
                                 </td>

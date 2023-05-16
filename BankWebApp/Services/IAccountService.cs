@@ -22,7 +22,6 @@ namespace BankWebApp.Services
         void Deposit(Account account, decimal amount);
         void Withdraw(Account account, decimal amount);
         void Transfer(Account fromAccount, Account toAccount, decimal amount);
-        void AddAccount(int customerId, string frequency, decimal initialBalance);
     }
 
 }

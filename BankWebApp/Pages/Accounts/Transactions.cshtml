@@ -3,10 +3,6 @@
 
 <h2>Transactions</h2>
 
-<form method="get">
-    <input type="text" name="searchText" value="@Model.SearchText" placeholder="Search by amount" />
-    <input type="submit" value="Search" />
-</form>
 
 <table>
     <thead>
@@ -29,35 +25,14 @@
         }
     </tbody>
 </table>
-
-<button id="loadMoreButton" onclick="loadMore()">Load More</button>
-
-@section Scripts {
-    <script>
-        function loadMore() {
-            var lastTransactionId = @Model.Transactions.Last().TransactionId;
-
-            fetch('/Transactions?handler=FetchMore&accountId=1&lastTransactionId=' + lastTransactionId)
-                .then(response => response.json())
-                .then(transactions => {
-                    var tableBody = document.getElementById('transactionTableBody');
-
-                    transactions.forEach(transaction => {
-                        var row = tableBody.insertRow();
-
-                        var cell1 = row.insertCell(0);
-                        cell1.textContent = transaction.transactionId;
-
-                        var cell2 = row.insertCell(1);
-                        cell2.textContent = transaction.date;
-
-                        var cell3 = row.insertCell(2);
-                        cell3.textContent = transaction.amount;
-
-                        var cell4 = row.insertCell(3);
-                        cell4.textContent = transaction.balance;
-                    });
-                });
+@*Fetch More button*@
+    <div class="d-flex justify-content-center">
+        @if (Model.CurrentPage != Model.TotalPages)
+        {
+            <a class="btn btn-secondary"
+           asp-page="/Accounts/Accounts"
+           asp-route-pageno="@(Model.CurrentPage + 1)">
+                Fetch More
+            </a>
         }
-    </script>
-}
+    </div>

@@ -31,11 +31,6 @@ namespace BankWebApp.Pages.Transactions
                 .OrderByDescending(t => t.Date)
                 .ToList();
 
-            // Filter by search text
-            if (!string.IsNullOrEmpty(searchText))
-            {
-                allTransactions = allTransactions.Where(t => t.Amount.ToString().Contains(searchText)).ToList();
-            }
 
             // Pagination
             int pageSize = 10;
