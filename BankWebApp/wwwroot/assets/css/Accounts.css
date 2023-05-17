@@ -1,0 +1,63 @@
+﻿/* CSS for the Accounts section */
+#accounts {
+    padding: 50px 0;
+}
+
+.section-title {
+    margin-bottom: 40px;
+}
+
+    .section-title h2 {
+        color: #333;
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+#account-info {
+    color: #888;
+}
+
+.table-responsive {
+    margin-bottom: 30px;
+}
+
+.custom-table th {
+    cursor: pointer;
+}
+
+    .custom-table th a {
+        color: #333;
+        text-decoration: none;
+    }
+
+.custom-table i.fa-angle-up,
+.custom-table i.fa-angle-down {
+    vertical-align: middle;
+}
+
+.custom-table td:last-child {
+    text-align: right;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+.d-flex.justify-content-center {
+    margin-top: 20px;
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    .section-title h2 {
+        font-size: 28px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+}

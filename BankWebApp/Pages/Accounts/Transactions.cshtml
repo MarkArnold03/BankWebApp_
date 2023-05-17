@@ -1,8 +1,10 @@
-﻿@page
+﻿@page 
 @model BankWebApp.Pages.Transactions.TransactionModel
+
 
 <h2>Transactions</h2>
 
+<div class="bok12"></div>
 
 <table>
     <thead>
@@ -30,7 +32,7 @@
         @if (Model.CurrentPage != Model.TotalPages)
         {
             <a class="btn btn-secondary"
-           asp-page="/Accounts/Accounts"
+           asp-page="/Transactions/Transactions"
            asp-route-pageno="@(Model.CurrentPage + 1)">
                 Fetch More
             </a>
