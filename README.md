@@ -23,3 +23,5 @@ Key Features:
    Both users have the same password: Hejsan123#. The roles "Admin" and "Cashier" are automatically created in the database upon startup if they do not already exist. The "Cashier" role has the ability to manage customers and their accounts.
 
 Please ensure that the required dependencies, such as AutoMapper, class libraries, ReadMe.md, and input validation, are implemented as per best practices. The application is designed to cater to real-world scenarios with non-technical users.
+
+Here is the link to the website:https://bankwebappilcation.azurewebsites.net/
