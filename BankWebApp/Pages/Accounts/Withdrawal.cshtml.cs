@@ -19,7 +19,7 @@ namespace BankWebApp.Pages.Accounts
 
         [BindProperty]
         [Required(ErrorMessage = "Please enter an amount.")]
-        [Range(1, 1000000, ErrorMessage = "Please choose a number between 1 and 1000000.")]
+        [Range(100, 10000, ErrorMessage = "Please choose a number between 100 and 10000.")]
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
 

@@ -9,7 +9,7 @@ using System.Data;
 
 namespace BankWebApp.Pages.Countries
 {
-    [Authorize(Roles = "Cashier")]
+    
 
     [ResponseCache(Duration = 60, VaryByQueryKeys = new[] { "countryId" })]
 

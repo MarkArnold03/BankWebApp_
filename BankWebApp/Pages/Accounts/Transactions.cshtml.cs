@@ -21,19 +21,27 @@ namespace BankWebApp.Pages.Transactions
         }
 
         public List<TransactionViewModel> Transactions { get; set; } = new List<TransactionViewModel>();
+        public int Id { get; set; }
         public string SearchText { get; set; }
+        public string SortOrder { get; set; }
+        public string SortColumn { get; set; }
         public int CurrentPage { get; set; }
+        public int PageCount { get; set; }
         public int TotalPages { get; set; }
 
-        public void OnGet(int accountId, string searchText, int pageNo = 1)
+        public void OnGet(int accountId, string sortColumn, string sortOrder, string searchText, int pageNo = 1)
         {
+
             var allTransactions = _accountService.GetAccountTransactions(accountId)
                 .OrderByDescending(t => t.Date)
                 .ToList();
 
 
             // Pagination
-            int pageSize = 10;
+            SearchText = searchText;
+            SortOrder = sortOrder;
+            SortColumn = sortColumn;
+            int pageSize = 50;
             TotalPages = (int)Math.Ceiling(allTransactions.Count / (double)pageSize);
 
             if (pageNo < 1) pageNo = 1;
@@ -49,17 +57,21 @@ namespace BankWebApp.Pages.Transactions
             Transactions = _mapper.Map<List<TransactionViewModel>>(transactionsForPage);
         }
 
-        public IActionResult OnGetFetchMore(int accountId, int lastTransactionId)
+        public IActionResult OnGetFetchMore(int accountId, long lastTransaction)
         {
-            var moreTransactions = _accountService.GetAccountTransactions(accountId)
-                .Where(t => t.TransactionId < lastTransactionId)
+            DateTime dateOfLastShown = new DateTime(lastTransaction).AddMilliseconds(100);
+
+            var listOfTransactions = _accountService.GetAccountTransactions(accountId)
+                .Where(t => lastTransaction == 0 || t.Date > dateOfLastShown)
                 .OrderByDescending(t => t.Date)
+
                 .Take(10)
                 .ToList();
 
-            var moreTransactionsViewModel = _mapper.Map<List<TransactionViewModel>>(moreTransactions);
-
-            return new JsonResult(moreTransactionsViewModel);
+            var listOfTransactionsViewModel = _mapper.Map<List<TransactionViewModel>>(listOfTransactions);
+            if (listOfTransactionsViewModel.Any())
+                lastTransaction = listOfTransactionsViewModel.Last().Date.Ticks;
+            return new JsonResult(new { items = listOfTransactionsViewModel, lastTransaction });
         }
 
         public class TransactionViewModel

@@ -1,0 +1,97 @@
+﻿
+.section-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+    .section-title h3 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+#customer-info {
+    font-weight: bold;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -10px;
+}
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+.col-lg-6 {
+    width: 50%;
+    padding: 10px;
+}
+
+.col-12 {
+    width: 100%;
+    padding: 10px;
+}
+
+h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th,
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.fa-info-circle,
+.fa-plus-square,
+.fa-minus-square,
+.fa-exchange-alt {
+    margin-right: 5px;
+}
+
+    .fa-info-circle:before,
+    .fa-plus-square:before,
+    .fa-minus-square:before,
+    .fa-exchange-alt:before {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        content: "\f128";
+    }
+
+    .fa-plus-square:before {
+        content: "\f067";
+    }
+
+    .fa-minus-square:before {
+        content: "\f068";
+    }
+
+    .fa-exchange-alt:before {
+        content: "\f362";
+    }
+
+a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    a:hover {
+        color: #0056b3;
+    }
+
+/* Media queries */
+@media (max-width: 767px) {
+    .col-lg-6 {
+        width: 100%;
+    }
+}

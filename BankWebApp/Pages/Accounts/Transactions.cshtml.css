@@ -1,5 +1,6 @@
 ﻿/* CSS for table */
-table {
+/*@import url('c:\users\admin\source\repos\bankwebapp\bankwebapp\pages\accounts\transactions.cshtml.css');
+*/table {
     width: 100%;
     border-collapse: collapse;
 }
@@ -47,4 +48,4 @@ table {
     width:500px;
     hight:500px;
     background-color:red;
-}
+}  

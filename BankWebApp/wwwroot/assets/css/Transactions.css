@@ -10,8 +10,10 @@ table {
         border: 1px solid #ddd;
     }
 
-    table th {
-        background-color: #f2f2f2;
+    table th,
+    table td :hover{
+        padding: 8px;
+        border: 1px solid #6c757d;
     }
 
 /* CSS for Fetch More button */

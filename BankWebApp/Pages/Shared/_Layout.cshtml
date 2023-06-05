@@ -20,7 +20,8 @@
     <link rel="stylesheet" href="~/assets/css/animate.css">
     <link rel="stylesheet" href="~/assets/css/indexstyle.css">
     <link rel="stylesheet" href="~/assets/css/layoutstyle.css">
-    <link rel="stylesheet" href="~/assets/TopTenStyle.css">
+@*    <link rel="stylesheet" href="~/assets/TopTenStyle.css">*@
+    @*<link rel="stylesheet" href="~/@(nameof(BankWebApp)).styles.css" />*@
 
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
 </head>
@@ -41,6 +42,10 @@
                                 <li><a class="nav-link scrollto" asp-page="/Customers/Customers" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; The ManDem</a></li>
                                 <li><a class="nav-link scrollto" asp-page="/Accounts/Accounts"><i class="fas fa-file-invoice-dollar"></i> &nbsp Accounts</a></li>
                             }
+                            @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Admin"))
+                            {
+                                <li><a class="nav-link scrollto" asp-page="/Users/Users" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; Users</a></li>
+                            }
                             <div class="navbar order-last order-lg-0">
                                 <partial name="_LoginPartial"></partial>
                             </div>
@@ -54,7 +59,7 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
-            <img class="background-img" src="~/assets/images/cool-background.png" />
+            <img class="background-img" src="~/assets/images/herobg-4k.webp" />
         </main>
     </div>
     <footer class="border-top footer text-muted">

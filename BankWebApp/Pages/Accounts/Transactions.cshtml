@@ -1,6 +1,12 @@
 ﻿@page 
 @model BankWebApp.Pages.Transactions.TransactionModel
-
+@{
+    int MinusCP = 4;
+    int PlusCP = 5;
+}
+<head>
+    <link href="~/assets/css/Transactions.css" rel="stylesheet" type="text/css" />
+</head>
 
 <h2>Transactions</h2>
 
@@ -27,14 +33,72 @@
         }
     </tbody>
 </table>
-@*Fetch More button*@
-    <div class="d-flex justify-content-center">
-        @if (Model.CurrentPage != Model.TotalPages)
-        {
-            <a class="btn btn-secondary"
-           asp-page="/Transactions/Transactions"
-           asp-route-pageno="@(Model.CurrentPage + 1)">
-                Fetch More
-            </a>
-        }
-    </div>
+@*Pagination*@
+
+<div class="d-flex justify-content-center">
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    @*Previous button*@
+                    @if (Model.CurrentPage != 1)
+                    {
+                        <a class="btn btn-secondary"
+                       asp-page="/Transactions/Transactions"
+                       asp-route-searchWord="@Model.SearchText"
+                       asp-route-accountId="@Model.Id"
+                       asp-route-sortColumn="@Model.SortColumn"
+                       asp-route-sortOrder="@Model.SortOrder"
+                       asp-route-pageno="@(Model.CurrentPage - 1)">
+                            Prev
+                        </a>
+                    }
+                </td>
+
+                @*Page buttons*@
+                <td>
+                    @for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        @if (!(i > Model.CurrentPage + MinusCP) && (i > Model.CurrentPage - PlusCP))
+                        {
+                            string pageColour = "btn-secondary";
+                            if (i == @Model.CurrentPage)
+                            {
+                                pageColour = "btn-primary";
+                            }
+                            <a id="table-page-btn"
+                       class="btn @pageColour my-1"
+                       asp-page="/Transactions/Transactions"
+                       asp-route-searchWord="@Model.SearchText"
+                       asp-route-accountId="@Model.Id"
+                       asp-route-sortColumn="@Model.SortColumn"
+                       asp-route-sortOrder="@Model.SortOrder"
+                       asp-route-pageno="@i">
+                                @i
+                            </a>
+                        }
+                    }
+                </td>
+
+                @*Next button*@
+                <td>
+                    @if (Model.CurrentPage != Model.PageCount)
+                    {
+                        <a class="btn btn-secondary"
+                       asp-route-searchText="@Model.SearchText"
+                       asp-page="/Transactions/Transactions"
+                       asp-route-accountId="@Model.Id"
+                       asp-route-sortColumn="@Model.SortColumn"
+                       asp-route-sortOrder="@Model.SortOrder"
+                       asp-route-pageno="@(Model.CurrentPage + 1)">
+                            Next
+                        </a>
+                    }
+                </td>
+            </tr>
+
+            
+        </tbody>
+    </table>
+</div>
+

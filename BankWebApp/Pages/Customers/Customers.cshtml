@@ -5,7 +5,9 @@
 }
 
 
-
+<head>
+    <link href="~/assets/css/Transactions.css" rel="stylesheet" type="text/css" />
+</head>
 
 <style>
     #table-page-btn {
@@ -16,7 +18,7 @@
 <section id="customers" class="d-flex align-items-center justify-content-center">
     <div class="container" data-aos="fade-up">
 
-       
+
 
 
         <div class="section-title">
@@ -42,161 +44,162 @@
 
 
 
-        @*-------------------------------------------------------------------*@
-        <div class="content">
-            <div class="table-responsive">
-                <table class="table custom-table table-fixed">
-                    <thead>
-                        <tr>
-                            <th class="st-header" scope="col">
-                                CustomerId
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="CustomerId"
-                                   asp-route-sortOrder="asc">
-                                    <i class="fa-solid fa-angle-up" title="Sort Customer Id ascending"></i>
-                                </a>
-
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="CustomerId"
-                                   asp-route-sortOrder="desc">
-                                    <i class="fa-solid fa-angle-down" title="Sort Customer Id descending"></i>
-                                </a>
-                            </th>
-
-                            <th class="st-header" scope="col">
-                                National Id
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="NationalId"
-                                   asp-route-sortOrder="asc">
-                                    <i class="fa-solid fa-angle-up" title="Sort National Id ascending"></i>
-                                </a>
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="NationalId"
-                                   asp-route-sortOrder="desc">
-                                    <i class="fa-solid fa-angle-down" title="Sort National Id descending"></i>
-                                </a>
-                            </th>
-
-                            <th class="st-header" scope="col">
-                                Name
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="FullName" asp-route-sortOrder="asc">
-                                    <i class="fa-solid fa-angle-up" title="Sort Name ascending"></i>
-                                </a>
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="FullName" asp-route-sortOrder="desc">
-                                    <i class="fa-solid fa-angle-down" title="Sort Name descending"></i>
-                                </a>
-                            </th>
-
-                            <th class="st-header" scope="col">
-                                Address
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="Address" asp-route-sortOrder="asc">
-                                    <i class="fa-solid fa-angle-up" title="Sort Address ascending"></i>
-                                </a>
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="Address" asp-route-sortOrder="desc">
-                                    <i class="fa-solid fa-angle-down" title="Sort Address descending"></i>
-                                </a>
-                            </th>
-
-
-                            <th class="st-header" scope="col">
-                                City
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="City" asp-route-sortOrder="asc">
-                                    <i class="fa-solid fa-angle-up" title="Sort City ascending"></i>
-                                </a>
-                                <a class="btn p-0" asp-page="/Customers/Customers" asp-route-sortColumn="City" asp-route-sortOrder="desc">
-                                    <i class="fa-solid fa-angle-down" title="Sort City descending"></i>
-                                </a>
-                            </th>
-                            <th class="st-header" scope="col"></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var customer in Model.Customers)
-                        {
-                            <tr itemscope="row">
-                                <td>@customer.Id</td>
-                                <td>@customer.NationalId</td>
-                                <td>@customer.FullName</td>
-                                <td>@customer.StreetAddress</td>
-                                <td>@customer.City</td>
-                                <td><a asp-page="/Customers/CustomerCard" asp-route-customerId="@customer.Id" class="more"><i class="fas fa-info-circle"></i> Details</a></td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-             
-
-                @{
-                  
-                    int MinusCP = 4;
-                    int PlusCP = 5;
-                }
-
-                <div class="d-flex justify-content-center">
-                    <table>
-                        <tbody>
+            @*-------------------------------------------------------------------*@
+            <div class="content">
+                <div class="table-responsive">
+                    <table class="table custom-table table-fixed">
+                        <thead>
                             <tr>
-                                <td>
-                                    @*Previous button*@
-                                    @if (Model.CurrentPage != 1)
-                                    {
-                                        <a class="btn btn-secondary"
-                                       asp-page="/Customers/Customers"
-                                       asp-route-searchWord="@Model.SearchText"
-                                       asp-route-customerId="@Model.Id"
-                                       asp-route-sortColumn="@Model.SortColumn"
-                                       asp-route-sortOrder="@Model.SortOrder"
-                                       asp-route-pageno="@(Model.CurrentPage - 1)">
-                                            Prev
-                                        </a>
-                                    }
-                                </td>
+                                <th class="st-header" scope="col">
+                                    CustomerId
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="CustomerId"
+                                       asp-route-sortOrder="asc">
+                                        <i class="fa-solid fa-angle-up" title="Sort Customer Id ascending"></i>
+                                    </a>
 
-                                @*Page buttons*@
-                                <td>
-                                    @for (int i = 1; i <= Model.PageCount; i++)
-                                    {
-                                        @if (!(i > Model.CurrentPage + MinusCP) && (i > Model.CurrentPage - PlusCP))
-                                        {
-                                            string pageColour = "btn-secondary";
-                                            if (i == @Model.CurrentPage)
-                                            {
-                                                pageColour = "btn-primary";
-                                            }
-                                            <a id="table-page-btn"
-                                       class="btn @pageColour my-1"
-                                       asp-page="/Customers/Customers"
-                                       asp-route-searchWord="@Model.SearchText"
-                                       asp-route-customerId="@Model.Id"
-                                       asp-route-sortColumn="@Model.SortColumn"
-                                       asp-route-sortOrder="@Model.SortOrder"
-                                       asp-route-pageno="@i">
-                                                @i
-                                            </a>
-                                        }
-                                    }
-                                </td>
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="CustomerId"
+                                       asp-route-sortOrder="desc">
+                                        <i class="fa-solid fa-angle-down" title="Sort Customer Id descending"></i>
+                                    </a>
+                                   
+                                </th>
 
-                                @*Next button*@
-                                <td>
-                                    @if (Model.CurrentPage != Model.PageCount)
-                                    {
-                                        <a class="btn btn-secondary"
-                                       asp-route-searchText="@Model.SearchText"
-                                       asp-page="/Customers/Customers"
-                                       asp-route-customerId="@Model.Id"
-                                       asp-route-sortColumn="@Model.SortColumn"
-                                       asp-route-sortOrder="@Model.SortOrder"
-                                       asp-route-pageno="@(Model.CurrentPage + 1)">
-                                            Next
-                                        </a>
-                                    }
-                                </td>
+                                <th class="st-header" scope="col">
+                                    National Id
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="NationalId"
+                                       asp-route-sortOrder="asc">
+                                        <i class="fa-solid fa-angle-up" title="Sort National Id ascending"></i>
+                                    </a>
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="NationalId"
+                                       asp-route-sortOrder="desc">
+                                        <i class="fa-solid fa-angle-down" title="Sort National Id descending"></i>
+                                    </a>
+                                </th>
+
+                                <th class="st-header" scope="col">
+                                    Name
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="FullName" asp-route-sortOrder="asc">
+                                        <i class="fa-solid fa-angle-up" title="Sort Name ascending"></i>
+                                    </a>
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="FullName" asp-route-sortOrder="desc">
+                                        <i class="fa-solid fa-angle-down" title="Sort Name descending"></i>
+                                    </a>
+                                </th>
+
+                                <th class="st-header" scope="col">
+                                    Address
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="Address" asp-route-sortOrder="asc">
+                                        <i class="fa-solid fa-angle-up" title="Sort Address ascending"></i>
+                                    </a>
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="Address" asp-route-sortOrder="desc">
+                                        <i class="fa-solid fa-angle-down" title="Sort Address descending"></i>
+                                    </a>
+                                </th>
+
+
+                                <th class="st-header" scope="col">
+                                    City
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="City" asp-route-sortOrder="asc">
+                                        <i class="fa-solid fa-angle-up" title="Sort City ascending"></i>
+                                    </a>
+                                    <a asp-page="/Customers/Customers" asp-route-sortColumn="City" asp-route-sortOrder="desc">
+                                        <i class="fa-solid fa-angle-down" title="Sort City descending"></i>
+                                    </a>
+                                </th>
+                                <th class="st-header" scope="col"></th>
                             </tr>
+                        </thead>
 
-                            </tr>
+                        <tbody>
+                            @foreach (var customer in Model.Customers)
+                            {
+                                <tr itemscope="row">
+                                    <td>@customer.Id</td>
+                                    <td>@customer.NationalId</td>
+                                    <td>@customer.FullName</td>
+                                    <td>@customer.StreetAddress</td>
+                                    <td>@customer.City</td>
+                                    <td><a asp-page="/Customers/CustomerCard" asp-route-customerId="@customer.Id" class="more"><i class="fas fa-info-circle"></i> Details</a></td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
-                </div>
-                <div>
-                </div>
+
+
+
+                    @{
+
+                        int MinusCP = 4;
+                        int PlusCP = 5;
+                    }
+
+                    <div class="d-flex justify-content-center">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @*Previous button*@
+                                        @if (Model.CurrentPage != 1)
+                                        {
+                                            <a class="btn btn-secondary"
+                                           asp-page="/Customers/Customers"
+                                           asp-route-searchWord="@Model.SearchText"
+                                           asp-route-customerId="@Model.Id"
+                                           asp-route-sortColumn="@Model.SortColumn"
+                                           asp-route-sortOrder="@Model.SortOrder"
+                                           asp-route-pageno="@(Model.CurrentPage - 1)">
+                                                Prev
+                                            </a>
+                                        }
+                                    </td>
+
+                                    @*Page buttons*@
+                                    <td>
+                                        @for (int i = 1; i <= Model.PageCount; i++)
+                                        {
+                                            @if (!(i > Model.CurrentPage + MinusCP) && (i > Model.CurrentPage - PlusCP))
+                                            {
+                                                string pageColour = "btn-secondary";
+                                                if (i == @Model.CurrentPage)
+                                                {
+                                                    pageColour = "btn-primary";
+                                                }
+                                                <a id="table-page-btn"
+                                           class="btn @pageColour my-1"
+                                           asp-page="/Customers/Customers"
+                                           asp-route-searchWord="@Model.SearchText"
+                                           asp-route-customerId="@Model.Id"
+                                           asp-route-sortColumn="@Model.SortColumn"
+                                           asp-route-sortOrder="@Model.SortOrder"
+                                           asp-route-pageno="@i">
+                                                    @i
+                                                </a>
+                                            }
+                                        }
+                                    </td>
+
+                                    @*Next button*@
+                                    <td>
+                                        @if (Model.CurrentPage != Model.PageCount)
+                                        {
+                                            <a class="btn btn-secondary"
+                                           asp-route-searchText="@Model.SearchText"
+                                           asp-page="/Customers/Customers"
+                                           asp-route-customerId="@Model.Id"
+                                           asp-route-sortColumn="@Model.SortColumn"
+                                           asp-route-sortOrder="@Model.SortOrder"
+                                           asp-route-pageno="@(Model.CurrentPage + 1)">
+                                                Next
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
 </section>
 
