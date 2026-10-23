@@ -1,11 +1,9 @@
 using AutoMapper;
 using BankWebApp.Services;
+using BankWebApp.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using BankWebApp.ViewModel;
 
 namespace BankWebApp.Pages.Accounts
 {
@@ -14,16 +12,14 @@ namespace BankWebApp.Pages.Accounts
     {
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        public List<AccountViewModel> Accounts { get; set; }
+        public List<AccountViewModel> Accounts { get; set; } = new();
 
-        public int Id { get; set; }
-        public string SortOrder { get; set; }
-        public string SortColumn { get; set; }
+        public string? SortOrder { get; set; }
+        public string? SortColumn { get; set; }
         public int CurrentPage { get; set; }
         public int PageCount { get; set; }
-        public string SearchText { get; set; }
-
-
+        public int RowCount { get; set; }
+        public string? SearchText { get; set; }
 
         public AccountsModel(IAccountService accountService, IMapper mapper)
         {
@@ -31,48 +27,23 @@ namespace BankWebApp.Pages.Accounts
             _mapper = mapper;
         }
 
-
-        
-
-        public class TransactionViewModel
+        public IActionResult OnGet(string? sortColumn, string? sortOrder, string? searchText, int pageNo)
         {
-            public int TransactionId { get; set; }
-            public DateTime Date { get; set; }
-            public decimal Amount { get; set; }
-            public decimal Balance { get; set; }
+            SearchText = searchText?.Trim();
 
-        }
+            // An account number on its own opens that account directly.
+            if (int.TryParse(SearchText, out var accountId) && _accountService.GetAccountForCustomer(accountId) != null)
+                return RedirectToPage("/Accounts/Transactions", new { accountId });
 
-         public IActionResult OnGetFetchMore(int accountId, int lastTransactionId)
-        {
-            var moreTransactions = _accountService.GetAccountTransactions(accountId)
-                .Where(t => t.TransactionId < lastTransactionId)
-                .OrderByDescending(t => t.Date)
-                .Take(10)
-                .ToList();
-
-            var moreTransactionsViewModel = _mapper.Map<List<TransactionViewModel>>(moreTransactions);
-
-            return new JsonResult(moreTransactionsViewModel);
-        }
-
-        public void OnGet(string sortColumn, string sortOrder, string searchText, int pageNo)
-        {
-            SearchText = searchText;
-            SortOrder = sortOrder;
+            SortOrder = sortOrder == "desc" ? "desc" : "asc";
             SortColumn = sortColumn;
-            if (pageNo == 0)
-                pageNo = 1;
-            CurrentPage = pageNo;
+            CurrentPage = Math.Max(1, pageNo);
 
-            var pageresult = _accountService.GetAccounts(sortColumn, sortOrder, searchText, CurrentPage);
-            PageCount = pageresult.PageCount;
-
+            var pageresult = _accountService.GetAccounts(sortColumn ?? "", SortOrder, SearchText ?? "", CurrentPage);
+            PageCount = Math.Max(1, pageresult.PageCount);
+            RowCount = pageresult.RowCount;
             Accounts = _mapper.Map<List<AccountViewModel>>(pageresult.Results);
-
+            return Page();
         }
-
-       
-
     }
 }

@@ -1,44 +1,37 @@
-﻿@page
+@page
 @model BankWebApp.Pages.Accounts.DepositModel
 @{
-    ViewData["Title"] = "Deposit";
+    var a = Model.Deposit.Account;
+    ViewData["Title"] = "Deposit · " + BankFormat.AccountNumber(a.Id);
+    var isPost = HttpMethods.IsPost(Request.Method);
+    var panel = new TellerPanelViewModel
+    {
+        Account = a,
+        CustomerId = Model.Deposit.CustomerId,
+        Active = "deposit",
+        Amount = isPost ? Request.Form["Amount"].ToString() : null,
+        AmountError = ViewData.ModelState["Amount"]?.Errors.FirstOrDefault()?.ErrorMessage,
+    };
 }
 
-<section id="customer" class="d-flex align-items-center justify-content-center">
-    <div class="container" data-aos="fade-up">
-        <div class="section-title">
-            <h2>Account</h2>
-            <p id="account-info">Deposit: </p>
-            <h5 style="color: white">Account number: @Model.Deposit.Account.AccountId</h5>
-            <h5 style="color: antiquewhite">Balance: @Model.Deposit.Account.Balance kr</h5>
-        </div>
-        <div class="card-body custom-table">
-            <form method="post">
-                <div class="form-group">
-                    <label class="mb-3" style="color:white" asp-for="Amount">Amount (Kr)</label>
-                    <input class="form-control w-50 mb-3" asp-for="Amount" />
-                    <span class="field-validation-error" style="color:red" asp-validation-for="Amount"></span>
-                </div>
-                <button type="submit"
-                        class="btn get-started-btn text-center button-link"
-                        asp-route-customerId="@Model.Deposit.CustomerId"
-                        asp-route-accountId="@Model.Deposit.Account.AccountId"
-                        style="font-size:20px">
-                    <i class="far fa-plus-square"></i> &nbsp; Deposit
-                </button>
-                <button class="btn back-btn mx-3 text-center button-link">
-                    <a asp-page="/Customers/CustomerCard"
-                       asp-route-customerId="@Model.Deposit.CustomerId">
-                        <i class="fas fa-chevron-circle-left"></i> Back
-                    </a>
-                </button>
-            </form>
-        </div>
-    </div>
-</section>
+<ol class="crumbs">
+    <li><a asp-page="/Index">Overview</a></li>
+    @if (Model.Deposit.CustomerId > 0)
+    {
+        <li><a asp-page="/Customers/CustomerCard" asp-route-customerId="@Model.Deposit.CustomerId">Customer № @Model.Deposit.CustomerId</a></li>
+    }
+    <li><a asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Deposit.CustomerId">Account № @BankFormat.AccountNumber(a.Id)</a></li>
+    <li>Deposit</li>
+</ol>
 
-@*Client side validation*@
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<partial name="_AccountHeader" model="panel" />
 
+<div class="grid-account">
+    <section class="panel">
+        <div class="panel-head"><h2>Deposit</h2></div>
+        <div class="panel-body">
+            <p class="muted">Book the deposit in the teller panel. The account's ledger is on the <a asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Deposit.CustomerId">account page</a>.</p>
+        </div>
+    </section>
+    <partial name="_TellerPanel" model="panel" />
+</div>

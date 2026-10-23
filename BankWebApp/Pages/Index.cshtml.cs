@@ -1,18 +1,23 @@
-﻿using BankWebApp.Services;
+using BankWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using BankWebApp.Services;
 
 namespace BankWebApp.Pages
 {
     [AllowAnonymous]
     public class IndexModel : PageModel
     {
+        public static readonly (string Code, string Name)[] Countries =
+        {
+            ("SE", "Sweden"), ("NO", "Norway"), ("DK", "Denmark"), ("FI", "Finland")
+        };
+
         private readonly ILogger<IndexModel> _logger;
         private readonly ICountryDataService _countryDataService;
 
         public Dictionary<string, IndexViewModel> ViewModels { get; set; } = new Dictionary<string, IndexViewModel>();
+        public IndexViewModel Totals { get; set; } = new IndexViewModel();
 
         public class IndexViewModel
         {
@@ -31,9 +36,15 @@ namespace BankWebApp.Pages
 
         public IActionResult OnGet()
         {
-            var countries = new[] { "SE", "FI", "DK", "NO" };
+            var totals = _countryDataService.GetBankTotals();
+            Totals = new IndexViewModel
+            {
+                NumberOfClients = totals.Customers,
+                NumberOfAccounts = totals.Accounts,
+                TotalAccountValue = totals.TotalBalance,
+            };
 
-            foreach (var country in countries)
+            foreach (var (country, _) in Countries)
             {
                 var viewModel = new IndexViewModel
                 {

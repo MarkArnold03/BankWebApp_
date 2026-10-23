@@ -1,0 +1,75 @@
+@model TellerPanelViewModel
+@{
+    var a = Model.Account;
+    string Checked(string tab) => Model.Active == tab ? "checked" : "";
+    string? AmountFor(string tab) => Model.Active == tab ? Model.Amount : null;
+    string? ErrorFor(string tab) => Model.Active == tab ? Model.AmountError : null;
+}
+<section class="panel teller" id="teller" aria-label="Book a transaction" data-balance="@a.Balance.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+    <input type="radio" name="teller-tab" id="t-deposit" @Checked("deposit") />
+    <input type="radio" name="teller-tab" id="t-withdraw" @Checked("withdraw") />
+    <input type="radio" name="teller-tab" id="t-transfer" @Checked("transfer") />
+    <div class="tabs" role="presentation">
+        <label for="t-deposit">@Icons.Svg("deposit", 15) Deposit</label>
+        <label for="t-withdraw">@Icons.Svg("withdraw", 15) Withdraw</label>
+        <label for="t-transfer">@Icons.Svg("transfer", 15) Transfer</label>
+    </div>
+
+    <form class="pane pane-deposit" method="post" asp-page="/Accounts/Deposit" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId" novalidate>
+        <div class="form-row">
+            <label for="d-amount">Cash paid in</label>
+            <div class="money-input"><input id="d-amount" name="Amount" inputmode="decimal" placeholder="0" autocomplete="off" value="@AmountFor("deposit")" data-sign="1" /><span>SEK</span></div>
+            <span class="field-error">@ErrorFor("deposit")</span>
+        </div>
+        <p class="after">Balance after <b data-after>@BankFormat.Sek(a.Balance)</b></p>
+        <button type="submit" class="btn btn-note btn-lg w-100" id="submit-deposit">Book deposit</button>
+        <p class="hint mt-2">Between 100 and 10 000 kr, at most two decimals.</p>
+    </form>
+
+    <form class="pane pane-withdraw" method="post" asp-page="/Accounts/Withdrawal" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId" novalidate>
+        <div class="form-row">
+            <label for="w-amount">Cash paid out</label>
+            <div class="money-input"><input id="w-amount" name="Amount" inputmode="decimal" placeholder="0" autocomplete="off" value="@AmountFor("withdraw")" data-sign="-1" /><span>SEK</span></div>
+            <span class="field-error">@ErrorFor("withdraw")</span>
+        </div>
+        <p class="after">Balance after <b data-after>@BankFormat.Sek(a.Balance)</b></p>
+        <button type="submit" class="btn btn-note btn-lg w-100" id="submit-withdraw">Book withdrawal</button>
+        <p class="hint mt-2">Between 100 and 10 000 kr. Never more than the balance.</p>
+    </form>
+
+    <form class="pane pane-transfer" method="post" asp-page="/Accounts/Transfer" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId" novalidate>
+        <div class="form-row">
+            <label for="t-amount">Amount to transfer</label>
+            <div class="money-input"><input id="t-amount" name="Amount" inputmode="decimal" placeholder="0" autocomplete="off" value="@AmountFor("transfer")" data-sign="-1" /><span>SEK</span></div>
+            <span class="field-error">@ErrorFor("transfer")</span>
+        </div>
+        <div class="form-row">
+            <label for="t-to">To account number</label>
+            <input class="text-input" id="t-to" name="AccountToId" inputmode="numeric" placeholder="e.g. 1204603" autocomplete="off" value="@Model.AccountTo" />
+            <span class="field-error">@Model.AccountToError</span>
+        </div>
+        <p class="after">Balance after <b data-after>@BankFormat.Sek(a.Balance)</b></p>
+        <button type="submit" class="btn btn-note btn-lg w-100" id="submit-transfer">Book transfer</button>
+        <p class="hint mt-2">Between 100 and 10 000 kr to another account at the bank.</p>
+    </form>
+</section>
+<script>
+    // Show the balance the account will have once the amount is booked.
+    (function () {
+        var panel = document.getElementById("teller");
+        if (!panel) return;
+        var balance = parseFloat(panel.getAttribute("data-balance"));
+        var fmt = new Intl.NumberFormat("sv-SE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        panel.querySelectorAll("input[data-sign]").forEach(function (input) {
+            var out = input.closest("form").querySelector("[data-after]");
+            function update() {
+                var v = parseFloat(input.value.replace(/\s/g, "").replace(",", "."));
+                var after = balance + (isNaN(v) ? 0 : v * parseInt(input.getAttribute("data-sign"), 10));
+                out.textContent = (after < 0 ? "−" : "") + fmt.format(Math.abs(after)) + " kr";
+                out.classList.toggle("neg", after < 0);
+            }
+            input.addEventListener("input", update);
+            update();
+        });
+    })();
+</script>

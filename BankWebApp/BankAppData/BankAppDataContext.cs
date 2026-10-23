@@ -36,7 +36,9 @@ namespace BankWebApp.BankAppData
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            // Collation is SQL Server specific; skipping it lets the tests run the same model on SQLite.
+            if (Database.IsSqlServer())
+                modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Account>(entity =>
             {

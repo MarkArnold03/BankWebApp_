@@ -1,85 +1,159 @@
-﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@{
+    var signedIn = SignInManager.IsSignedIn(User);
+    var currentPage = ViewContext.RouteData.Values["page"] as string ?? "";
+    var isIdentity = (ViewContext.RouteData.Values["area"] as string) == "Identity";
+    var isCashier = User.IsInRole("Cashier");
+    var isAdmin = User.IsInRole("Admin");
 
+    // Each section has its own colour, the way each banknote value does.
+    var note = currentPage switch
+    {
+        var p when p.StartsWith("/Customers") => "green",
+        var p when p.StartsWith("/Accounts") => "red",
+        var p when p.StartsWith("/Users") => "violet",
+        _ => "blue"
+    };
 
+    string? Current(params string[] prefixes) => prefixes.Any(p => currentPage == p || currentPage.StartsWith(p + "/")) ? "page" : null;
+
+    var nav = new List<(string Page, string Label, string Color, string[] Match)> { ("/Index", "Overview", "var(--note-blue)", new[] { "/Index", "/Countries" }) };
+    if (isCashier)
+    {
+        nav.Add(("/Customers/Customers", "Customers", "var(--note-green)", new[] { "/Customers" }));
+        nav.Add(("/Accounts/Accounts", "Accounts", "var(--note-red)", new[] { "/Accounts" }));
+    }
+    if (isAdmin)
+    {
+        nav.Add(("/Users/Users", "Users", "var(--note-violet)", new[] { "/Users" }));
+    }
+
+    var roleLabel = isAdmin ? "Admin" : isCashier ? "Cashier" : "No staff role";
+    var email = User.Identity?.Name ?? "";
+    // "richard.erdos.chalk@gmail.se" is shown as "Richard Erdos Chalk".
+    var nameParts = email.Split('@')[0].Split('.', '_', '-').Where(p => p.Length > 0).ToArray();
+    var displayName = nameParts.Length > 0 ? string.Join(" ", nameParts.Select(p => char.ToUpperInvariant(p[0]) + p[1..])) : email;
+    var initials = BankFormat.Initials(nameParts.FirstOrDefault(), nameParts.Length > 1 ? nameParts[^1] : null);
+    var fullBleed = ViewData["FullBleed"] as bool? == true;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - BankWebApp</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-   @*   <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">*@
-
-    <link rel="stylesheet" href="~/assets/css/fontawesome.css">
-    <link rel="stylesheet" href="~/assets/css/owl.css">
-    <link rel="stylesheet" href="~/assets/css/animate.css">
-    <link rel="stylesheet" href="~/assets/css/indexstyle.css">
-    <link rel="stylesheet" href="~/assets/css/layoutstyle.css">
-@*    <link rel="stylesheet" href="~/assets/TopTenStyle.css">*@
-    @*<link rel="stylesheet" href="~/@(nameof(BankWebApp)).styles.css" />*@
-
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#13221b" />
+    <title>@ViewData["Title"] · ManDem Bank</title>
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem("theme");
+                if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+            } catch (e) { }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" />
+    <link rel="stylesheet" href="~/vendor/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <header class="header-area header-sticky" style="">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <h1 class="logo me-auto me-lg-0">
-                            <a asp-page="/Index">
-                                <span class="material-icons">account_balance</span> MB
-                            </a>
-                        </h1>
-                        <ul class="nav">
-                            @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Cashier"))
-                            {
-                                <li><a class="nav-link scrollto" asp-page="/Customers/Customers" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; The ManDem</a></li>
-                                <li><a class="nav-link scrollto" asp-page="/Accounts/Accounts"><i class="fas fa-file-invoice-dollar"></i> &nbsp Accounts</a></li>
-                            }
-                            @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Admin"))
-                            {
-                                <li><a class="nav-link scrollto" asp-page="/Users/Users" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; Users</a></li>
-                            }
-                            <div class="navbar order-last order-lg-0">
-                                <partial name="_LoginPartial"></partial>
+<body data-note="@note">
+    <header class="band">
+        <div class="wrap">
+            <a class="logo" asp-area="" asp-page="/Index" aria-label="ManDem Bank, overview">
+                <canvas class="guilloche rosette" data-guilloche="rosette" style="color: var(--band-ink)" aria-hidden="true"></canvas>
+                <span class="names"><strong>ManDem Bank</strong><small>@(signedIn ? "Teller desk" : "Est. 2023")</small></span>
+            </a>
+
+            @if (signedIn)
+            {
+                <ul class="mainnav" aria-label="Main">
+                    @foreach (var n in nav)
+                    {
+                        <li><a asp-area="" asp-page="@n.Page" aria-current="@Current(n.Match)" style="--c: @n.Color"><span class="dot" aria-hidden="true"></span>@n.Label</a></li>
+                    }
+                </ul>
+                @if (isCashier)
+                {
+                    <form class="cmdsearch" role="search" method="get" asp-area="" asp-page="/Customers/Customers">
+                        @Icons.Svg("search", 16)
+                        <input name="searchText" id="global-search" placeholder="Find a customer" aria-label="Find a customer by name, city or customer number" autocomplete="off" />
+                        <kbd aria-hidden="true">/</kbd>
+                    </form>
+                }
+                <div class="end">
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle>
+                        @Icons.Svg("moon", 18, "i-moon")@Icons.Svg("sun", 18, "i-sun")
+                    </button>
+                    <details class="usermenu">
+                        <summary aria-label="Account menu">
+                            <span class="avatar">@initials</span>
+                            <span class="who"><strong>@displayName</strong><span>@roleLabel</span></span>
+                        </summary>
+                        <div class="menu">
+                            <div class="menu-head"><strong>@displayName</strong><span>@roleLabel · @email</span></div>
+                            <div class="menu-nav">
+                                @foreach (var n in nav)
+                                {
+                                    <a asp-area="" asp-page="@n.Page">@n.Label</a>
+                                }
                             </div>
-                        </ul>
-                        <a class="menu-trigger"><span>Menu</span></a>
-                    </nav>
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index">Profile and security</a>
+                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+                                <button type="submit" class="destructive">Log out</button>
+                            </form>
+                        </div>
+                    </details>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="end">
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle>
+                        @Icons.Svg("moon", 18, "i-moon")@Icons.Svg("sun", 18, "i-sun")
+                    </button>
+                    <partial name="_LoginPartial" />
+                </div>
+            }
         </div>
+        <div class="band-trim"><canvas class="guilloche" data-guilloche="band" style="color: var(--note)" aria-hidden="true"></canvas></div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <main role="main">
+        @if (fullBleed)
+        {
             @RenderBody()
-            <img class="background-img" src="~/assets/images/herobg-4k.webp" />
-        </main>
-    </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright © 2023 <a href="#">Mandem Bank</a> Company. All rights reserved.</p>
-                </div>
+        }
+        else
+        {
+            <div class="wrap page @(isIdentity ? "identity" : "")">
+                @if (TempData["success"] is string success)
+                {
+                    <div class="notice" role="status"><span class="stamp">BOOKED</span><span>@success</span></div>
+                }
+                @RenderBody()
             </div>
+        }
+    </main>
+
+    <footer class="footer">
+        <div class="wrap">
+            <span>&copy; @DateTime.Now.Year ManDem Bank · Internal banking system</span>
+            <nav aria-label="Footer">
+                <a asp-area="" asp-page="/Privacy">Privacy</a>
+                @if (!signedIn)
+                {
+                    <a asp-area="Identity" asp-page="/Account/ForgotPassword">Reset password</a>
+                }
+            </nav>
+            <div class="microtext" aria-hidden="true">@string.Concat(Enumerable.Repeat("MANDEMBANK·", 40))</div>
         </div>
     </footer>
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/isotope.min.js"></script>
-    <script src="assets/js/owl-carousel.js"></script>
-    <script src="assets/js/tabs.js"></script>
-    <script src="assets/js/popup.js"></script>
-    <script src="assets/js/custom.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/guilloche.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

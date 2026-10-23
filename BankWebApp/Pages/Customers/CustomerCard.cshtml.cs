@@ -1,11 +1,9 @@
 using AutoMapper;
-using BankWebApp.BankAppData;
-using BankWebApp.ViewModel;
 using BankWebApp.Services;
+using BankWebApp.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data;
 
 namespace BankWebApp.Pages.Customers
 {
@@ -23,26 +21,28 @@ namespace BankWebApp.Pages.Customers
             _mapper = mapper;
         }
 
-        public CustomerCardViewModel Customer { get; set; }
+        public CustomerCardViewModel Customer { get; set; } = null!;
         public int CustmerId { get; set; }
 
-
-
-        public void OnGet(int customerId)
+        public IActionResult OnGet(int customerId)
         {
-            CustmerId = customerId;
             var customer = _customerService.GetCustomer(customerId);
-            Customer = _mapper.Map<CustomerCardViewModel>(customer);
+            if (customer == null) return NotFound();
 
-            Customer.Name = $"{Customer.GivenName} {Customer.Surname}";
-            Customer.Age = DateTime.Now.Year - Customer.Birthday.Year;
-            Customer.Accounts = _accountService.GetAccountsForCustomer(customerId)
-                .Select(a => new AccountViewModel { Id = a.AccountId, Balance = a.Balance })
-                .ToList();
+            CustmerId = customerId;
+            Customer = _mapper.Map<CustomerCardViewModel>(customer);
+            Customer.Age = Customer.Birthday == null ? null : AgeOn(Customer.Birthday.Value, DateTime.Today);
+            Customer.Accounts = _mapper.Map<List<AccountViewModel>>(_accountService.GetAccountsForCustomer(customerId));
             Customer.TotalAccountValue = Customer.Accounts.Sum(a => a.Balance);
+            return Page();
+        }
+
+        /// <summary>Whole years, counting the birthday only once it has passed this year.</summary>
+        public static int AgeOn(DateTime birthday, DateTime today)
+        {
+            var age = today.Year - birthday.Year;
+            if (birthday.Date > today.AddYears(-age)) age--;
+            return age;
         }
     }
-
-
 }
-

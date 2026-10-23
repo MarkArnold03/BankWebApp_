@@ -1,12 +1,11 @@
-using BankWebApp.BankAppData;
+using AutoMapper;
+using BankWebApp.Helpers;
 using BankWebApp.Services;
+using BankWebApp.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 
 namespace BankWebApp.Pages.Accounts
 {
@@ -14,59 +13,61 @@ namespace BankWebApp.Pages.Accounts
     public class DepositModel : PageModel
     {
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
 
-        public DepositViewModel Deposit { get; set; }
+        public DepositViewModel Deposit { get; set; } = null!;
 
         [BindProperty]
         [Required(ErrorMessage = "Please enter an amount.")]
-        [Range(100, 10000, ErrorMessage = "Please choose a number between 100 and 10000.")]
+        [Range(100, 10000, ErrorMessage = "Please choose an amount between 100 and 10 000 kr.")]
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
 
-        public DepositModel(IAccountService accountService)
+        public DepositModel(IAccountService accountService, IMapper mapper)
         {
             _accountService = accountService;
+            _mapper = mapper;
         }
 
         public class DepositViewModel
         {
-            public Account Account { get; set; }
-
-            [Range(1, 1000000)]
-            public decimal Amount { get; set; }
-
+            public AccountViewModel Account { get; set; } = null!;
             public int CustomerId { get; set; }
         }
 
         public IActionResult OnGet(int accountId, int customerId)
         {
-            Deposit = _accountService.CreateNewDepositViewModel();
-            Deposit.Account = _accountService.GetAccountForCustomer(accountId);
-            Deposit.Amount = 0;
-            Deposit.CustomerId = customerId;
-
-            return Page();
+            return Load(accountId, customerId) ? Page() : NotFound();
         }
 
         public IActionResult OnPost(int accountId, int customerId)
         {
             var account = _accountService.GetAccountForCustomer(accountId);
+            if (account == null) return NotFound();
+
+            if (decimal.Round(Amount, 2) != Amount)
+                ModelState.AddModelError(nameof(Amount), "Use at most two decimals (öre).");
 
             if (ModelState.IsValid)
             {
                 _accountService.Deposit(account, Amount);
 
-                TempData["success"] = "Deposit made successfully!";
+                TempData["success"] = $"Deposited {BankFormat.Sek(Amount)}.";
 
-                return RedirectToPage("/Customers/CustomerCard", new { customerId = customerId });
+                return RedirectToPage("/Accounts/Transactions", new { accountId, customerId });
             }
 
-            Deposit = _accountService.CreateNewDepositViewModel();
-            Deposit.Account = _accountService.GetAccountForCustomer(accountId);
-            Deposit.Amount = 0;
-            Deposit.CustomerId = customerId;
-
+            Load(accountId, customerId);
             return Page();
+        }
+
+        private bool Load(int accountId, int customerId)
+        {
+            var account = _accountService.GetAccountForCustomer(accountId);
+            if (account == null) return false;
+
+            Deposit = new DepositViewModel { Account = _mapper.Map<AccountViewModel>(account), CustomerId = customerId };
+            return true;
         }
     }
 }

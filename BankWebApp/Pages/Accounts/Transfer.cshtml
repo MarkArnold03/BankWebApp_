@@ -1,57 +1,39 @@
-﻿@page
+@page
 @model BankWebApp.Pages.Accounts.TransferModel
 @{
-    ViewData["Title"] = "Transfer";
+    var a = Model.Transfer.Account;
+    ViewData["Title"] = "Transfer · " + BankFormat.AccountNumber(a.Id);
+    var isPost = HttpMethods.IsPost(Request.Method);
+    var panel = new TellerPanelViewModel
+    {
+        Account = a,
+        CustomerId = Model.Transfer.CustomerId,
+        Active = "transfer",
+        Amount = isPost ? Request.Form["Amount"].ToString() : null,
+        AccountTo = isPost ? Request.Form["AccountToId"].ToString() : null,
+        AmountError = ViewData.ModelState["Amount"]?.Errors.FirstOrDefault()?.ErrorMessage,
+        AccountToError = ViewData.ModelState["AccountToId"]?.Errors.FirstOrDefault()?.ErrorMessage,
+    };
 }
 
+<ol class="crumbs">
+    <li><a asp-page="/Index">Overview</a></li>
+    @if (Model.Transfer.CustomerId > 0)
+    {
+        <li><a asp-page="/Customers/CustomerCard" asp-route-customerId="@Model.Transfer.CustomerId">Customer № @Model.Transfer.CustomerId</a></li>
+    }
+    <li><a asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Transfer.CustomerId">Account № @BankFormat.AccountNumber(a.Id)</a></li>
+    <li>Transfer</li>
+</ol>
 
-<section id="customer" class="d-flex align-items-center justify-content-center">
-    <div class="container" data-aos="fade-up">
+<partial name="_AccountHeader" model="panel" />
 
-        <div class="section-title">
-            <h2>Account</h2>
-            <p id="account-info">Transfer: </p>
-            <h5 style="color: white">Transfer FROM account no: @Model.Transfer.Account.AccountId</h5>
-            <h5 style="color: #ffc451">Balance: @Model.Transfer.Account.Balance kr</h5>
+<div class="grid-account">
+    <section class="panel">
+        <div class="panel-head"><h2>Transfer</h2></div>
+        <div class="panel-body">
+            <p class="muted">Book the transfer in the teller panel. The account's ledger is on the <a asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Transfer.CustomerId">account page</a>.</p>
         </div>
-
-        <div class="card-body custom-table">
-            <form method="post">
-
-                <div class="form-group">
-                    <label class="mb-3" style="color:white" asp-for="Amount">Amount (Kr)</label>
-                    <input class="form-control w-50 mb-3" asp-for="Amount" />
-                    <span class="field-validation-error" style="color:red" asp-validation-for="Amount"></span>
-                </div>
-
-                <div class="form-group">
-                    <label class="mb-3" style="color:white" asp-for="AccountToId">Transfer TO account no.</label>
-                    <input class="form-control w-50 mb-3" asp-for="AccountToId" />
-                    <span class="field-validation-error" style="color:red" asp-validation-for="AccountToId"></span>
-                </div>
-
-
-                <button type="submit"
-                        class="btn get-started-btn text-center button-link"
-                        asp-route-customerId="@Model.Transfer.CustomerId"
-                        asp-route-accountId="@Model.Transfer.Account.AccountId"
-                        asp-route-accountToId="@Model.AccountToId"
-                        style="font-size:20px">
-                    <i class="fas fa-exchange-alt"></i> &nbsp; Transfer
-                </button>
-
-                <button class="btn back-btn mx-3 text-center button-link">
-                    <a asp-page="/Customers/CustomerCard"
-                       asp-route-customerId="@Model.Transfer.CustomerId">
-                        <i class="fas fa-chevron-circle-left"></i> Back
-                    </a>
-                </button>
-            </form>
-        </div>
-    </div>
-</section>
-
-@*Client side validation*@
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    </section>
+    <partial name="_TellerPanel" model="panel" />
+</div>

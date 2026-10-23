@@ -1,104 +1,96 @@
-﻿@page 
+@page
 @model BankWebApp.Pages.Transactions.TransactionModel
 @{
-    int MinusCP = 4;
-    int PlusCP = 5;
+    var a = Model.Account;
+    ViewData["Title"] = "Account " + BankFormat.AccountNumber(a.Id);
+    var panel = new TellerPanelViewModel { Account = a, CustomerId = Model.CustomerId };
 }
-<head>
-    <link href="~/assets/css/Transactions.css" rel="stylesheet" type="text/css" />
-</head>
 
-<h2>Transactions</h2>
+<ol class="crumbs">
+    <li><a asp-page="/Index">Overview</a></li>
+    @if (Model.CustomerId > 0)
+    {
+        <li><a asp-page="/Customers/Customers">Customers</a></li>
+        <li><a asp-page="/Customers/CustomerCard" asp-route-customerId="@Model.CustomerId">Customer № @Model.CustomerId</a></li>
+    }
+    else
+    {
+        <li><a asp-page="/Accounts/Accounts">Accounts</a></li>
+    }
+    <li>Account № @BankFormat.AccountNumber(a.Id)</li>
+</ol>
 
-<div class="bok12"></div>
+<partial name="_AccountHeader" model="panel" />
 
-<table>
-    <thead>
-        <tr>
-            <th>Transaction ID</th>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Balance</th>
-        </tr>
-    </thead>
-    <tbody id="transactionTableBody">
-        @foreach (var transaction in Model.Transactions)
+<div class="grid-account">
+    <section class="panel" aria-labelledby="tx-title">
+        <div class="panel-head"><h2 id="tx-title">Ledger</h2><span class="micro">Newest first</span></div>
+        @if (Model.Transactions.Count == 0)
         {
-            <tr>
-                <td>@transaction.TransactionId</td>
-                <td>@transaction.Date</td>
-                <td>@transaction.Amount</td>
-                <td>@transaction.Balance</td>
-            </tr>
+            <div class="empty"><h2>No transactions yet</h2><p>Bookings will appear here.</p></div>
         }
-    </tbody>
-</table>
-@*Pagination*@
+        else
+        {
+            <div class="table-wrap">
+                <table class="data ledger">
+                    <thead><tr><th scope="col">Date</th><th scope="col">Transaction</th><th scope="col" class="num">Amount</th><th scope="col" class="num hide-sm">Balance</th></tr></thead>
+                    <tbody id="transactions">
+                        <partial name="_TransactionRows" model="Model.Transactions" />
+                    </tbody>
+                </table>
+            </div>
+            @if (Model.HasMore)
+            {
+                <div class="load-more">
+                    <button type="button" class="btn btn-gray" id="load-more"
+                            data-url="@Url.Page("/Accounts/Transactions", "FetchMore", new { accountId = a.Id })"
+                            data-skip="@Model.Transactions.Count">Load 20 more</button>
+                </div>
+            }
+            <p class="field-error text-center pb-3" id="load-error" role="alert" hidden>Couldn't load more transactions. Try again.</p>
+        }
+    </section>
 
-<div class="d-flex justify-content-center">
-    <table>
-        <tbody>
-            <tr>
-                <td>
-                    @*Previous button*@
-                    @if (Model.CurrentPage != 1)
-                    {
-                        <a class="btn btn-secondary"
-                       asp-page="/Transactions/Transactions"
-                       asp-route-searchWord="@Model.SearchText"
-                       asp-route-accountId="@Model.Id"
-                       asp-route-sortColumn="@Model.SortColumn"
-                       asp-route-sortOrder="@Model.SortOrder"
-                       asp-route-pageno="@(Model.CurrentPage - 1)">
-                            Prev
-                        </a>
-                    }
-                </td>
-
-                @*Page buttons*@
-                <td>
-                    @for (int i = 1; i <= Model.PageCount; i++)
-                    {
-                        @if (!(i > Model.CurrentPage + MinusCP) && (i > Model.CurrentPage - PlusCP))
-                        {
-                            string pageColour = "btn-secondary";
-                            if (i == @Model.CurrentPage)
-                            {
-                                pageColour = "btn-primary";
-                            }
-                            <a id="table-page-btn"
-                       class="btn @pageColour my-1"
-                       asp-page="/Transactions/Transactions"
-                       asp-route-searchWord="@Model.SearchText"
-                       asp-route-accountId="@Model.Id"
-                       asp-route-sortColumn="@Model.SortColumn"
-                       asp-route-sortOrder="@Model.SortOrder"
-                       asp-route-pageno="@i">
-                                @i
-                            </a>
-                        }
-                    }
-                </td>
-
-                @*Next button*@
-                <td>
-                    @if (Model.CurrentPage != Model.PageCount)
-                    {
-                        <a class="btn btn-secondary"
-                       asp-route-searchText="@Model.SearchText"
-                       asp-page="/Transactions/Transactions"
-                       asp-route-accountId="@Model.Id"
-                       asp-route-sortColumn="@Model.SortColumn"
-                       asp-route-sortOrder="@Model.SortOrder"
-                       asp-route-pageno="@(Model.CurrentPage + 1)">
-                            Next
-                        </a>
-                    }
-                </td>
-            </tr>
-
-            
-        </tbody>
-    </table>
+    <partial name="_TellerPanel" model="panel" />
 </div>
 
+@section Scripts {
+    <script>
+        (function () {
+            var button = document.getElementById("load-more");
+            if (!button) return;
+            var list = document.getElementById("transactions");
+            var error = document.getElementById("load-error");
+
+            button.addEventListener("click", function () {
+                var skip = parseInt(button.getAttribute("data-skip"), 10);
+                button.disabled = true;
+                button.textContent = "Loading…";
+                error.hidden = true;
+
+                fetch(button.getAttribute("data-url") + "&skip=" + skip)
+                    .then(function (r) {
+                        if (!r.ok) throw new Error(r.status);
+                        var more = r.headers.get("X-Has-More") === "true";
+                        return r.text().then(function (html) { return { html: html, more: more }; });
+                    })
+                    .then(function (result) {
+                        var before = list.children.length;
+                        list.insertAdjacentHTML("beforeend", result.html);
+                        button.setAttribute("data-skip", skip + (list.children.length - before));
+                        if (result.more) {
+                            button.disabled = false;
+                            button.textContent = "Load 20 more";
+                        } else {
+                            button.parentElement.remove();
+                        }
+                    })
+                    .catch(function () {
+                        error.hidden = false;
+                        button.disabled = false;
+                        button.textContent = "Load 20 more";
+                    });
+            });
+        })();
+    </script>
+}

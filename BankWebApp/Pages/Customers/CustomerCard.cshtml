@@ -1,73 +1,80 @@
-﻿@page "{customerId:int}"
+@page "{customerId:int}"
 @model CustomerCardModel
 @{
-    ViewData["Title"] = "Customer Card";
+    var c = Model.Customer;
+    ViewData["Title"] = c.Name;
+    var inv = System.Globalization.CultureInfo.InvariantCulture;
+    string Or(string? v) => string.IsNullOrWhiteSpace(v) ? "–" : v!;
+    var initials = BankFormat.Initials(c.GivenName, c.Surname);
 }
-<head>
-    <link href="~/assets/css/CustomerCard.css" rel="stylesheet" type="text/css" />
-</head>
 
-<section id="customer" class="d-flex align-items-center justify-content-center">
-    <div class="container" data-aos="fade-up">
-        <div class="section-title">
-            <h3>@Model.Customer.Name</h3>
-            <p id="customer-info">Customer profile</p>
+<ol class="crumbs"><li><a asp-page="/Index">Overview</a></li><li><a asp-page="/Customers/Customers">Customers</a></li><li>@c.Name</li></ol>
+
+<section class="panel profile mb-4" aria-label="Customer">
+    <div class="seal">
+        <canvas class="guilloche" data-guilloche="seal" style="color: var(--note)" aria-hidden="true"></canvas>
+        <span aria-hidden="true">@initials</span>
+    </div>
+    <div>
+        <div class="micro">Customer <span class="serial">№ @c.Id</span></div>
+        <h1>@c.Name</h1>
+        <div class="facts">
+            <span>@c.City, @c.Country</span>
+            @if (c.Age != null) { <span><b>@c.Age</b> years</span> }
+            <span>@c.Accounts.Count @(c.Accounts.Count == 1 ? "account" : "accounts")</span>
         </div>
+    </div>
+    <dl class="total m-0">
+        <dt>Total balance</dt>
+        <dd>@BankFormat.Sek(c.TotalAccountValue)</dd>
+    </dl>
+</section>
 
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                
-                <p>@Model.Customer.Age years old</p>
-                <p>@Model.Customer.Birthday.ToShortDateString()</p>
-                <p>@Model.Customer.Gender</p>
-                <p>@Model.Customer.TelephoneNumber</p>
-                <p>@Model.Customer.NationalId</p>
-                <p>@Model.Customer.StreetAddress, @Model.Customer.ZipCode, @Model.Customer.City</p>
-                <p>@Model.Customer.Country</p>
-            </div>
-
-            <div class="col-lg-6">
-                <h3>Accounts</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Account ID</th>
-                            <th>Balance</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+<div class="grid-2">
+    <section class="panel" aria-labelledby="acc-title">
+        <div class="panel-head"><h2 id="acc-title">Accounts</h2><span class="micro">Open an account to see its ledger</span></div>
+        @if (c.Accounts.Count == 0)
+        {
+            <div class="empty"><h2>No accounts</h2><p>This customer has no accounts.</p></div>
+        }
+        else
+        {
+            <div class="table-wrap">
+                <table class="data">
+                    <thead><tr><th scope="col">Account</th><th scope="col" class="hide-sm">Statements</th><th scope="col" class="num">Balance</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
                     <tbody>
-                        @foreach (var account in Model.Customer.Accounts)
+                        @foreach (var a in c.Accounts)
                         {
                             <tr>
-                                <td>@account.Id</td>
-                                <td>@account.Balance.ToString("C")</td>
+                                <td class="primary-cell"><a class="serial" asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustmerId">№ @BankFormat.AccountNumber(a.Id)</a></td>
+                                <td class="hide-sm muted">@(a.Frequency == "AfterTransaction" ? "After each transaction" : a.Frequency)</td>
+                                <td class="num">@BankFormat.Sek(a.Balance)</td>
                                 <td>
-                                    <a asp-page="/Accounts/Transactions" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@account.Id" title="Show account transactions">
-                                        <i class="fas fa-info-circle"></i>
-                                    </a>
-                                    <a asp-page="/Accounts/Deposit" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@account.Id" title="Make a deposit">
-                                        <i class="fas fa-plus-square"></i>
-                                    </a>
-                                    <a asp-page="/Accounts/Withdrawal" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@account.Id" title="Make a withdrawal">
-                                        <i class="fas fa-minus-square"></i>
-                                    </a>
-                                    <a asp-page="/Accounts/Transfer" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@account.Id" title="Make a transfer">
-                                        <i class="fas fa-exchange-alt"></i>
-                                    </a>
+                                    <div class="row-actions">
+                                        <a asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustmerId" asp-fragment="teller" title="Deposit, withdraw or transfer">Book</a>
+                                    </div>
                                 </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
-        </div>
+            <div class="panel-foot">Total <span class="num">@BankFormat.Sek(c.TotalAccountValue)</span> across all accounts, including shared ones.</div>
+        }
+    </section>
 
-        <div class="row">
-            <div class="col-12">
-                <h3>Total Account Value</h3>
-                <p>@Model.Customer.TotalAccountValue.ToString("C")</p>
-            </div>
+    <section class="panel" aria-labelledby="det-title">
+        <div class="panel-head"><h2 id="det-title">Particulars</h2></div>
+        <div class="panel-body">
+            <dl class="kv">
+                <dt>Personal ID</dt><dd class="mono">@Or(c.NationalId)</dd>
+                <dt>Born</dt><dd>@(c.Birthday?.ToString("d MMMM yyyy", inv) ?? "–")</dd>
+                <dt>Gender</dt><dd>@(string.IsNullOrEmpty(c.Gender) ? "–" : char.ToUpperInvariant(c.Gender[0]) + c.Gender[1..])</dd>
+                <dt>Address</dt><dd>@c.StreetAddress<br />@c.ZipCode @c.City</dd>
+                <dt>Country</dt><dd>@c.Country</dd>
+                <dt>Phone</dt><dd class="mono">@(string.IsNullOrWhiteSpace(c.TelephoneNumber) ? "–" : $"{c.TelephoneCountryCode} {c.TelephoneNumber}".Trim())</dd>
+                <dt>Email</dt><dd>@Or(c.EmailAddress)</dd>
+            </dl>
         </div>
-    </div>
-</section>
+    </section>
+</div>

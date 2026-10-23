@@ -1,49 +1,37 @@
-﻿@page
+@page
 @model BankWebApp.Pages.Accounts.WithdrawalModel
 @{
-    ViewData["Title"] = "Withdrawal";
+    var a = Model.Withdrawal.Account;
+    ViewData["Title"] = "Withdrawal · " + BankFormat.AccountNumber(a.Id);
+    var isPost = HttpMethods.IsPost(Request.Method);
+    var panel = new TellerPanelViewModel
+    {
+        Account = a,
+        CustomerId = Model.Withdrawal.CustomerId,
+        Active = "withdraw",
+        Amount = isPost ? Request.Form["Amount"].ToString() : null,
+        AmountError = ViewData.ModelState["Amount"]?.Errors.FirstOrDefault()?.ErrorMessage,
+    };
 }
 
+<ol class="crumbs">
+    <li><a asp-page="/Index">Overview</a></li>
+    @if (Model.Withdrawal.CustomerId > 0)
+    {
+        <li><a asp-page="/Customers/CustomerCard" asp-route-customerId="@Model.Withdrawal.CustomerId">Customer № @Model.Withdrawal.CustomerId</a></li>
+    }
+    <li><a asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Withdrawal.CustomerId">Account № @BankFormat.AccountNumber(a.Id)</a></li>
+    <li>Withdrawal</li>
+</ol>
 
-<section id="customer" class="d-flex align-items-center justify-content-center">
-    <div class="container" data-aos="fade-up">
+<partial name="_AccountHeader" model="panel" />
 
-        <div class="section-title">
-            <h2>Account</h2>
-            <p id="account-info">Withdrawal: </p>
-            <h5 style="color: white">Account number: @Model.Withdrawal.Account.AccountId</h5>
-            <h5 style="color: #ffc451">Balance: @Model.Withdrawal.Account.Balance kr</h5>
+<div class="grid-account">
+    <section class="panel">
+        <div class="panel-head"><h2>Withdrawal</h2></div>
+        <div class="panel-body">
+            <p class="muted">Book the withdrawal in the teller panel. The account's ledger is on the <a asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Withdrawal.CustomerId">account page</a>.</p>
         </div>
-
-        <div class="card-body custom-table">
-            <form method="post">
-                <div class="form-group">
-                    <label class="mb-3" style="color:white" asp-for="Amount">Amount (Kr)</label>
-                    <input class="form-control w-50 mb-3" asp-for="Amount" />
-                    <span class="field-validation-error" style="color:red" asp-validation-for="Amount"></span>
-                </div>
-
-                <button type="submit"
-                        class="btn get-started-btn text-center button-link"
-                        asp-route-customerId="@Model.Withdrawal.CustomerId"
-                        asp-route-accountId="@Model.Withdrawal.Account.AccountId"
-                        style="font-size:20px">
-                    <i class="far fa-minus-square"></i> &nbsp; Withdraw
-                </button>
-
-                <button class="btn back-btn mx-3 text-center button-link">
-                    <a asp-page="/Customers/CustomerCard"
-                       asp-route-customerId="@Model.Withdrawal.CustomerId">
-                        <i class="fas fa-chevron-circle-left"></i> Back
-                    </a>
-                </button>
-            </form>
-        </div>
-    </div>
-</section>
-
-@*Client side validation*@
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
-
+    </section>
+    <partial name="_TellerPanel" model="panel" />
+</div>

@@ -1,16 +1,17 @@
 using AutoMapper;
-using BankWebApp.BankAppData;
 using BankWebApp.Services;
+using BankWebApp.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BankWebApp.Pages.Transactions
 {
+    [Authorize(Roles = "Cashier")]
     public class TransactionModel : PageModel
     {
+        public const int BatchSize = 20;
+
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
 
@@ -20,66 +21,34 @@ namespace BankWebApp.Pages.Transactions
             _mapper = mapper;
         }
 
-        public List<TransactionViewModel> Transactions { get; set; } = new List<TransactionViewModel>();
-        public int Id { get; set; }
-        public string SearchText { get; set; }
-        public string SortOrder { get; set; }
-        public string SortColumn { get; set; }
-        public int CurrentPage { get; set; }
-        public int PageCount { get; set; }
-        public int TotalPages { get; set; }
+        public AccountViewModel Account { get; set; } = null!;
+        public int CustomerId { get; set; }
+        public List<TransactionViewModel> Transactions { get; set; } = new();
+        public bool HasMore { get; set; }
 
-        public void OnGet(int accountId, string sortColumn, string sortOrder, string searchText, int pageNo = 1)
+        public IActionResult OnGet(int accountId, int customerId)
         {
+            var account = _accountService.GetAccountForCustomer(accountId);
+            if (account == null) return NotFound();
 
-            var allTransactions = _accountService.GetAccountTransactions(accountId)
-                .OrderByDescending(t => t.Date)
-                .ToList();
+            Account = _mapper.Map<AccountViewModel>(account);
+            CustomerId = customerId;
 
-
-            // Pagination
-            SearchText = searchText;
-            SortOrder = sortOrder;
-            SortColumn = sortColumn;
-            int pageSize = 50;
-            TotalPages = (int)Math.Ceiling(allTransactions.Count / (double)pageSize);
-
-            if (pageNo < 1) pageNo = 1;
-            else if (pageNo > TotalPages) pageNo = TotalPages;
-
-            CurrentPage = pageNo;
-
-            var transactionsForPage = allTransactions
-                .Skip((CurrentPage - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            Transactions = _mapper.Map<List<TransactionViewModel>>(transactionsForPage);
+            var batch = _accountService.GetAccountTransactions(accountId, 0, BatchSize + 1);
+            HasMore = batch.Count > BatchSize;
+            Transactions = _mapper.Map<List<TransactionViewModel>>(batch.Take(BatchSize));
+            return Page();
         }
 
-        public IActionResult OnGetFetchMore(int accountId, long lastTransaction)
+        /// <summary>
+        /// Called by the "Load 20 more" button: the next 20 transactions as table rows.
+        /// The X-Has-More header says whether there are more after these.
+        /// </summary>
+        public IActionResult OnGetFetchMore(int accountId, int skip)
         {
-            DateTime dateOfLastShown = new DateTime(lastTransaction).AddMilliseconds(100);
-
-            var listOfTransactions = _accountService.GetAccountTransactions(accountId)
-                .Where(t => lastTransaction == 0 || t.Date > dateOfLastShown)
-                .OrderByDescending(t => t.Date)
-
-                .Take(10)
-                .ToList();
-
-            var listOfTransactionsViewModel = _mapper.Map<List<TransactionViewModel>>(listOfTransactions);
-            if (listOfTransactionsViewModel.Any())
-                lastTransaction = listOfTransactionsViewModel.Last().Date.Ticks;
-            return new JsonResult(new { items = listOfTransactionsViewModel, lastTransaction });
-        }
-
-        public class TransactionViewModel
-        {
-            public int TransactionId { get; set; }
-            public DateTime Date { get; set; }
-            public decimal Amount { get; set; }
-            public decimal Balance { get; set; }
+            var batch = _accountService.GetAccountTransactions(accountId, skip, BatchSize + 1);
+            Response.Headers["X-Has-More"] = batch.Count > BatchSize ? "true" : "false";
+            return Partial("_TransactionRows", _mapper.Map<List<TransactionViewModel>>(batch.Take(BatchSize)));
         }
     }
 }

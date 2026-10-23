@@ -1,0 +1,10 @@
+@model IEnumerable<TransactionViewModel>
+@foreach (var t in Model)
+{
+    <tr data-transaction="@t.TransactionId">
+        <td class="when">@t.Date.ToString("yyyy-MM-dd")</td>
+        <td class="what"><strong>@t.Title</strong>@if (!string.IsNullOrEmpty(t.Details)) {<span class="sub">@t.Details</span>}</td>
+        <td class="amount @(t.IsOutgoing ? "" : "in")">@BankFormat.SignedSek(t.SignedAmount)</td>
+        <td class="amount hide-sm muted">@BankFormat.Sek(t.Balance)</td>
+    </tr>
+}
