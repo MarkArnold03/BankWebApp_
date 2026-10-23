@@ -32,24 +32,28 @@ namespace BankWebApp.Services
                     query = sortOrder == "asc" ? query.OrderBy(c => c.City) : query.OrderByDescending(c => c.City);
                     break;
                 default:
+                    // A stable order, so paging never repeats or skips customers.
+                    query = query.OrderBy(c => c.CustomerId);
                     break;
             }
 
-            if (!string.IsNullOrEmpty(searchText))
+            // Every word must match the customer number, first name, surname or city,
+            // so "anna uppsala" finds Anna in Uppsala.
+            foreach (var word in (searchText ?? "").ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Where(c =>
-                    c.CustomerId.ToString() == searchText ||
-                    c.Givenname.ToLower().Contains(searchText.ToLower()) ||
-                    c.Surname.ToLower().Contains(searchText.ToLower()) ||
-                    c.City.ToLower().Contains(searchText.ToLower()));
+                    c.CustomerId.ToString() == word ||
+                    c.Givenname.ToLower().Contains(word) ||
+                    c.Surname.ToLower().Contains(word) ||
+                    c.City.ToLower().Contains(word));
             }
 
             return query.GetPaged(page, 50);
         }
 
-        public IEnumerable<Customer> GetCustomers() => _dbContext.Customers;
+        public IQueryable<Customer> GetCustomers() => _dbContext.Customers;
 
-        public Customer GetCustomer(int customerId) => _dbContext.Customers.Include(c => c.Dispositions).First(c => c.CustomerId == customerId);
+        public Customer? GetCustomer(int customerId) => _dbContext.Customers.Include(c => c.Dispositions).FirstOrDefault(c => c.CustomerId == customerId);
 
        
     }

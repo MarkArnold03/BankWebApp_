@@ -16,7 +16,9 @@ namespace BankWebApp.Data
         }
         public void SeedData()
         {
-            _dbContext.Database.Migrate();
+            // Migrations target SQL Server; other providers (the tests use SQLite) create the schema themselves.
+            if (_dbContext.Database.IsSqlServer())
+                _dbContext.Database.Migrate();
             SeedRoles();
             SeedUsers();
         }
@@ -37,10 +39,17 @@ namespace BankWebApp.Data
 
         private void AddRoleIfNotExisting(string roleName)
         {
+            // Identity looks roles up by their upper-case normalized name ("ADMIN").
+            var normalized = roleName.ToUpperInvariant();
             var role = _dbContext.Roles.FirstOrDefault(r => r.Name == roleName);
             if (role == null)
             {
-                _dbContext.Roles.Add(new IdentityRole { Name = roleName, NormalizedName = roleName });
+                _dbContext.Roles.Add(new IdentityRole { Name = roleName, NormalizedName = normalized });
+                _dbContext.SaveChanges();
+            }
+            else if (role.NormalizedName != normalized)
+            {
+                role.NormalizedName = normalized;
                 _dbContext.SaveChanges();
             }
         }

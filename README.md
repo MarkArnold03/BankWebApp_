@@ -25,3 +25,22 @@ Key Features:
 Please ensure that the required dependencies, such as AutoMapper, class libraries, ReadMe.md, and input validation, are implemented as per best practices. The application is designed to cater to real-world scenarios with non-technical users.
 
 Here is the link to the website:https://bankwebappilcation.azurewebsites.net/
+
+## Running the tests
+
+The `BankWebApp.Tests` project checks the services and every page, end to end:
+
+```
+dotnet test
+```
+
+The tests start the whole app on SQLite in memory, so they don't need a database. They log in with both users above, check each role's access, search customers, load transactions 20 at a time, and make deposits, withdrawals and transfers.
+
+To also check the app against the real SQL Server database, set `BANKAPP_SQLSERVER` to its connection string first:
+
+```
+set BANKAPP_SQLSERVER=Server=localhost;Database=BankAppData;Trusted_Connection=True;
+dotnet test
+```
+
+`GET /health` returns `Healthy` when the app can reach both of its databases.

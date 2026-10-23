@@ -2,7 +2,6 @@ using BankWebApp.BankAppData;
 using BankWebApp.Data;
 using BankWebApp.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -34,6 +33,11 @@ builder.Services.AddTransient<ICountryDataService, CountryDataService>();
 
 
 builder.Services.AddResponseCaching();
+
+// /health reports whether both databases (logins and bank data) can be reached.
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>("identity-db")
+    .AddDbContextCheck<BankAppDataContext>("bank-db");
 
 
 var app = builder.Build();
@@ -69,5 +73,9 @@ app.UseAuthorization();
 app.UseResponseCaching();
 
 app.MapRazorPages();
+app.MapHealthChecks("/health");
 
 app.Run();
+
+// Lets the integration tests start the app with WebApplicationFactory<Program>.
+public partial class Program { }

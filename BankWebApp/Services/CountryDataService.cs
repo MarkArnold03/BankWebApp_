@@ -1,50 +1,48 @@
-﻿using BankWebApp.BankAppData;
-using BankWebApp.Data;
-using Microsoft.EntityFrameworkCore;
+using BankWebApp.BankAppData;
 
 namespace BankWebApp.Services
 {
     public class CountryDataService : ICountryDataService
     {
         private readonly ICustomerService _customerService;
+        private readonly BankAppDataContext _context;
 
-        public CountryDataService(ICustomerService customerService)
+        public CountryDataService(ICustomerService customerService, BankAppDataContext context)
         {
             _customerService = customerService;
+            _context = context;
         }
 
         public int GetCountryCustomersCount(string country)
         {
-            var customers = _customerService.GetCustomers()
-                .Where(c => c.CountryCode == country);
-            return customers.Count();
+            return _customerService.GetCustomers().Count(c => c.CountryCode == country);
         }
 
         public int GetCountryAccountsCount(string country)
         {
-            var dispSE = _customerService.GetCustomers()
-                .AsQueryable()
-                .Include(c => c.Dispositions)
-                .ThenInclude(d => d.Account)
+            // Count only owners of accounts (not joint holders), so each account is counted once.
+            return _customerService.GetCustomers()
                 .Where(c => c.CountryCode == country)
-                .SelectMany(c => c.Dispositions.Where(c => c.Type == "OWNER")); // Count only "Owners" of account (not joint accounts)
-            return dispSE.Count();
+                .SelectMany(c => c.Dispositions.Where(d => d.Type == "OWNER"))
+                .Count();
         }
 
         public decimal GetCountryBalance(string country)
         {
-            var dispSE = _customerService.GetCustomers()
-                .AsQueryable()
-                .Include(c => c.Dispositions)
-                .ThenInclude(d => d.Account)
+            var balances = _customerService.GetCustomers()
                 .Where(c => c.CountryCode == country)
-                .SelectMany(c => c.Dispositions);
-
-            return dispSE
-                .Select(d => d.Account.Balance)
-                .Sum();
+                .SelectMany(c => c.Dispositions.Where(d => d.Type == "OWNER"))
+                .Select(d => d.Account.Balance);
+            return Sum(balances);
         }
+
+        public (int Customers, int Accounts, decimal TotalBalance) GetBankTotals()
+        {
+            return (_context.Customers.Count(), _context.Accounts.Count(), Sum(_context.Accounts.Select(a => a.Balance)));
+        }
+
+        // SQL Server sums decimals in the database. SQLite (used by the tests) can't, so it sums in memory.
+        private decimal Sum(IQueryable<decimal> values) =>
+            _context.Database.ProviderName == "Microsoft.EntityFrameworkCore.SqlServer" ? values.Sum() : values.AsEnumerable().Sum();
     }
-
-
 }

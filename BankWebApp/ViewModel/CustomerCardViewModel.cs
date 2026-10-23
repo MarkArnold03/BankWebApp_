@@ -11,13 +11,13 @@
         public string City { get; set; }
         public string ZipCode { get; set; }
         public string Country { get; set; }
-        public DateTime Birthday { get; set; }
-        public int Age { get; set; }
-        public string NationalId { get; set; }
-        public string TelephoneCountryCode { get; set; }
-        public string TelephoneNumber { get; set; }
-        public string EmailAddress { get; set; }
-        public List<AccountViewModel> Accounts { get; set; }
+        public DateTime? Birthday { get; set; }
+        public int? Age { get; set; }
+        public string? NationalId { get; set; }
+        public string? TelephoneCountryCode { get; set; }
+        public string? TelephoneNumber { get; set; }
+        public string? EmailAddress { get; set; }
+        public List<AccountViewModel> Accounts { get; set; } = new();
         public decimal TotalAccountValue { get; set; }
     }
 }

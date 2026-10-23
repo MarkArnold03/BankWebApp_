@@ -1,3 +1,7 @@
 ﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
- 
+ <script>
+    // Don't re-validate on blur: clearing a message as focus leaves a field moves the
+    // submit button while it's being clicked. Messages still update as you type.
+    if (window.jQuery && jQuery.validator) jQuery.validator.setDefaults({ onfocusout: false });
+</script>

@@ -1,85 +1,172 @@
-﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@{
+    var signedIn = SignInManager.IsSignedIn(User);
+    var currentPage = ViewContext.RouteData.Values["page"] as string ?? "";
+    var isIdentity = (ViewContext.RouteData.Values["area"] as string) == "Identity";
+    var isManage = isIdentity && currentPage.StartsWith("/Account/Manage");
+    var isCashier = User.IsInRole("Cashier");
+    var isAdmin = User.IsInRole("Admin");
 
+    string? Current(params string[] pages) => pages.Contains(currentPage) ? "page" : null;
 
+    var tabs = new List<(string Page, string Label, string Icon, string[] Match)>
+    {
+        ("/Index", "Overview", "overview", new[] { "/Index", "/Countries/TopTen" }),
+    };
+    if (isCashier)
+    {
+        tabs.Add(("/Customers/Customers", "Customers", "users", new[] { "/Customers/Customers", "/Customers/CustomerCard", "/Accounts/Transactions", "/Accounts/Deposit", "/Accounts/Withdrawal", "/Accounts/Transfer" }));
+        tabs.Add(("/Accounts/Accounts", "Accounts", "accounts", new[] { "/Accounts/Accounts" }));
+    }
+    if (isAdmin)
+    {
+        tabs.Add(("/Users/Users", "Users", "key", new[] { "/Users/Users" }));
+    }
+
+    var roleLabel = isAdmin ? "Admin" : isCashier ? "Cashier" : "No staff role";
+    var email = User.Identity?.Name ?? "";
+    // "richard.erdos.chalk@gmail.se" is shown as "Richard Erdos Chalk".
+    var nameParts = email.Split('@')[0].Split('.', '_', '-').Where(p => p.Length > 0).ToArray();
+    var displayName = nameParts.Length > 0 ? string.Join(" ", nameParts.Select(p => char.ToUpperInvariant(p[0]) + p[1..])) : email;
+    var initials = BankFormat.Initials(nameParts.FirstOrDefault(), nameParts.Length > 1 ? nameParts[^1] : null);
+    var contentClass = ViewData["Narrow"] as bool? == true || isIdentity ? "content narrow" : "content";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - BankWebApp</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-   @*   <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">*@
-
-    <link rel="stylesheet" href="~/assets/css/fontawesome.css">
-    <link rel="stylesheet" href="~/assets/css/owl.css">
-    <link rel="stylesheet" href="~/assets/css/animate.css">
-    <link rel="stylesheet" href="~/assets/css/indexstyle.css">
-    <link rel="stylesheet" href="~/assets/css/layoutstyle.css">
-@*    <link rel="stylesheet" href="~/assets/TopTenStyle.css">*@
-    @*<link rel="stylesheet" href="~/@(nameof(BankWebApp)).styles.css" />*@
-
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <title>@ViewData["Title"] · ManDem Bank</title>
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem("theme");
+                if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+            } catch (e) { }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="~/vendor/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <header class="header-area header-sticky" style="">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <h1 class="logo me-auto me-lg-0">
-                            <a asp-page="/Index">
-                                <span class="material-icons">account_balance</span> MB
-                            </a>
-                        </h1>
-                        <ul class="nav">
-                            @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Cashier"))
-                            {
-                                <li><a class="nav-link scrollto" asp-page="/Customers/Customers" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; The ManDem</a></li>
-                                <li><a class="nav-link scrollto" asp-page="/Accounts/Accounts"><i class="fas fa-file-invoice-dollar"></i> &nbsp Accounts</a></li>
-                            }
-                            @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Admin"))
-                            {
-                                <li><a class="nav-link scrollto" asp-page="/Users/Users" asp-for="@Model."><i class="fas fa-users"></i> &nbsp; Users</a></li>
-                            }
-                            <div class="navbar order-last order-lg-0">
-                                <partial name="_LoginPartial"></partial>
-                            </div>
-                        </ul>
-                        <a class="menu-trigger"><span>Menu</span></a>
-                    </nav>
+<body class="@(signedIn ? "is-app" : "is-public")">
+@if (signedIn)
+{
+    <div class="shell">
+        <aside class="sidebar" aria-label="Main">
+            <a class="wordmark" asp-area="" asp-page="/Index">@Icons.Svg("bank", 20) ManDem Bank</a>
+            <ul class="side-nav">
+                @foreach (var t in tabs)
+                {
+                    <li><a asp-area="" asp-page="@t.Page" aria-current="@Current(t.Match)">@Icons.Svg(t.Icon, 20)@t.Label</a></li>
+                }
+            </ul>
+            <div class="side-foot">
+                <a class="side-user" asp-area="Identity" asp-page="/Account/Manage/Index" aria-current="@(isManage ? "page" : null)">
+                    <span class="avatar" aria-hidden="true">@initials</span>
+                    <span class="who"><strong>@displayName</strong><span>@roleLabel · @email</span></span>
+                </a>
+                <div class="side-actions">
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+                        <button type="submit" class="btn btn-link">Log out</button>
+                    </form>
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle>
+                        @Icons.Svg("moon", 18, "i-moon")@Icons.Svg("sun", 18, "i-sun")
+                    </button>
                 </div>
+            </div>
+        </aside>
+
+        <div>
+            <header class="appbar">
+                <a class="wordmark" asp-area="" asp-page="/Index">@Icons.Svg("bank", 20) ManDem Bank</a>
+                <div class="end">
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle>
+                        @Icons.Svg("moon", 18, "i-moon")@Icons.Svg("sun", 18, "i-sun")
+                    </button>
+                    <details class="usermenu">
+                        <summary aria-label="Account menu"><span class="avatar">@initials</span></summary>
+                        <div class="menu">
+                            <div class="menu-head"><strong>@displayName</strong><span>@roleLabel · @email</span></div>
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index">Profile and security</a>
+                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+                                <button type="submit" class="destructive">Log out</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+            </header>
+
+            <main role="main" class="@contentClass">
+                @if (TempData["success"] is string success)
+                {
+                    <div class="confirm" role="status">@Icons.Svg("check", 20) @success</div>
+                }
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <nav class="tabbar" aria-label="Main" style="grid-template-columns: repeat(@(tabs.Count + 1), minmax(0, 1fr))">
+        @foreach (var t in tabs)
+        {
+            <a asp-area="" asp-page="@t.Page" aria-current="@Current(t.Match)">@Icons.Svg(t.Icon, 25)<span>@t.Label</span></a>
+        }
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" aria-current="@(isManage ? "page" : null)">@Icons.Svg("user", 25)<span>Profile</span></a>
+    </nav>
+}
+else
+{
+    <header class="globalnav">
+        <div class="inner">
+            <a class="wordmark" asp-area="" asp-page="/Index" aria-label="ManDem Bank home">@Icons.Svg("bank", 18) ManDem Bank</a>
+            <nav aria-label="Main">
+                <a asp-area="" asp-page="/Index" asp-fragment="countries">Countries</a>
+                <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </nav>
+            <div class="end">
+                <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle>
+                    @Icons.Svg("moon", 16, "i-moon")@Icons.Svg("sun", 16, "i-sun")
+                </button>
+                <partial name="_LoginPartial" />
             </div>
         </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <main role="main">
+        @if (ViewData["FullBleed"] as bool? == true)
+        {
             @RenderBody()
-            <img class="background-img" src="~/assets/images/herobg-4k.webp" />
-        </main>
-    </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright © 2023 <a href="#">Mandem Bank</a> Company. All rights reserved.</p>
-                </div>
+        }
+        else
+        {
+            <div class="prose identity">
+                @RenderBody()
+            </div>
+        }
+    </main>
+
+    <footer class="globalfooter">
+        <div class="inner">
+            <p class="note">ManDem Bank's internal banking system. The figures on the home page come live from the bank's database.</p>
+            <div class="base">
+                <span>Copyright &copy; @DateTime.Now.Year ManDem Bank. All rights reserved.</span>
+                <nav aria-label="Footer">
+                    <a asp-area="" asp-page="/Privacy">Privacy Policy</a>
+                    <a asp-area="Identity" asp-page="/Account/ForgotPassword">Reset password</a>
+                </nav>
             </div>
         </div>
     </footer>
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/isotope.min.js"></script>
-    <script src="assets/js/owl-carousel.js"></script>
-    <script src="assets/js/tabs.js"></script>
-    <script src="assets/js/popup.js"></script>
-    <script src="assets/js/custom.js"></script>
+}
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

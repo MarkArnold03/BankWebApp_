@@ -1,8 +1,21 @@
-﻿@page
+@page
 @model PrivacyModel
 @{
     ViewData["Title"] = "Privacy Policy";
+    ViewData["FullBleed"] = User.Identity?.IsAuthenticated != true;
 }
-<h1>@ViewData["Title"]</h1>
+<article class="@(User.Identity?.IsAuthenticated == true ? "" : "prose")">
+    <h1 class="@(User.Identity?.IsAuthenticated == true ? "large-title mb-3" : "")">Privacy Policy</h1>
+    <p class="secondary">Updated @DateTime.Now.ToString("d MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</p>
 
-<p>Use this page to detail your site's privacy policy.</p>
+    <h2 class="mt-4">What we store</h2>
+    <p>Staff logins (email and a hashed password) and their roles. Customer details such as name, address, phone number and personal ID, and the accounts, cards, loans and transactions linked to them.</p>
+
+    <h2 class="mt-4">Who can see it</h2>
+    <p>Only logged-in staff. Cashiers see customers and accounts; admins manage users. The public home page shows totals only.</p>
+
+    <h2 class="mt-4">Cookies</h2>
+    <p>One cookie keeps staff logged in. The light or dark appearance choice is saved in the browser only.</p>
+
+    <p class="mt-4 secondary">Replace this text with the bank's own privacy policy before going live.</p>
+</article>

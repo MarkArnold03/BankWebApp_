@@ -1,10 +1,40 @@
-﻿@page
+@page
 @model BankWebApp.Pages.Users.UsersModel
 @{
+    ViewData["Title"] = "Users";
 }
 
-<div>
-    <h1>
-        Under Development
-    </h1>
+<div class="page-head">
+    <h1 class="large-title">Users</h1>
+    <p>Everyone who can log in, and what they're allowed to do.</p>
 </div>
+
+<ul class="list has-glyph">
+    @foreach (var u in Model.Users)
+    {
+        <li>
+            <div class="cell">
+                <span class="glyph">@Icons.Svg(u.Roles.Contains("Admin") ? "key" : "user", 17)</span>
+                <span class="main">
+                    <span class="title">@u.Email</span>
+                    <span class="sub">@(u.Roles.Count == 0 ? "No role: can't open customers or accounts" : string.Join(", ", u.Roles))</span>
+                </span>
+                <span class="trail">
+                    @if (u.LockedOut)
+                    {
+                        <span class="status bad">Locked out</span>
+                    }
+                    else if (!u.EmailConfirmed)
+                    {
+                        <span class="status">Email not confirmed</span>
+                    }
+                    else
+                    {
+                        <span class="status ok">Active</span>
+                    }
+                </span>
+            </div>
+        </li>
+    }
+</ul>
+<p class="group-footer">Cashiers manage customers and accounts. Admins manage users.</p>

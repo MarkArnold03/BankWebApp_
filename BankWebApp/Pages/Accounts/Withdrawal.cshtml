@@ -1,49 +1,41 @@
-﻿@page
+@page
 @model BankWebApp.Pages.Accounts.WithdrawalModel
 @{
-    ViewData["Title"] = "Withdrawal";
+    var a = Model.Withdrawal.Account;
+    ViewData["Title"] = "Withdraw";
+    ViewData["Narrow"] = true;
 }
 
+<a class="back" asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Withdrawal.CustomerId">@Icons.Svg("back", 22) Account @BankFormat.AccountNumber(a.Id)</a>
 
-<section id="customer" class="d-flex align-items-center justify-content-center">
-    <div class="container" data-aos="fade-up">
+<div class="page-head">
+    <h1 class="large-title">Withdraw</h1>
+    <p>Balance <span class="num">@BankFormat.Sek(a.Balance)</span></p>
+</div>
 
-        <div class="section-title">
-            <h2>Account</h2>
-            <p id="account-info">Withdrawal: </p>
-            <h5 style="color: white">Account number: @Model.Withdrawal.Account.AccountId</h5>
-            <h5 style="color: #ffc451">Balance: @Model.Withdrawal.Account.Balance kr</h5>
-        </div>
+<nav class="segmented mb-4" aria-label="Kind of transaction">
+    <a asp-page="/Accounts/Deposit" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Withdrawal.CustomerId" aria-current="@("Withdraw" == "Deposit" ? "true" : null)">Deposit</a>
+    <a asp-page="/Accounts/Withdrawal" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Withdrawal.CustomerId" aria-current="@("Withdraw" == "Withdraw" ? "true" : null)">Withdraw</a>
+    <a asp-page="/Accounts/Transfer" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Withdrawal.CustomerId" aria-current="@("Withdraw" == "Transfer" ? "true" : null)">Transfer</a>
+</nav>
 
-        <div class="card-body custom-table">
-            <form method="post">
-                <div class="form-group">
-                    <label class="mb-3" style="color:white" asp-for="Amount">Amount (Kr)</label>
-                    <input class="form-control w-50 mb-3" asp-for="Amount" />
-                    <span class="field-validation-error" style="color:red" asp-validation-for="Amount"></span>
-                </div>
+<form method="post" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Withdrawal.CustomerId" novalidate>
+    <div asp-validation-summary="ModelOnly" class="field-error mb-3"></div>
 
-                <button type="submit"
-                        class="btn get-started-btn text-center button-link"
-                        asp-route-customerId="@Model.Withdrawal.CustomerId"
-                        asp-route-accountId="@Model.Withdrawal.Account.AccountId"
-                        style="font-size:20px">
-                    <i class="far fa-minus-square"></i> &nbsp; Withdraw
-                </button>
-
-                <button class="btn back-btn mx-3 text-center button-link">
-                    <a asp-page="/Customers/CustomerCard"
-                       asp-route-customerId="@Model.Withdrawal.CustomerId">
-                        <i class="fas fa-chevron-circle-left"></i> Back
-                    </a>
-                </button>
-            </form>
-        </div>
+    <div class="amount-entry">
+        <label asp-for="Amount">Amount in kronor</label>
+        <input asp-for="Amount" type="text" inputmode="decimal" placeholder="0" autocomplete="off" value="@(Model.Amount == 0 ? "" : Model.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture))" autofocus />
+        <span asp-validation-for="Amount" class="field-error"></span>
     </div>
-</section>
 
-@*Client side validation*@
+    <p class="group-footer">Cash paid out at the counter, between 100 and 10 000 kr. You can't withdraw more than the balance.</p>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-lg w-100" id="submit-transaction">Withdraw</button>
+        <a class="btn btn-link w-100" style="min-height:44px" asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.Withdrawal.CustomerId">Cancel</a>
+    </div>
+</form>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

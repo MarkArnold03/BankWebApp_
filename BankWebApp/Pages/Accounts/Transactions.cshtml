@@ -1,104 +1,104 @@
-﻿@page 
+@page
 @model BankWebApp.Pages.Transactions.TransactionModel
 @{
-    int MinusCP = 4;
-    int PlusCP = 5;
+    var a = Model.Account;
+    ViewData["Title"] = "Account " + BankFormat.AccountNumber(a.Id);
 }
-<head>
-    <link href="~/assets/css/Transactions.css" rel="stylesheet" type="text/css" />
-</head>
 
-<h2>Transactions</h2>
+@if (Model.CustomerId > 0)
+{
+    <a class="back" asp-page="/Customers/CustomerCard" asp-route-customerId="@Model.CustomerId">@Icons.Svg("back", 22) Customer</a>
+}
+else
+{
+    <a class="back" asp-page="/Accounts/Accounts">@Icons.Svg("back", 22) Accounts</a>
+}
 
-<div class="bok12"></div>
-
-<table>
-    <thead>
-        <tr>
-            <th>Transaction ID</th>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Balance</th>
-        </tr>
-    </thead>
-    <tbody id="transactionTableBody">
-        @foreach (var transaction in Model.Transactions)
-        {
-            <tr>
-                <td>@transaction.TransactionId</td>
-                <td>@transaction.Date</td>
-                <td>@transaction.Amount</td>
-                <td>@transaction.Balance</td>
-            </tr>
-        }
-    </tbody>
-</table>
-@*Pagination*@
-
-<div class="d-flex justify-content-center">
-    <table>
-        <tbody>
-            <tr>
-                <td>
-                    @*Previous button*@
-                    @if (Model.CurrentPage != 1)
-                    {
-                        <a class="btn btn-secondary"
-                       asp-page="/Transactions/Transactions"
-                       asp-route-searchWord="@Model.SearchText"
-                       asp-route-accountId="@Model.Id"
-                       asp-route-sortColumn="@Model.SortColumn"
-                       asp-route-sortOrder="@Model.SortOrder"
-                       asp-route-pageno="@(Model.CurrentPage - 1)">
-                            Prev
-                        </a>
-                    }
-                </td>
-
-                @*Page buttons*@
-                <td>
-                    @for (int i = 1; i <= Model.PageCount; i++)
-                    {
-                        @if (!(i > Model.CurrentPage + MinusCP) && (i > Model.CurrentPage - PlusCP))
-                        {
-                            string pageColour = "btn-secondary";
-                            if (i == @Model.CurrentPage)
-                            {
-                                pageColour = "btn-primary";
-                            }
-                            <a id="table-page-btn"
-                       class="btn @pageColour my-1"
-                       asp-page="/Transactions/Transactions"
-                       asp-route-searchWord="@Model.SearchText"
-                       asp-route-accountId="@Model.Id"
-                       asp-route-sortColumn="@Model.SortColumn"
-                       asp-route-sortOrder="@Model.SortOrder"
-                       asp-route-pageno="@i">
-                                @i
-                            </a>
-                        }
-                    }
-                </td>
-
-                @*Next button*@
-                <td>
-                    @if (Model.CurrentPage != Model.PageCount)
-                    {
-                        <a class="btn btn-secondary"
-                       asp-route-searchText="@Model.SearchText"
-                       asp-page="/Transactions/Transactions"
-                       asp-route-accountId="@Model.Id"
-                       asp-route-sortColumn="@Model.SortColumn"
-                       asp-route-sortOrder="@Model.SortOrder"
-                       asp-route-pageno="@(Model.CurrentPage + 1)">
-                            Next
-                        </a>
-                    }
-                </td>
-            </tr>
-
-            
-        </tbody>
-    </table>
+<div class="page-head">
+    <div class="page-eyebrow">Account</div>
+    <h1 class="large-title num">@BankFormat.AccountNumber(a.Id)</h1>
 </div>
 
+<div class="figure">
+    <div class="caption">Balance</div>
+    <div class="value">@BankFormat.Sek(a.Balance).Replace(" kr", "")<span class="unit">kr</span></div>
+    <div class="buttons">
+        <a class="btn btn-primary" asp-page="/Accounts/Deposit" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId">@Icons.Svg("deposit", 18) Deposit</a>
+        <a class="btn btn-gray" asp-page="/Accounts/Withdrawal" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId">@Icons.Svg("withdraw", 18) Withdraw</a>
+        <a class="btn btn-gray" asp-page="/Accounts/Transfer" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId">@Icons.Svg("transfer", 18) Transfer</a>
+    </div>
+</div>
+
+<div class="two-col">
+    <section aria-labelledby="tx-title">
+        <div class="toolbar"><h2 id="tx-title">Transactions</h2><span class="secondary">Newest first</span></div>
+        @if (Model.Transactions.Count == 0)
+        {
+            <div class="empty"><h2>No transactions yet</h2><p>Deposits, withdrawals and transfers will appear here.</p></div>
+        }
+        else
+        {
+            <div class="list has-glyph" id="transactions">
+                <partial name="_TransactionRows" model="Model.Transactions" />
+            </div>
+            @if (Model.HasMore)
+            {
+                <div class="load-more">
+                    <button type="button" class="btn btn-gray" id="load-more"
+                            data-url="@Url.Page("/Accounts/Transactions", "FetchMore", new { accountId = a.Id })"
+                            data-skip="@Model.Transactions.Count">Load 20 more</button>
+                </div>
+            }
+            <p class="field-error text-center" id="load-error" role="alert" hidden>Couldn't load more transactions. Try again.</p>
+        }
+    </section>
+
+    <section class="group mt-5 mt-xl-0" aria-labelledby="det-title">
+        <div class="group-header"><h2 id="det-title">Details</h2></div>
+        <ul class="list">
+            <li><div class="cell"><span class="main">Opened</span><span class="trail label-value">@a.Created.ToString("d MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</span></div></li>
+            <li><div class="cell"><span class="main">Statements</span><span class="trail label-value">@(a.Frequency == "AfterTransaction" ? "After each transaction" : a.Frequency)</span></div></li>
+        </ul>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            var button = document.getElementById("load-more");
+            if (!button) return;
+            var list = document.getElementById("transactions");
+            var error = document.getElementById("load-error");
+
+            button.addEventListener("click", function () {
+                var skip = parseInt(button.getAttribute("data-skip"), 10);
+                button.disabled = true;
+                button.textContent = "Loading…";
+                error.hidden = true;
+
+                fetch(button.getAttribute("data-url") + "&skip=" + skip)
+                    .then(function (r) {
+                        if (!r.ok) throw new Error(r.status);
+                        var more = r.headers.get("X-Has-More") === "true";
+                        return r.text().then(function (html) { return { html: html, more: more }; });
+                    })
+                    .then(function (result) {
+                        var before = list.children.length;
+                        list.insertAdjacentHTML("beforeend", result.html);
+                        button.setAttribute("data-skip", skip + (list.children.length - before));
+                        if (result.more) {
+                            button.disabled = false;
+                            button.textContent = "Load 20 more";
+                        } else {
+                            button.parentElement.remove();
+                        }
+                    })
+                    .catch(function () {
+                        error.hidden = false;
+                        button.disabled = false;
+                        button.textContent = "Load 20 more";
+                    });
+            });
+        })();
+    </script>
+}

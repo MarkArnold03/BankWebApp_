@@ -1,12 +1,11 @@
-using BankWebApp.BankAppData;
+using AutoMapper;
+using BankWebApp.Helpers;
 using BankWebApp.Services;
+using BankWebApp.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 
 namespace BankWebApp.Pages.Accounts
 {
@@ -14,64 +13,63 @@ namespace BankWebApp.Pages.Accounts
     public class WithdrawalModel : PageModel
     {
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
 
-        public WithdrawalViewModel Withdrawal { get; set; }
+        public WithdrawalViewModel Withdrawal { get; set; } = null!;
 
         [BindProperty]
         [Required(ErrorMessage = "Please enter an amount.")]
-        [Range(100, 10000, ErrorMessage = "Please choose a number between 100 and 10000.")]
+        [Range(100, 10000, ErrorMessage = "Please choose an amount between 100 and 10 000 kr.")]
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
 
-        public WithdrawalModel(IAccountService accountService)
+        public WithdrawalModel(IAccountService accountService, IMapper mapper)
         {
             _accountService = accountService;
+            _mapper = mapper;
         }
 
         public class WithdrawalViewModel
         {
-            public Account Account { get; set; }
-
-            [Range(1, 1000000)]
-            [DataType(DataType.Currency)]
-            public decimal Amount { get; set; }
-
+            public AccountViewModel Account { get; set; } = null!;
             public int CustomerId { get; set; }
         }
 
         public IActionResult OnGet(int accountId, int customerId)
         {
-            Withdrawal = _accountService.CreateNewWithdrawalViewModel();
-            Withdrawal.Account = _accountService.GetAccountForCustomer(accountId);
-            Withdrawal.Amount = 0;
-            Withdrawal.CustomerId = customerId;
-
-            return Page();
+            return Load(accountId, customerId) ? Page() : NotFound();
         }
 
         public IActionResult OnPost(int accountId, int customerId)
         {
             var account = _accountService.GetAccountForCustomer(accountId);
+            if (account == null) return NotFound();
+
+            if (decimal.Round(Amount, 2) != Amount)
+                ModelState.AddModelError(nameof(Amount), "Use at most two decimals (öre).");
             if (account.Balance < Amount)
-            {
-                ModelState.AddModelError("Amount", "Sorry, amount is too high!");
-            }
+                ModelState.AddModelError(nameof(Amount), $"Insufficient funds. The balance is {BankFormat.Sek(account.Balance)}.");
 
             if (ModelState.IsValid)
             {
                 _accountService.Withdraw(account, Amount);
 
-                TempData["success"] = "Withdrawal made successfully!";
+                TempData["success"] = $"Withdrew {BankFormat.Sek(Amount)}.";
 
-                return RedirectToPage("/Customers/CustomerCard", new { customerId = customerId });
+                return RedirectToPage("/Accounts/Transactions", new { accountId, customerId });
             }
 
-            Withdrawal = _accountService.CreateNewWithdrawalViewModel();
-            Withdrawal.Account = _accountService.GetAccountForCustomer(accountId);
-            Withdrawal.Amount = 0;
-            Withdrawal.CustomerId = customerId;
-
+            Load(accountId, customerId);
             return Page();
+        }
+
+        private bool Load(int accountId, int customerId)
+        {
+            var account = _accountService.GetAccountForCustomer(accountId);
+            if (account == null) return false;
+
+            Withdrawal = new WithdrawalViewModel { Account = _mapper.Map<AccountViewModel>(account), CustomerId = customerId };
+            return true;
         }
     }
 }
