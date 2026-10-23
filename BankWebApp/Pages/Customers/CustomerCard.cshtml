@@ -5,56 +5,76 @@
     ViewData["Title"] = c.Name;
     var inv = System.Globalization.CultureInfo.InvariantCulture;
     string Or(string? v) => string.IsNullOrWhiteSpace(v) ? "–" : v!;
+    var initials = BankFormat.Initials(c.GivenName, c.Surname);
 }
 
-<a class="back" asp-page="/Customers/Customers">@Icons.Svg("back", 22) Customers</a>
+<ol class="crumbs"><li><a asp-page="/Index">Overview</a></li><li><a asp-page="/Customers/Customers">Customers</a></li><li>@c.Name</li></ol>
 
-<div class="page-head">
-    <div class="page-eyebrow num">Customer @c.Id</div>
-    <h1 class="large-title">@c.Name</h1>
-</div>
+<section class="panel profile mb-4" aria-label="Customer">
+    <div class="seal">
+        <canvas class="guilloche" data-guilloche="seal" style="color: var(--note)" aria-hidden="true"></canvas>
+        <span aria-hidden="true">@initials</span>
+    </div>
+    <div>
+        <div class="micro">Customer <span class="serial">№ @c.Id</span></div>
+        <h1>@c.Name</h1>
+        <div class="facts">
+            <span>@c.City, @c.Country</span>
+            @if (c.Age != null) { <span><b>@c.Age</b> years</span> }
+            <span>@c.Accounts.Count @(c.Accounts.Count == 1 ? "account" : "accounts")</span>
+        </div>
+    </div>
+    <dl class="total m-0">
+        <dt>Total balance</dt>
+        <dd>@BankFormat.Sek(c.TotalAccountValue)</dd>
+    </dl>
+</section>
 
-<div class="figure">
-    <div class="caption">Total balance, @c.Accounts.Count @(c.Accounts.Count == 1 ? "account" : "accounts")</div>
-    <div class="value">@BankFormat.Sek(c.TotalAccountValue).Replace(" kr", "")<span class="unit">kr</span></div>
-</div>
-
-<div class="two-col">
-    <section class="group" aria-labelledby="acc-title">
-        <div class="group-header"><h2 id="acc-title">Accounts</h2></div>
+<div class="grid-2">
+    <section class="panel" aria-labelledby="acc-title">
+        <div class="panel-head"><h2 id="acc-title">Accounts</h2><span class="micro">Open an account to see its ledger</span></div>
         @if (c.Accounts.Count == 0)
         {
-            <ul class="list"><li><div class="cell secondary">This customer has no accounts.</div></li></ul>
+            <div class="empty"><h2>No accounts</h2><p>This customer has no accounts.</p></div>
         }
-        @foreach (var a in c.Accounts)
+        else
         {
-            <div class="list account-card">
-                <a class="cell" asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustmerId">
-                    <span class="main">
-                        <span class="title num">Account @BankFormat.AccountNumber(a.Id)</span>
-                        <span class="sub">@(a.Frequency == "AfterTransaction" ? "Statement after each transaction" : a.Frequency + " statement") · Transactions</span>
-                    </span>
-                    <span class="trail"><span class="value">@BankFormat.Sek(a.Balance)</span>@Icons.Svg("chevron", 16, "chev")</span>
-                </a>
-                <div class="account-actions">
-                    <a asp-page="/Accounts/Deposit" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@a.Id">@Icons.Svg("deposit", 16) Deposit</a>
-                    <a asp-page="/Accounts/Withdrawal" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@a.Id">@Icons.Svg("withdraw", 16) Withdraw</a>
-                    <a asp-page="/Accounts/Transfer" asp-route-customerId="@Model.CustmerId" asp-route-accountId="@a.Id">@Icons.Svg("transfer", 16) Transfer</a>
-                </div>
+            <div class="table-wrap">
+                <table class="data">
+                    <thead><tr><th scope="col">Account</th><th scope="col" class="hide-sm">Statements</th><th scope="col" class="num">Balance</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+                    <tbody>
+                        @foreach (var a in c.Accounts)
+                        {
+                            <tr>
+                                <td class="primary-cell"><a class="serial" asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustmerId">№ @BankFormat.AccountNumber(a.Id)</a></td>
+                                <td class="hide-sm muted">@(a.Frequency == "AfterTransaction" ? "After each transaction" : a.Frequency)</td>
+                                <td class="num">@BankFormat.Sek(a.Balance)</td>
+                                <td>
+                                    <div class="row-actions">
+                                        <a asp-page="/Accounts/Transactions" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustmerId" asp-fragment="teller" title="Deposit, withdraw or transfer">Book</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
+            <div class="panel-foot">Total <span class="num">@BankFormat.Sek(c.TotalAccountValue)</span> across all accounts, including shared ones.</div>
         }
     </section>
 
-    <section class="group" aria-labelledby="det-title">
-        <div class="group-header"><h2 id="det-title">Details</h2></div>
-        <ul class="list">
-            <li><div class="cell"><span class="main">Personal ID</span><span class="trail label-value num">@Or(c.NationalId)</span></div></li>
-            <li><div class="cell"><span class="main">Born</span><span class="trail label-value">@(c.Birthday?.ToString("d MMMM yyyy", inv) ?? "–")@(c.Age != null ? $" ({c.Age} years)" : "")</span></div></li>
-            <li><div class="cell"><span class="main">Gender</span><span class="trail label-value">@(string.IsNullOrEmpty(c.Gender) ? "–" : char.ToUpperInvariant(c.Gender[0]) + c.Gender[1..])</span></div></li>
-            <li><div class="cell"><span class="main">Address</span><span class="trail label-value text-end">@c.StreetAddress<br />@c.ZipCode @c.City</span></div></li>
-            <li><div class="cell"><span class="main">Country</span><span class="trail label-value">@c.Country</span></div></li>
-            <li><div class="cell"><span class="main">Phone</span><span class="trail label-value num">@(string.IsNullOrWhiteSpace(c.TelephoneNumber) ? "–" : $"{c.TelephoneCountryCode} {c.TelephoneNumber}".Trim())</span></div></li>
-            <li><div class="cell"><span class="main">Email</span><span class="trail label-value">@Or(c.EmailAddress)</span></div></li>
-        </ul>
+    <section class="panel" aria-labelledby="det-title">
+        <div class="panel-head"><h2 id="det-title">Particulars</h2></div>
+        <div class="panel-body">
+            <dl class="kv">
+                <dt>Personal ID</dt><dd class="mono">@Or(c.NationalId)</dd>
+                <dt>Born</dt><dd>@(c.Birthday?.ToString("d MMMM yyyy", inv) ?? "–")</dd>
+                <dt>Gender</dt><dd>@(string.IsNullOrEmpty(c.Gender) ? "–" : char.ToUpperInvariant(c.Gender[0]) + c.Gender[1..])</dd>
+                <dt>Address</dt><dd>@c.StreetAddress<br />@c.ZipCode @c.City</dd>
+                <dt>Country</dt><dd>@c.Country</dd>
+                <dt>Phone</dt><dd class="mono">@(string.IsNullOrWhiteSpace(c.TelephoneNumber) ? "–" : $"{c.TelephoneCountryCode} {c.TelephoneNumber}".Trim())</dd>
+                <dt>Email</dt><dd>@Or(c.EmailAddress)</dd>
+            </dl>
+        </div>
     </section>
 </div>

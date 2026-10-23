@@ -6,25 +6,34 @@
 }
 
 <div class="signin">
-    <div class="mark" aria-hidden="true">@Icons.Svg("bank", 34)</div>
-    <h1>Log in to ManDem Bank</h1>
-    <p class="lede">For bank staff. Use your work email and password.</p>
+    <partial name="_BanknoteSide" />
+    <div class="signin-main">
+        <div class="signin-form">
+            <p class="micro">Staff sign-in</p>
+            <h1>Log in</h1>
+            <p class="lede">Use your work email and password.</p>
 
-    <form id="account" method="post">
-        <div asp-validation-summary="ModelOnly" class="error"></div>
-        <div class="stack">
-            <input asp-for="Input.Email" type="email" autocomplete="username" aria-required="true" placeholder="Email" aria-label="Email" />
-            <input asp-for="Input.Password" autocomplete="current-password" aria-required="true" placeholder="Password" aria-label="Password" />
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="error"></div>
+                <div class="form-row">
+                    <label asp-for="Input.Email">Email</label>
+                    <input class="text-input" asp-for="Input.Email" type="email" autocomplete="username" aria-required="true" placeholder="name@mandembank.se" />
+                    <span asp-validation-for="Input.Email" class="field-validation-error"></span>
+                </div>
+                <div class="form-row">
+                    <label asp-for="Input.Password">Password</label>
+                    <input class="text-input" asp-for="Input.Password" autocomplete="current-password" aria-required="true" />
+                    <span asp-validation-for="Input.Password" class="field-validation-error"></span>
+                </div>
+                <label class="remember"><input asp-for="Input.RememberMe" /> Keep me logged in on this computer</label>
+                <button id="login-submit" type="submit" class="btn btn-primary btn-lg w-100">Log in</button>
+            </form>
+
+            <div class="links">
+                <a id="forgot-password" asp-page="./ForgotPassword">Forgot password?</a>
+                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend confirmation email</a>
+            </div>
         </div>
-        <span asp-validation-for="Input.Email" class="field-validation-error"></span>
-        <span asp-validation-for="Input.Password" class="field-validation-error"></span>
-        <label class="remember"><input asp-for="Input.RememberMe" /> Keep me logged in</label>
-        <button id="login-submit" type="submit" class="btn btn-primary btn-lg w-100">Log in</button>
-    </form>
-
-    <div class="links">
-        <a id="forgot-password" asp-page="./ForgotPassword">Forgot password?</a>
-        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend confirmation email</a>
     </div>
 </div>
 

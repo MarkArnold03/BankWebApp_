@@ -4,15 +4,17 @@
     ViewData["Title"] = "Error";
 }
 
-<h1 class="large-title">Something went wrong.</h1>
-<p class="mt-2 secondary">Try again in a moment. If it keeps happening, contact support and quote the request ID below.</p>
+<article class="prose">
+    <h1>Something went wrong.</h1>
+    <p>Try again in a moment. If it keeps happening, contact support and quote the request ID below.</p>
 
-@if (Model.ShowRequestId)
-{
-    <p class="mt-3"><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
-}
+    @if (Model.ShowRequestId)
+    {
+        <p class="mt-3"><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
+    }
 
-<p class="mt-4"><a class="btn btn-primary" asp-area="" asp-page="/Index">Back to start</a></p>
+    <p class="mt-4"><a class="btn btn-primary" asp-area="" asp-page="/Index">Back to the overview</a></p>
 
-<h2 class="mt-5 h5">Development mode</h2>
-<p class="secondary">Switching to the <strong>Development</strong> environment shows detailed information about the error. Don't enable it on a deployed app: it can expose sensitive details from exceptions. For local debugging, set <code>ASPNETCORE_ENVIRONMENT</code> to <code>Development</code> and restart the app.</p>
+    <h2>Development mode</h2>
+    <p>Switching to the <strong>Development</strong> environment shows detailed information about the error. Don't enable it on a deployed app: it can expose sensitive details from exceptions. For local debugging, set <code>ASPNETCORE_ENVIRONMENT</code> to <code>Development</code> and restart the app.</p>
+</article>

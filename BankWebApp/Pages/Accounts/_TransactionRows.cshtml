@@ -1,20 +1,10 @@
 @model IEnumerable<TransactionViewModel>
 @foreach (var t in Model)
 {
-    var text = (t.Symbol + " " + t.Operation).ToLowerInvariant();
-    var icon = text.Contains("card") ? "card"
-        : text.Contains("cash") ? "cash"
-        : text.Contains("bank") ? "transfer"
-        : text.Contains("interest") ? "interest"
-        : t.IsOutgoing ? "out" : "in";
-    <div class="cell" data-transaction="@t.TransactionId">
-        <span class="glyph">@Icons.Svg(icon, 17)</span>
-        <span class="main">
-            <span class="title">@t.Title</span>
-            <span class="sub">@BankFormat.ShortDate(t.Date)@(string.IsNullOrEmpty(t.Details) ? "" : " · " + t.Details)</span>
-        </span>
-        <span class="trail">
-            <span class="value @(t.IsOutgoing ? "" : "pos")">@BankFormat.SignedSek(t.SignedAmount)<small>@BankFormat.Sek(t.Balance)</small></span>
-        </span>
-    </div>
+    <tr data-transaction="@t.TransactionId">
+        <td class="when">@t.Date.ToString("yyyy-MM-dd")</td>
+        <td class="what"><strong>@t.Title</strong>@if (!string.IsNullOrEmpty(t.Details)) {<span class="sub">@t.Details</span>}</td>
+        <td class="amount @(t.IsOutgoing ? "" : "in")">@BankFormat.SignedSek(t.SignedAmount)</td>
+        <td class="amount hide-sm muted">@BankFormat.Sek(t.Balance)</td>
+    </tr>
 }

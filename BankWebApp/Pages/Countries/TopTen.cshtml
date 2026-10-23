@@ -4,46 +4,63 @@
     ViewData["Title"] = "Top 10 · " + Model.CountryName;
     var canOpen = User.IsInRole("Cashier");
     var rank = 0;
+    var max = Model.Top10Customers.Select(c => c.Balance).DefaultIfEmpty(0).Max();
 }
 
-<a class="back" asp-page="/Index">@Icons.Svg("back", 22) Overview</a>
-
-<div class="page-head d-flex align-items-center gap-3">
-    <img class="flag flag-lg" src="~/assets/images/@(Model.CountryCode)-flag-png-large.png" alt="" />
-    <div>
-        <div class="page-eyebrow">Top 10 accounts</div>
-        <h1 class="large-title">@Model.CountryName</h1>
+<ol class="crumbs"><li><a asp-page="/Index">Overview</a></li><li>@Model.CountryName</li></ol>
+<div class="page-title">
+    <div class="d-flex align-items-center gap-3">
+        <img class="flag" style="width:54px;height:36px" src="~/assets/images/@(Model.CountryCode)-flag-png-large.png" alt="" />
+        <div>
+            <div class="micro">Ten largest accounts</div>
+            <h1>@Model.CountryName</h1>
+        </div>
     </div>
 </div>
 
-@if (!Model.Top10Customers.Any())
-{
-    <div class="empty"><h2>No accounts in @Model.CountryName</h2></div>
-}
-else
-{
-    <ol class="list ranking">
-        @foreach (var c in Model.Top10Customers)
-        {
-            rank++;
-            <li>
-                @if (canOpen)
-                {
-                    <a class="cell" asp-page="/Accounts/Transactions" asp-route-accountId="@c.AccountId" asp-route-customerId="@c.Id">
-                        <span class="rank num">@rank</span>
-                        <span class="main"><span class="title">@c.Name</span><span class="sub">Account @BankFormat.AccountNumber(c.AccountId)@(string.IsNullOrEmpty(c.Emailaddress) ? "" : " · " + c.Emailaddress)</span></span>
-                        <span class="trail"><span class="value">@BankFormat.Sek(c.Balance)</span>@Icons.Svg("chevron", 16, "chev")</span>
-                    </a>
-                }
-                else
-                {
-                    <div class="cell">
-                        <span class="rank num">@rank</span>
-                        <span class="main"><span class="title">@c.Name</span><span class="sub">Account @BankFormat.AccountNumber(c.AccountId)@(string.IsNullOrEmpty(c.Emailaddress) ? "" : " · " + c.Emailaddress)</span></span>
-                        <span class="trail"><span class="value">@BankFormat.Sek(c.Balance)</span></span>
-                    </div>
-                }
-            </li>
-        }
-    </ol>
-}
+<section class="panel">
+    @if (!Model.Top10Customers.Any())
+    {
+        <div class="empty"><h2>No accounts in @Model.CountryName</h2></div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="data">
+                <thead><tr><th scope="col" class="num">#</th><th scope="col">Customer</th><th scope="col" class="hide-sm">Account</th><th scope="col" class="num">Balance</th><th scope="col" class="hide-sm" style="width:24%"><span class="visually-hidden">Compared with the largest</span></th></tr></thead>
+                <tbody>
+                    @foreach (var c in Model.Top10Customers)
+                    {
+                        rank++;
+                        <tr>
+                            <td class="num faint">@rank</td>
+                            <td class="primary-cell">
+                                @if (canOpen)
+                                {
+                                    <a asp-page="/Customers/CustomerCard" asp-route-customerId="@c.Id">@c.Name</a>
+                                }
+                                else
+                                {
+                                    <span>@c.Name</span>
+                                }
+                                @if (!string.IsNullOrEmpty(c.Emailaddress)) {<span class="sub">@c.Emailaddress</span>}
+                            </td>
+                            <td class="hide-sm">
+                                @if (canOpen)
+                                {
+                                    <a class="serial" asp-page="/Accounts/Transactions" asp-route-accountId="@c.AccountId" asp-route-customerId="@c.Id">Account № @BankFormat.AccountNumber(c.AccountId)</a>
+                                }
+                                else
+                                {
+                                    <span class="serial">Account № @BankFormat.AccountNumber(c.AccountId)</span>
+                                }
+                            </td>
+                            <td class="num">@BankFormat.Sek(c.Balance)</td>
+                            <td class="hide-sm"><div class="bar"><span style="width:@((max == 0 ? 0 : c.Balance / max * 100).ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))%"></span></div></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

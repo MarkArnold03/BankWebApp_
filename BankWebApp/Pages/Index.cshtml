@@ -1,117 +1,136 @@
 @page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home";
-    ViewData["FullBleed"] = true;
+    ViewData["Title"] = "Overview";
     var signedIn = User.Identity?.IsAuthenticated == true;
+    ViewData["FullBleed"] = !signedIn;
     var sv = System.Globalization.CultureInfo.GetCultureInfo("sv-SE");
     var t = Model.Totals;
-    string Whole(decimal v) => Math.Round(v, 0).ToString("#,##0", sv) + " kr";
-    var hour = DateTime.Now.Hour;
-    var greeting = hour < 10 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    string N(int v) => v.ToString("#,##0", sv);
+    string Whole(decimal v) => Math.Round(v, 0).ToString("#,##0", sv);
+    var maxCapital = Model.ViewModels.Values.Select(v => v.TotalAccountValue).DefaultIfEmpty(0).Max();
 }
 
 @if (signedIn)
 {
-    <div class="page-head">
-        <div class="page-eyebrow">@DateTime.Today.ToString("dddd d MMMM", System.Globalization.CultureInfo.InvariantCulture)</div>
-        <h1 class="large-title">@greeting</h1>
-    </div>
-
-    <div class="figure">
-        <div class="caption">Total balance, all accounts</div>
-        <div class="value">@BankFormat.Sek(t.TotalAccountValue).Replace(" kr", "")<span class="unit">kr</span></div>
+    <ol class="crumbs"><li>Overview</li></ol>
+    <div class="page-title">
+        <div>
+            <h1>The bank today</h1>
+            <p class="lede">@DateTime.Today.ToString("dddd d MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture). Live figures from the bank's ledger.</p>
+        </div>
         @if (User.IsInRole("Cashier"))
         {
-            <div class="buttons">
-                <a class="btn btn-primary" asp-page="/Customers/Customers">@Icons.Svg("search", 18) Find a customer</a>
-                <a class="btn btn-gray" asp-page="/Accounts/Accounts">All accounts</a>
+            <div class="actions">
+                <a class="btn btn-primary" asp-page="/Customers/Customers">@Icons.Svg("users", 16) Customers</a>
+                <a class="btn btn-gray" asp-page="/Accounts/Accounts">Accounts</a>
             </div>
         }
     </div>
 
-    <div class="two-col">
-        <section class="group" aria-labelledby="countries-title">
-            <div class="group-header"><h2 id="countries-title">By country</h2></div>
-            <ul class="list">
-                @foreach (var (code, name) in IndexModel.Countries)
-                {
-                    var c = Model.ViewModels[code];
-                    <li>
-                        <a class="cell" asp-page="/Countries/TopTen" asp-route-countryId="@code">
-                            <img class="flag" src="~/assets/images/@(code)-flag-png-large.png" alt="" />
-                            <span class="main">
-                                <span class="title">@name</span>
-                                <span class="sub num">@c.NumberOfClients.ToString("#,##0", sv) customers · @c.NumberOfAccounts.ToString("#,##0", sv) accounts</span>
-                            </span>
-                            <span class="trail"><span class="value">@Whole(c.TotalAccountValue)</span>@Icons.Svg("chevron", 16, "chev")</span>
-                        </a>
-                    </li>
-                }
-            </ul>
-            <p class="group-footer">Open a country to see its ten largest accounts.</p>
-        </section>
+    <dl class="panel kpis">
+        <div class="kpi hero"><dt>Total balance</dt><dd>@Whole(t.TotalAccountValue)<small>SEK</small></dd></div>
+        <div class="kpi"><dt>Customers</dt><dd>@N(t.NumberOfClients)</dd></div>
+        <div class="kpi"><dt>Accounts</dt><dd>@N(t.NumberOfAccounts)</dd></div>
+        <div class="kpi"><dt>Average balance</dt><dd>@Whole(t.NumberOfAccounts == 0 ? 0 : t.TotalAccountValue / t.NumberOfAccounts)<small>SEK</small></dd></div>
+    </dl>
 
-        <section class="group" aria-labelledby="bank-title">
-            <div class="group-header"><h2 id="bank-title">The bank today</h2></div>
-            <ul class="list">
-                <li><div class="cell"><span class="main">Customers</span><span class="trail label-value num">@t.NumberOfClients.ToString("#,##0", sv)</span></div></li>
-                <li><div class="cell"><span class="main">Accounts</span><span class="trail label-value num">@t.NumberOfAccounts.ToString("#,##0", sv)</span></div></li>
-                <li><div class="cell"><span class="main">Average balance</span><span class="trail label-value num">@BankFormat.Sek(t.NumberOfAccounts == 0 ? 0 : Math.Round(t.TotalAccountValue / t.NumberOfAccounts, 2))</span></div></li>
-            </ul>
-        </section>
-    </div>
+    <section class="panel" aria-labelledby="by-country">
+        <div class="panel-head"><h2 id="by-country">By country</h2><span class="micro">Owners' accounts</span></div>
+        <div class="table-wrap">
+            <table class="data">
+                <thead>
+                    <tr>
+                        <th scope="col">Country</th>
+                        <th scope="col" class="num">Customers</th>
+                        <th scope="col" class="num hide-sm">Accounts</th>
+                        <th scope="col" class="num">Capital, SEK</th>
+                        <th scope="col" class="hide-sm" style="width:28%">Share of capital</th>
+                        <th scope="col"><span class="visually-hidden">Open</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var (code, name) in IndexModel.Countries.OrderByDescending(c => Model.ViewModels[c.Code].TotalAccountValue))
+                    {
+                        var c = Model.ViewModels[code];
+                        var share = t.TotalAccountValue == 0 ? 0 : c.TotalAccountValue / t.TotalAccountValue * 100;
+                        <tr>
+                            <td class="primary-cell"><img class="flag me-2" src="~/assets/images/@(code)-flag-png-large.png" alt="" /><a asp-page="/Countries/TopTen" asp-route-countryId="@code">@name</a></td>
+                            <td class="num">@N(c.NumberOfClients)</td>
+                            <td class="num hide-sm">@N(c.NumberOfAccounts)</td>
+                            <td class="num">@Whole(c.TotalAccountValue)</td>
+                            <td class="hide-sm"><div class="bar" title="@share.ToString("0.0", sv) %"><span style="width:@((maxCapital == 0 ? 0 : c.TotalAccountValue / maxCapital * 100).ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))%"></span></div></td>
+                            <td class="text-end"><a class="micro" asp-page="/Countries/TopTen" asp-route-countryId="@code">Top 10 ›</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-foot">Bars compare each country with the largest. Accounts shared by two customers are counted once, under the owner.</div>
+    </section>
 }
 else
 {
-    <section class="section hero">
-        <div class="inner">
-            <h1 class="headline">ManDem Bank.<br />At a glance.</h1>
-            <p class="subhead">The bank for the mandem around the world. Staff find any customer, follow every transaction, and handle deposits, withdrawals and transfers.</p>
-            <div class="cta-row">
-                <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">Log in</a>
-                <a class="link-chevron" href="#countries">Top banking countries @Icons.Svg("chevron", 16)</a>
+    <section class="landing">
+        <div class="wrap landing-hero">
+            <div>
+                <p class="micro" style="color: var(--band-ink-2)">Internal banking system</p>
+                <h1>Every krona, <em>engraved</em> in the ledger.</h1>
+                <p>ManDem Bank's teller desk. Staff find any customer, follow every transaction, and book deposits, withdrawals and transfers.</p>
+                <div class="cta">
+                    <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">Log in to the teller desk</a>
+                    <a class="btn btn-ghost btn-lg" href="#countries">Countries</a>
+                </div>
             </div>
 
-            <dl class="stats" aria-label="The bank today">
-                <div><dt>Customers</dt><dd class="num">@t.NumberOfClients.ToString("#,##0", sv)</dd></div>
-                <div><dt>Accounts</dt><dd class="num">@t.NumberOfAccounts.ToString("#,##0", sv)</dd></div>
-                <div><dt>Total balance</dt><dd class="num">@Whole(t.TotalAccountValue)</dd></div>
-            </dl>
-            <p class="stats-note">Live from the bank's database.</p>
+            <figure class="note m-0" aria-label="The bank's total balance: @Whole(t.TotalAccountValue) kronor across @N(t.NumberOfAccounts) accounts and @N(t.NumberOfClients) customers">
+                <canvas class="guilloche" data-guilloche="note" style="color: var(--note-blue)" aria-hidden="true"></canvas>
+                <div class="note-frame" aria-hidden="true"></div>
+                <div class="note-body" aria-hidden="true">
+                    <div class="issuer">ManDem Bank<small>Total held for customers</small></div>
+                    <div class="serialno">№ @t.NumberOfClients.ToString("000000")·@t.NumberOfAccounts.ToString("000000")</div>
+                    <div class="value">@Whole(t.TotalAccountValue)<small>SEK</small></div>
+                    <div class="legend"><span>@N(t.NumberOfClients) customers</span><span>@N(t.NumberOfAccounts) accounts</span><span>Live</span></div>
+                </div>
+            </figure>
         </div>
     </section>
 
-    <section class="section gray" id="countries">
-        <div class="inner">
-            <h2 class="section-title">Top banking countries.</h2>
-            <p class="section-copy">Customers, accounts and capital in each country. Staff can open a country to see its ten largest accounts.</p>
-        </div>
-        <div class="country-grid">
+    <section class="wrap countries" id="countries">
+        <p class="micro">Top banking countries</p>
+        <h2 style="font-size: 2.2rem">Four countries, one ledger.</h2>
+        <div class="grid">
             @foreach (var (code, name) in IndexModel.Countries)
             {
                 var c = Model.ViewModels[code];
-                <a class="country" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Page("/Countries/TopTen", new { countryId = code })">
-                    <img src="~/assets/images/@(code)-flag-png-large.png" alt="Flag of @name" />
-                    <h3>@name</h3>
+                <a class="panel country" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Page("/Countries/TopTen", new { countryId = code })">
+                    <div class="top"><h3>@name</h3><img src="~/assets/images/@(code)-flag-png-large.png" alt="Flag of @name" /></div>
                     <dl>
-                        <div><dt>Customers</dt><dd class="num">@c.NumberOfClients.ToString("#,##0", sv)</dd></div>
-                        <div><dt>Accounts</dt><dd class="num">@c.NumberOfAccounts.ToString("#,##0", sv)</dd></div>
-                        <div><dt>Capital</dt><dd class="num">@Whole(c.TotalAccountValue)</dd></div>
+                        <div><dt>Customers</dt><dd>@N(c.NumberOfClients)</dd></div>
+                        <div><dt>Accounts</dt><dd>@N(c.NumberOfAccounts)</dd></div>
+                        <div><dt>Capital</dt><dd>@Whole(c.TotalAccountValue) kr</dd></div>
                     </dl>
-                    <span class="link-chevron">Log in to see the top 10 accounts @Icons.Svg("chevron", 14)</span>
+                    <span class="go">Staff: top 10 accounts ›</span>
                 </a>
             }
         </div>
     </section>
 
-    <section class="section">
-        <div class="inner">
-            <h2 class="section-title">Ready when you are.</h2>
-            <p class="section-copy">Log in with your staff email and password.</p>
-            <div class="cta-row">
-                <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">Log in</a>
-            </div>
+    <section class="wrap features" aria-label="What the teller desk does">
+        <div class="feature">
+            <span class="ic">@Icons.Svg("search", 20)</span>
+            <h3>Find anyone</h3>
+            <p>One search box for names, cities and customer numbers, on every page. Press <kbd>/</kbd> to use it.</p>
+        </div>
+        <div class="feature">
+            <span class="ic">@Icons.Svg("accounts", 20)</span>
+            <h3>Read the ledger</h3>
+            <p>Every account's transactions, newest first, twenty at a time without leaving the page.</p>
+        </div>
+        <div class="feature">
+            <span class="ic">@Icons.Svg("transfer", 20)</span>
+            <h3>Book at the counter</h3>
+            <p>Deposits, withdrawals and transfers beside the ledger. Never more than the balance.</p>
         </div>
     </section>
 }

@@ -23,3 +23,14 @@ document.addEventListener("click", function (e) {
         if (!d.contains(e.target)) d.removeAttribute("open");
     });
 });
+
+// Press "/" anywhere to jump to the customer search.
+document.addEventListener("keydown", function (e) {
+    if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable)) return;
+    var search = document.getElementById("global-search");
+    if (!search) return;
+    e.preventDefault();
+    search.focus();
+});

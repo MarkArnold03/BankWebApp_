@@ -1,0 +1,22 @@
+@inject BankWebApp.Services.ICountryDataService Stats
+@{
+    var t = Stats.GetBankTotals();
+    var sv = System.Globalization.CultureInfo.GetCultureInfo("sv-SE");
+}
+<aside class="signin-side">
+    <div>
+        <p class="micro" style="color: var(--band-ink-2)">ManDem Bank · Teller desk</p>
+        <h2>Every krona, engraved in the ledger.</h2>
+    </div>
+    <figure class="note m-0" aria-label="The bank's total balance: @Math.Round(t.TotalBalance, 0).ToString("#,##0", sv) kronor">
+        <canvas class="guilloche" data-guilloche="note" style="color: var(--note-blue)" aria-hidden="true"></canvas>
+        <div class="note-frame" aria-hidden="true"></div>
+        <div class="note-body" aria-hidden="true">
+            <div class="issuer">ManDem Bank<small>Total held for customers</small></div>
+            <div class="serialno">№ @t.Customers.ToString("000000")·@t.Accounts.ToString("000000")</div>
+            <div class="value">@Math.Round(t.TotalBalance, 0).ToString("#,##0", sv)<small>SEK</small></div>
+            <div class="legend"><span>@t.Customers.ToString("#,##0", sv) customers</span><span>@t.Accounts.ToString("#,##0", sv) accounts</span><span>Live</span></div>
+        </div>
+    </figure>
+    <p>For bank staff only. Cashiers manage customers and accounts; admins manage users.</p>
+</aside>

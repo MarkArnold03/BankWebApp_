@@ -4,37 +4,41 @@
     ViewData["Title"] = "Users";
 }
 
-<div class="page-head">
-    <h1 class="large-title">Users</h1>
-    <p>Everyone who can log in, and what they're allowed to do.</p>
+<ol class="crumbs"><li><a asp-page="/Index">Overview</a></li><li>Users</li></ol>
+<div class="page-title">
+    <div>
+        <h1>Users</h1>
+        <p class="lede">Everyone who can log in, and what they're allowed to do. Cashiers manage customers and accounts; admins manage users.</p>
+    </div>
 </div>
 
-<ul class="list has-glyph">
-    @foreach (var u in Model.Users)
-    {
-        <li>
-            <div class="cell">
-                <span class="glyph">@Icons.Svg(u.Roles.Contains("Admin") ? "key" : "user", 17)</span>
-                <span class="main">
-                    <span class="title">@u.Email</span>
-                    <span class="sub">@(u.Roles.Count == 0 ? "No role: can't open customers or accounts" : string.Join(", ", u.Roles))</span>
-                </span>
-                <span class="trail">
-                    @if (u.LockedOut)
-                    {
-                        <span class="status bad">Locked out</span>
-                    }
-                    else if (!u.EmailConfirmed)
-                    {
-                        <span class="status">Email not confirmed</span>
-                    }
-                    else
-                    {
-                        <span class="status ok">Active</span>
-                    }
-                </span>
-            </div>
-        </li>
-    }
-</ul>
-<p class="group-footer">Cashiers manage customers and accounts. Admins manage users.</p>
+<section class="panel">
+    <div class="table-wrap">
+        <table class="data">
+            <thead><tr><th scope="col">Login</th><th scope="col">Role</th><th scope="col">Status</th></tr></thead>
+            <tbody>
+                @foreach (var u in Model.Users)
+                {
+                    <tr>
+                        <td class="primary-cell"><span>@u.Email</span></td>
+                        <td>
+                            @if (u.Roles.Count == 0)
+                            {
+                                <span class="muted">No role: can't open customers or accounts</span>
+                            }
+                            @foreach (var r in u.Roles)
+                            {
+                                <span class="tag role">@r</span>
+                            }
+                        </td>
+                        <td>
+                            @if (u.LockedOut) { <span class="tag bad">Locked out</span> }
+                            else if (!u.EmailConfirmed) { <span class="tag">Email not confirmed</span> }
+                            else { <span class="tag ok">Active</span> }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

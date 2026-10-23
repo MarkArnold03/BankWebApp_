@@ -90,7 +90,7 @@ namespace BankWebApp.Tests
         {
             var html = await Text(await As(email), "/");
 
-            Assert.Contains("Total balance, all accounts", html);
+            Assert.Contains("The bank today", html);
             Assert.Contains(role + " · " + email, html);
         }
 
@@ -139,8 +139,8 @@ namespace BankWebApp.Tests
         {
             var html = await Text(NewClient(), "/");
 
-            Assert.Contains("<dt>Customers</dt><dd class=\"num\">3</dd>", html);
-            Assert.Contains("<dt>Accounts</dt><dd class=\"num\">4</dd>", html);
+            Assert.Contains("<span>3 customers</span><span>4 accounts</span>", html);   // on the banknote
+            Assert.Contains("№ 000003·000004", html);
             Assert.Contains("Sweden", html);
             Assert.DoesNotContain("anna@example.com", html); // no customer details in public
         }
@@ -150,7 +150,7 @@ namespace BankWebApp.Tests
         {
             var html = await Text(await As(BankAppFactory.AdminEmail), "/Countries/TopTen?countryId=SE");
 
-            var order = new[] { "1\u00a0002", "1\u00a0001", "1\u00a0003" }.Select(n => html.IndexOf("Account " + n)).ToList();
+            var order = new[] { "1\u00a0002", "1\u00a0001", "1\u00a0003" }.Select(n => html.IndexOf("Account № " + n)).ToList();
             Assert.All(order, i => Assert.True(i > 0));
             Assert.True(order[0] < order[1] && order[1] < order[2], "Largest balance first");
             Assert.DoesNotContain("Nordmann", html);
@@ -186,8 +186,8 @@ namespace BankWebApp.Tests
 
             Assert.Contains("Anna Lindqvist", html);
             Assert.Contains(BankFormat.Sek(total).Replace(" kr", ""), html);
-            Assert.Contains("Account 1 001", html);
-            Assert.Contains("Account 1 003", html);
+            Assert.Contains("№ 1\u00a0001", html);
+            Assert.Contains("№ 1\u00a0003", html);
             Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/Customers/CustomerCard/999999")).StatusCode);
         }
 
@@ -217,6 +217,17 @@ namespace BankWebApp.Tests
             Assert.True(Regex.Matches(await Text(third), "data-transaction=").Count >= 5);
             Assert.DoesNotContain("<html", await Text(third)); // only rows, for appending
             Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync("/Accounts/Transactions?accountId=999999")).StatusCode);
+        }
+
+        [Fact]
+        public async Task Account_page_has_the_teller_panel_beside_the_ledger()
+        {
+            var html = await Text(await As(BankAppFactory.CashierEmail), "/Accounts/Transactions?accountId=1001&customerId=1");
+
+            Assert.Contains("action=\"/Accounts/Deposit?accountId=1001&amp;customerId=1\"".Replace("&amp;", "&"), html);
+            Assert.Contains("action=\"/Accounts/Withdrawal?accountId=1001&customerId=1\"", html);
+            Assert.Contains("action=\"/Accounts/Transfer?accountId=1001&customerId=1\"", html);
+            Assert.Equal(4, Regex.Matches(html, "name=\"__RequestVerificationToken\"").Count); // three teller forms and log out
         }
 
         [Fact]

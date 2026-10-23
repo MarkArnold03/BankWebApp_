@@ -3,43 +3,41 @@
 @{
     var a = Model.Account;
     ViewData["Title"] = "Account " + BankFormat.AccountNumber(a.Id);
+    var panel = new TellerPanelViewModel { Account = a, CustomerId = Model.CustomerId };
 }
 
-@if (Model.CustomerId > 0)
-{
-    <a class="back" asp-page="/Customers/CustomerCard" asp-route-customerId="@Model.CustomerId">@Icons.Svg("back", 22) Customer</a>
-}
-else
-{
-    <a class="back" asp-page="/Accounts/Accounts">@Icons.Svg("back", 22) Accounts</a>
-}
+<ol class="crumbs">
+    <li><a asp-page="/Index">Overview</a></li>
+    @if (Model.CustomerId > 0)
+    {
+        <li><a asp-page="/Customers/Customers">Customers</a></li>
+        <li><a asp-page="/Customers/CustomerCard" asp-route-customerId="@Model.CustomerId">Customer № @Model.CustomerId</a></li>
+    }
+    else
+    {
+        <li><a asp-page="/Accounts/Accounts">Accounts</a></li>
+    }
+    <li>Account № @BankFormat.AccountNumber(a.Id)</li>
+</ol>
 
-<div class="page-head">
-    <div class="page-eyebrow">Account</div>
-    <h1 class="large-title num">@BankFormat.AccountNumber(a.Id)</h1>
-</div>
+<partial name="_AccountHeader" model="panel" />
 
-<div class="figure">
-    <div class="caption">Balance</div>
-    <div class="value">@BankFormat.Sek(a.Balance).Replace(" kr", "")<span class="unit">kr</span></div>
-    <div class="buttons">
-        <a class="btn btn-primary" asp-page="/Accounts/Deposit" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId">@Icons.Svg("deposit", 18) Deposit</a>
-        <a class="btn btn-gray" asp-page="/Accounts/Withdrawal" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId">@Icons.Svg("withdraw", 18) Withdraw</a>
-        <a class="btn btn-gray" asp-page="/Accounts/Transfer" asp-route-accountId="@a.Id" asp-route-customerId="@Model.CustomerId">@Icons.Svg("transfer", 18) Transfer</a>
-    </div>
-</div>
-
-<div class="two-col">
-    <section aria-labelledby="tx-title">
-        <div class="toolbar"><h2 id="tx-title">Transactions</h2><span class="secondary">Newest first</span></div>
+<div class="grid-account">
+    <section class="panel" aria-labelledby="tx-title">
+        <div class="panel-head"><h2 id="tx-title">Ledger</h2><span class="micro">Newest first</span></div>
         @if (Model.Transactions.Count == 0)
         {
-            <div class="empty"><h2>No transactions yet</h2><p>Deposits, withdrawals and transfers will appear here.</p></div>
+            <div class="empty"><h2>No transactions yet</h2><p>Bookings will appear here.</p></div>
         }
         else
         {
-            <div class="list has-glyph" id="transactions">
-                <partial name="_TransactionRows" model="Model.Transactions" />
+            <div class="table-wrap">
+                <table class="data ledger">
+                    <thead><tr><th scope="col">Date</th><th scope="col">Transaction</th><th scope="col" class="num">Amount</th><th scope="col" class="num hide-sm">Balance</th></tr></thead>
+                    <tbody id="transactions">
+                        <partial name="_TransactionRows" model="Model.Transactions" />
+                    </tbody>
+                </table>
             </div>
             @if (Model.HasMore)
             {
@@ -49,17 +47,11 @@ else
                             data-skip="@Model.Transactions.Count">Load 20 more</button>
                 </div>
             }
-            <p class="field-error text-center" id="load-error" role="alert" hidden>Couldn't load more transactions. Try again.</p>
+            <p class="field-error text-center pb-3" id="load-error" role="alert" hidden>Couldn't load more transactions. Try again.</p>
         }
     </section>
 
-    <section class="group mt-5 mt-xl-0" aria-labelledby="det-title">
-        <div class="group-header"><h2 id="det-title">Details</h2></div>
-        <ul class="list">
-            <li><div class="cell"><span class="main">Opened</span><span class="trail label-value">@a.Created.ToString("d MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</span></div></li>
-            <li><div class="cell"><span class="main">Statements</span><span class="trail label-value">@(a.Frequency == "AfterTransaction" ? "After each transaction" : a.Frequency)</span></div></li>
-        </ul>
-    </section>
+    <partial name="_TellerPanel" model="panel" />
 </div>
 
 @section Scripts {

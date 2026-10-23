@@ -1,0 +1,14 @@
+@model TellerPanelViewModel
+@{
+    var a = Model.Account;
+}
+<section class="panel account-head mb-4" aria-label="Account">
+    <div>
+        <div class="micro">Account · @(a.Frequency == "AfterTransaction" ? "statement after each transaction" : a.Frequency.ToLowerInvariant() + " statement") · opened @a.Created.ToString("d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</div>
+        <h1>№ @BankFormat.AccountNumber(a.Id)</h1>
+    </div>
+    <dl class="balance-figure m-0">
+        <dt>Balance</dt>
+        <dd>@BankFormat.Sek(a.Balance).Replace(" kr", "")<small>SEK</small></dd>
+    </dl>
+</section>
