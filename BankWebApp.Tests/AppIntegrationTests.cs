@@ -139,8 +139,8 @@ namespace BankWebApp.Tests
         {
             var html = await Text(NewClient(), "/");
 
-            Assert.Contains("<span>3 customers</span><span>4 accounts</span>", html);   // on the banknote
-            Assert.Contains("№ 000003·000004", html);
+            Assert.Contains("<div><dt>Customers</dt><dd>3</dd></div>", html);   // banner figures
+            Assert.Contains("<div><dt>Accounts</dt><dd>4</dd></div>", html);
             Assert.Contains("Sweden", html);
             Assert.DoesNotContain("anna@example.com", html); // no customer details in public
         }

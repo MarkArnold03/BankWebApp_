@@ -65,6 +65,13 @@
         rosette: function (s) { rosette(s.ctx, s.w / 2, s.h / 2, Math.min(s.w, s.h) / 2 - 1, 2, 0.75, 0.35); },
         seal: function (s) { rosette(s.ctx, s.w / 2, s.h / 2, Math.min(s.w, s.h) / 2 - 1, 6, 0.55, 0.5); },
         band: function (s) { waves(s.ctx, 0, 1, s.w, s.h - 2, 6, Math.max(8, s.w / 60), 0.55, 0.6); },
+        // Banner: one oversized rosette cropped by the right edge, over faint waves.
+        hero: function (s) {
+            var ctx = s.ctx, w = s.w, h = s.h;
+            waves(ctx, 0, h * 0.1, w, h * 0.8, 14, Math.max(2, w / 220), 0.08, 0.6);
+            rosette(ctx, w * 0.78, h * 0.5, Math.max(h, w * 0.6) * 0.62, 9, 0.32, 0.6);
+            rosette(ctx, w * 0.78, h * 0.5, Math.max(h, w * 0.6) * 0.3, 5, 0.25, 0.5);
+        },
         note: function (s) {
             var ctx = s.ctx, w = s.w, h = s.h;
             waves(ctx, 0, h * 0.08, w, h * 0.84, 18, Math.max(3, w / 140), 0.12, 0.6);

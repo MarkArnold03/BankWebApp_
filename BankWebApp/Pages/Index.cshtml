@@ -71,28 +71,37 @@
 }
 else
 {
-    <section class="landing">
-        <div class="wrap landing-hero">
-            <div>
-                <p class="micro" style="color: var(--band-ink-2)">Internal banking system</p>
-                <h1>Every krona, <em>engraved</em> in the ledger.</h1>
-                <p>ManDem Bank's teller desk. Staff find any customer, follow every transaction, and book deposits, withdrawals and transfers.</p>
-                <div class="cta">
-                    <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">Log in to the teller desk</a>
-                    <a class="btn btn-ghost btn-lg" href="#countries">Countries</a>
-                </div>
-            </div>
+    <section class="banner" aria-labelledby="banner-title">
+        <canvas class="guilloche banner-art" data-guilloche="hero" style="color: var(--note-blue)" aria-hidden="true"></canvas>
+        <div class="wrap banner-inner">
+            <p class="banner-kicker"><span class="live-dot" aria-hidden="true"></span>Internal banking system · live figures</p>
+            <h1 id="banner-title">The teller desk for <span>ManDem Bank</span>.</h1>
+            <p class="banner-lede">Find any customer, follow every transaction, and book deposits, withdrawals and transfers from one place.</p>
 
-            <figure class="note m-0" aria-label="The bank's total balance: @Whole(t.TotalAccountValue) kronor across @N(t.NumberOfAccounts) accounts and @N(t.NumberOfClients) customers">
-                <canvas class="guilloche" data-guilloche="note" style="color: var(--note-blue)" aria-hidden="true"></canvas>
-                <div class="note-frame" aria-hidden="true"></div>
-                <div class="note-body" aria-hidden="true">
-                    <div class="issuer">ManDem Bank<small>Total held for customers</small></div>
-                    <div class="serialno">№ @t.NumberOfClients.ToString("000000")·@t.NumberOfAccounts.ToString("000000")</div>
-                    <div class="value">@Whole(t.TotalAccountValue)<small>SEK</small></div>
-                    <div class="legend"><span>@N(t.NumberOfClients) customers</span><span>@N(t.NumberOfAccounts) accounts</span><span>Live</span></div>
-                </div>
-            </figure>
+            <dl class="banner-figures">
+                <div class="lead-figure"><dt>Held for customers</dt><dd>@Whole(t.TotalAccountValue)<small>SEK</small></dd></div>
+                <div><dt>Customers</dt><dd>@N(t.NumberOfClients)</dd></div>
+                <div><dt>Accounts</dt><dd>@N(t.NumberOfAccounts)</dd></div>
+            </dl>
+
+            <div class="banner-cta">
+                <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">Log in to the teller desk</a>
+                <a class="btn btn-gray btn-lg" href="#countries">See the countries</a>
+            </div>
+        </div>
+
+        <div class="banner-strip">
+            <ul class="wrap" aria-label="Capital by country">
+                @foreach (var (code, name) in IndexModel.Countries.OrderByDescending(c => Model.ViewModels[c.Code].TotalAccountValue))
+                {
+                    var c = Model.ViewModels[code];
+                    <li>
+                        <img class="flag" src="~/assets/images/@(code)-flag-png-large.png" alt="" />
+                        <span class="strip-name">@name</span>
+                        <span class="strip-value">@Whole(c.TotalAccountValue) kr</span>
+                    </li>
+                }
+            </ul>
         </div>
     </section>
 
