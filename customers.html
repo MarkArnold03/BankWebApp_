@@ -1,0 +1,498 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#13221b">
+    <title>Customers · ManDem Bank</title>
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem("theme");
+                if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+            } catch (e) { }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;display=swap">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="site.css">
+</head>
+<body data-note="green">
+    <header class="band">
+        <div class="wrap">
+            <a class="logo" aria-label="ManDem Bank, overview" href="overview.html">
+                <canvas class="guilloche rosette" data-guilloche="rosette" style="color: var(--band-ink)" aria-hidden="true" width="34" height="34"></canvas>
+                <span class="names"><strong>ManDem Bank</strong><small>Teller desk</small></span>
+            </a>
+
+                <ul class="mainnav" aria-label="Main">
+                        <li><a style="--c: var(--note-blue)" href="overview.html"><span class="dot" aria-hidden="true"></span>Overview</a></li>
+                        <li><a aria-current="page" style="--c: var(--note-green)" href="customers.html"><span class="dot" aria-hidden="true"></span>Customers</a></li>
+                        <li><a style="--c: var(--note-red)" href="accounts.html"><span class="dot" aria-hidden="true"></span>Accounts</a></li>
+                </ul>
+                    <form class="cmdsearch" role="search" method="get" data-preview-next="customers.html">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+                        <input name="searchText" id="global-search" placeholder="Find a customer" aria-label="Find a customer by name, city or customer number" autocomplete="off">
+                        <kbd aria-hidden="true">/</kbd>
+                    </form>
+                <div class="end">
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle="">
+                        <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg><svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+                    </button>
+                    <details class="usermenu">
+                        <summary aria-label="Account menu">
+                            <span class="avatar">RC</span>
+                            <span class="who"><strong>Richard Erdos Chalk</strong><span>Cashier</span></span>
+                        </summary>
+                        <div class="menu">
+                            <div class="menu-head"><strong>Richard Erdos Chalk</strong><span>Cashier · richard.erdos.chalk@gmail.se</span></div>
+                            <div class="menu-nav">
+                                    <a href="overview.html">Overview</a>
+                                    <a href="customers.html">Customers</a>
+                                    <a href="accounts.html">Accounts</a>
+                            </div>
+                            <a href="profile.html">Profile and security</a>
+                            <form method="post" data-preview-next="./">
+                                <button type="submit" class="destructive">Log out</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+        </div>
+        <div class="band-trim"><canvas class="guilloche" data-guilloche="band" style="color: var(--note)" aria-hidden="true" width="1280" height="7"></canvas></div>
+    </header>
+
+    <main role="main">
+            <div class="wrap page ">
+                
+<ol class="crumbs"><li><a href="overview.html">Overview</a></li><li>Customers</li></ol>
+<div class="page-title">
+    <div>
+        <h1>Customers</h1>
+        <p class="lede">Search by first name, surname and city, for example <em>anna uppsala</em>. A customer number opens the customer.</p>
+    </div>
+</div>
+
+<section class="panel">
+    <div class="panel-head">
+        <form method="get" class="toolbar w-100" role="search" data-preview-next="customers.html">
+            <label class="field-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input name="searchText" placeholder="Name, city or customer number" aria-label="Search customers" autocomplete="off"></label>
+            <button class="btn btn-primary" type="submit">Search</button>
+            <span class="count num">1–50 of 64</span>
+        </form>
+    </div>
+
+        <div class="table-wrap">
+            <table class="data">
+                <thead>
+                    <tr>
+                            <th scope="col" class="num">
+                                <a href="customers.html">No. </a>
+                            </th>
+                            <th scope="col" class="hide-sm">
+                                <a href="customers.html">Personal ID </a>
+                            </th>
+                            <th scope="col" class="">
+                                <a href="customers.html">Name </a>
+                            </th>
+                            <th scope="col" class="hide-sm">
+                                <a href="customers.html">Address </a>
+                            </th>
+                            <th scope="col" class="">
+                                <a href="customers.html">City </a>
+                            </th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td class="num"><span class="serial">1</span></td>
+                            <td class="hide-sm mono">19500101-1000</td>
+                            <td class="primary-cell"><a href="card-1.html">Anna Lindqvist</a></td>
+                            <td class="hide-sm muted">Storgatan 12</td>
+                            <td>Uppsala</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">2</span></td>
+                            <td class="hide-sm mono">19510202-1037</td>
+                            <td class="primary-cell"><a href="card-2.html">Erik Olsson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 2</td>
+                            <td>Stockholm</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">3</span></td>
+                            <td class="hide-sm mono">19520303-1074</td>
+                            <td class="primary-cell"><a href="card-3.html">Maria Ek</a></td>
+                            <td class="hide-sm muted">Drottninggatan 3</td>
+                            <td>Oslo</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">4</span></td>
+                            <td class="hide-sm mono">19530404-1111</td>
+                            <td class="primary-cell"><a href="card-4.html">Lars Larsson</a></td>
+                            <td class="hide-sm muted">Vasagatan 4</td>
+                            <td>København</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">5</span></td>
+                            <td class="hide-sm mono">19540505-1148</td>
+                            <td class="primary-cell"><a href="card-5.html">Karin Berg</a></td>
+                            <td class="hide-sm muted">Ågatan 5</td>
+                            <td>Göteborg</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">6</span></td>
+                            <td class="hide-sm mono">19550606-1185</td>
+                            <td class="primary-cell"><a href="card-6.html">Johan Eriksson</a></td>
+                            <td class="hide-sm muted">Skolgatan 6</td>
+                            <td>Helsinki</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">7</span></td>
+                            <td class="hide-sm mono">19560707-1222</td>
+                            <td class="primary-cell"><a href="card-7.html">Eva Jonsson</a></td>
+                            <td class="hide-sm muted">Storgatan 7</td>
+                            <td>Bergen</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">8</span></td>
+                            <td class="hide-sm mono">19570808-1259</td>
+                            <td class="primary-cell"><a href="card-8.html">Anders Nilsson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 8</td>
+                            <td>Aarhus</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">9</span></td>
+                            <td class="hide-sm mono">19580909-1296</td>
+                            <td class="primary-cell"><a href="card-9.html">Sara Pettersson</a></td>
+                            <td class="hide-sm muted">Drottninggatan 9</td>
+                            <td>Uppsala</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">10</span></td>
+                            <td class="hide-sm mono">19591010-1333</td>
+                            <td class="primary-cell"><a href="card-10.html">Per Karlsson</a></td>
+                            <td class="hide-sm muted">Vasagatan 10</td>
+                            <td>Stockholm</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">11</span></td>
+                            <td class="hide-sm mono">19601111-1370</td>
+                            <td class="primary-cell"><a href="card-11.html">Lena Gustafsson</a></td>
+                            <td class="hide-sm muted">Ågatan 11</td>
+                            <td>Oslo</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">12</span></td>
+                            <td class="hide-sm mono">19611212-1407</td>
+                            <td class="primary-cell"><a href="card-12.html">Nils Johansson</a></td>
+                            <td class="hide-sm muted">Skolgatan 12</td>
+                            <td>København</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">13</span></td>
+                            <td class="hide-sm mono">19620113-1444</td>
+                            <td class="primary-cell"><a href="card-13.html">Ingrid Svensson</a></td>
+                            <td class="hide-sm muted">Storgatan 13</td>
+                            <td>Göteborg</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">14</span></td>
+                            <td class="hide-sm mono">19630214-1481</td>
+                            <td class="primary-cell"><a href="card-14.html">Oskar Andersson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 14</td>
+                            <td>Helsinki</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">15</span></td>
+                            <td class="hide-sm mono">19640315-1518</td>
+                            <td class="primary-cell"><a href="card-15.html">Elin Persson</a></td>
+                            <td class="hide-sm muted">Drottninggatan 15</td>
+                            <td>Bergen</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">16</span></td>
+                            <td class="hide-sm mono">19650416-1555</td>
+                            <td class="primary-cell"><a href="card-16.html">Gustav Lindqvist</a></td>
+                            <td class="hide-sm muted">Vasagatan 16</td>
+                            <td>Aarhus</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">17</span></td>
+                            <td class="hide-sm mono">19660517-1592</td>
+                            <td class="primary-cell"><a href="card-17.html">Maja Olsson</a></td>
+                            <td class="hide-sm muted">Ågatan 17</td>
+                            <td>Uppsala</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">18</span></td>
+                            <td class="hide-sm mono">19670618-1629</td>
+                            <td class="primary-cell"><a href="card-18.html">Axel Ek</a></td>
+                            <td class="hide-sm muted">Skolgatan 18</td>
+                            <td>Stockholm</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">19</span></td>
+                            <td class="hide-sm mono">19680719-1666</td>
+                            <td class="primary-cell"><a href="card-19.html">Linnea Larsson</a></td>
+                            <td class="hide-sm muted">Storgatan 19</td>
+                            <td>Oslo</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">20</span></td>
+                            <td class="hide-sm mono">19690820-1703</td>
+                            <td class="primary-cell"><a href="card-20.html">Henrik Berg</a></td>
+                            <td class="hide-sm muted">Kungsgatan 20</td>
+                            <td>København</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">21</span></td>
+                            <td class="hide-sm mono">19700921-1740</td>
+                            <td class="primary-cell"><a href="card-21.html">Anna Eriksson</a></td>
+                            <td class="hide-sm muted">Drottninggatan 21</td>
+                            <td>Göteborg</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">22</span></td>
+                            <td class="hide-sm mono">19711022-1777</td>
+                            <td class="primary-cell"><a href="card-22.html">Erik Jonsson</a></td>
+                            <td class="hide-sm muted">Vasagatan 22</td>
+                            <td>Helsinki</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">23</span></td>
+                            <td class="hide-sm mono">19721123-1814</td>
+                            <td class="primary-cell"><a href="card-23.html">Maria Nilsson</a></td>
+                            <td class="hide-sm muted">Ågatan 23</td>
+                            <td>Bergen</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">24</span></td>
+                            <td class="hide-sm mono">19731224-1851</td>
+                            <td class="primary-cell"><a href="card-24.html">Lars Pettersson</a></td>
+                            <td class="hide-sm muted">Skolgatan 24</td>
+                            <td>Aarhus</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">25</span></td>
+                            <td class="hide-sm mono">19740125-1888</td>
+                            <td class="primary-cell"><a href="card-25.html">Karin Karlsson</a></td>
+                            <td class="hide-sm muted">Storgatan 25</td>
+                            <td>Uppsala</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">26</span></td>
+                            <td class="hide-sm mono">19750226-1925</td>
+                            <td class="primary-cell"><a href="card-26.html">Johan Gustafsson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 26</td>
+                            <td>Stockholm</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">27</span></td>
+                            <td class="hide-sm mono">19760327-1962</td>
+                            <td class="primary-cell"><a href="card-27.html">Eva Johansson</a></td>
+                            <td class="hide-sm muted">Drottninggatan 27</td>
+                            <td>Oslo</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">28</span></td>
+                            <td class="hide-sm mono">19770428-1999</td>
+                            <td class="primary-cell"><a href="card-28.html">Anders Svensson</a></td>
+                            <td class="hide-sm muted">Vasagatan 28</td>
+                            <td>København</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">29</span></td>
+                            <td class="hide-sm mono">19780501-2036</td>
+                            <td class="primary-cell"><a href="card-29.html">Sara Andersson</a></td>
+                            <td class="hide-sm muted">Ågatan 29</td>
+                            <td>Göteborg</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">30</span></td>
+                            <td class="hide-sm mono">19790602-2073</td>
+                            <td class="primary-cell"><a href="card-30.html">Per Persson</a></td>
+                            <td class="hide-sm muted">Skolgatan 30</td>
+                            <td>Helsinki</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">31</span></td>
+                            <td class="hide-sm mono">19800703-2110</td>
+                            <td class="primary-cell"><a href="card-31.html">Lena Lindqvist</a></td>
+                            <td class="hide-sm muted">Storgatan 31</td>
+                            <td>Bergen</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">32</span></td>
+                            <td class="hide-sm mono">19810804-2147</td>
+                            <td class="primary-cell"><a href="card-32.html">Nils Olsson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 32</td>
+                            <td>Aarhus</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">33</span></td>
+                            <td class="hide-sm mono">19820905-2184</td>
+                            <td class="primary-cell"><a href="card-33.html">Ingrid Ek</a></td>
+                            <td class="hide-sm muted">Drottninggatan 33</td>
+                            <td>Uppsala</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">34</span></td>
+                            <td class="hide-sm mono">19831006-2221</td>
+                            <td class="primary-cell"><a href="card-34.html">Oskar Larsson</a></td>
+                            <td class="hide-sm muted">Vasagatan 34</td>
+                            <td>Stockholm</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">35</span></td>
+                            <td class="hide-sm mono">19841107-2258</td>
+                            <td class="primary-cell"><a href="card-35.html">Elin Berg</a></td>
+                            <td class="hide-sm muted">Ågatan 35</td>
+                            <td>Oslo</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">36</span></td>
+                            <td class="hide-sm mono">19851208-2295</td>
+                            <td class="primary-cell"><a href="card-36.html">Gustav Eriksson</a></td>
+                            <td class="hide-sm muted">Skolgatan 36</td>
+                            <td>København</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">37</span></td>
+                            <td class="hide-sm mono">19860109-2332</td>
+                            <td class="primary-cell"><a href="card-37.html">Maja Jonsson</a></td>
+                            <td class="hide-sm muted">Storgatan 37</td>
+                            <td>Göteborg</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">38</span></td>
+                            <td class="hide-sm mono">19870210-2369</td>
+                            <td class="primary-cell"><a href="card-38.html">Axel Nilsson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 38</td>
+                            <td>Helsinki</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">39</span></td>
+                            <td class="hide-sm mono">19880311-2406</td>
+                            <td class="primary-cell"><a href="card-39.html">Linnea Pettersson</a></td>
+                            <td class="hide-sm muted">Drottninggatan 39</td>
+                            <td>Bergen</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">40</span></td>
+                            <td class="hide-sm mono">19890412-2443</td>
+                            <td class="primary-cell"><a href="card-40.html">Henrik Karlsson</a></td>
+                            <td class="hide-sm muted">Vasagatan 40</td>
+                            <td>Aarhus</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">41</span></td>
+                            <td class="hide-sm mono">19900513-2480</td>
+                            <td class="primary-cell"><a href="card-41.html">Anna Gustafsson</a></td>
+                            <td class="hide-sm muted">Ågatan 1</td>
+                            <td>Uppsala</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">42</span></td>
+                            <td class="hide-sm mono">19910614-2517</td>
+                            <td class="primary-cell"><a href="card-42.html">Erik Johansson</a></td>
+                            <td class="hide-sm muted">Skolgatan 2</td>
+                            <td>Stockholm</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">43</span></td>
+                            <td class="hide-sm mono">19920715-2554</td>
+                            <td class="primary-cell"><a href="card-43.html">Maria Svensson</a></td>
+                            <td class="hide-sm muted">Storgatan 3</td>
+                            <td>Oslo</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">44</span></td>
+                            <td class="hide-sm mono">19930816-2591</td>
+                            <td class="primary-cell"><a href="card-44.html">Lars Andersson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 4</td>
+                            <td>København</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">45</span></td>
+                            <td class="hide-sm mono">19940917-2628</td>
+                            <td class="primary-cell"><a href="card-45.html">Karin Persson</a></td>
+                            <td class="hide-sm muted">Drottninggatan 5</td>
+                            <td>Göteborg</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">46</span></td>
+                            <td class="hide-sm mono">19951018-2665</td>
+                            <td class="primary-cell"><a href="card-46.html">Johan Lindqvist</a></td>
+                            <td class="hide-sm muted">Vasagatan 6</td>
+                            <td>Helsinki</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">47</span></td>
+                            <td class="hide-sm mono">19961119-2702</td>
+                            <td class="primary-cell"><a href="card-47.html">Eva Olsson</a></td>
+                            <td class="hide-sm muted">Ågatan 7</td>
+                            <td>Bergen</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">48</span></td>
+                            <td class="hide-sm mono">19971220-2739</td>
+                            <td class="primary-cell"><a href="card-48.html">Anders Ek</a></td>
+                            <td class="hide-sm muted">Skolgatan 8</td>
+                            <td>Aarhus</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">49</span></td>
+                            <td class="hide-sm mono">19980121-2776</td>
+                            <td class="primary-cell"><a href="card-49.html">Sara Larsson</a></td>
+                            <td class="hide-sm muted">Storgatan 9</td>
+                            <td>Uppsala</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">50</span></td>
+                            <td class="hide-sm mono">19990222-2813</td>
+                            <td class="primary-cell"><a href="card-50.html">Per Berg</a></td>
+                            <td class="hide-sm muted">Kungsgatan 10</td>
+                            <td>Stockholm</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+            <nav class="pager" aria-label="Pages">
+                <span>Page 1 of 2</span>
+                <div class="pages">
+                        <a aria-current="page" href="customers.html">1</a>
+                        <a href="customers-2.html">2</a>
+                        <a aria-label="Next page" href="customers-2.html">›</a>
+                </div>
+            </nav>
+</section>
+
+            </div>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap">
+            <span>© 2026 ManDem Bank · Internal banking system · Preview with sample customers</span>
+            <nav aria-label="Footer">
+                <a href="privacy.html">Privacy</a>
+            </nav>
+            <div class="microtext" aria-hidden="true">MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·</div>
+        </div>
+    </footer>
+
+    
+    <script src="site.js"></script>
+    <script src="guilloche.js"></script>
+
+    
+
+
+<script>
+// Preview only: nothing is sent anywhere. Forms open the page the real app would show next.
+document.addEventListener("submit", function (e) {
+  e.preventDefault();
+  var next = e.target.getAttribute("data-preview-next");
+  if (next) location.href = next;
+}, true);
+</script>
+</body></html>

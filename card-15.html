@@ -1,0 +1,156 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#13221b">
+    <title>Elin Persson · ManDem Bank</title>
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem("theme");
+                if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+            } catch (e) { }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;display=swap">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="site.css">
+</head>
+<body data-note="green">
+    <header class="band">
+        <div class="wrap">
+            <a class="logo" aria-label="ManDem Bank, overview" href="overview.html">
+                <canvas class="guilloche rosette" data-guilloche="rosette" style="color: var(--band-ink)" aria-hidden="true" width="34" height="34"></canvas>
+                <span class="names"><strong>ManDem Bank</strong><small>Teller desk</small></span>
+            </a>
+
+                <ul class="mainnav" aria-label="Main">
+                        <li><a style="--c: var(--note-blue)" href="overview.html"><span class="dot" aria-hidden="true"></span>Overview</a></li>
+                        <li><a aria-current="page" style="--c: var(--note-green)" href="customers.html"><span class="dot" aria-hidden="true"></span>Customers</a></li>
+                        <li><a style="--c: var(--note-red)" href="accounts.html"><span class="dot" aria-hidden="true"></span>Accounts</a></li>
+                </ul>
+                    <form class="cmdsearch" role="search" method="get" data-preview-next="customers.html">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+                        <input name="searchText" id="global-search" placeholder="Find a customer" aria-label="Find a customer by name, city or customer number" autocomplete="off">
+                        <kbd aria-hidden="true">/</kbd>
+                    </form>
+                <div class="end">
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle="">
+                        <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg><svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+                    </button>
+                    <details class="usermenu">
+                        <summary aria-label="Account menu">
+                            <span class="avatar">RC</span>
+                            <span class="who"><strong>Richard Erdos Chalk</strong><span>Cashier</span></span>
+                        </summary>
+                        <div class="menu">
+                            <div class="menu-head"><strong>Richard Erdos Chalk</strong><span>Cashier · richard.erdos.chalk@gmail.se</span></div>
+                            <div class="menu-nav">
+                                    <a href="overview.html">Overview</a>
+                                    <a href="customers.html">Customers</a>
+                                    <a href="accounts.html">Accounts</a>
+                            </div>
+                            <a href="profile.html">Profile and security</a>
+                            <form method="post" data-preview-next="./">
+                                <button type="submit" class="destructive">Log out</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+        </div>
+        <div class="band-trim"><canvas class="guilloche" data-guilloche="band" style="color: var(--note)" aria-hidden="true" width="1280" height="7"></canvas></div>
+    </header>
+
+    <main role="main">
+            <div class="wrap page ">
+                
+<ol class="crumbs"><li><a href="overview.html">Overview</a></li><li><a href="customers.html">Customers</a></li><li>Elin Persson</li></ol>
+
+<section class="panel profile mb-4" aria-label="Customer">
+    <div class="seal">
+        <canvas class="guilloche" data-guilloche="seal" style="color: var(--note)" aria-hidden="true" width="72" height="72"></canvas>
+        <span aria-hidden="true">EP</span>
+    </div>
+    <div>
+        <div class="micro">Customer <span class="serial">№ 15</span></div>
+        <h1>Elin Persson</h1>
+        <div class="facts">
+            <span>Bergen, Norway</span>
+ <span><b>62</b> years</span>             <span>1 account</span>
+        </div>
+    </div>
+    <dl class="total m-0">
+        <dt>Total balance</dt>
+        <dd>62&nbsp;177,41&nbsp;kr</dd>
+    </dl>
+</section>
+
+<div class="grid-2">
+    <section class="panel" aria-labelledby="acc-title">
+        <div class="panel-head"><h2 id="acc-title">Accounts</h2><span class="micro">Open an account to see its ledger</span></div>
+            <div class="table-wrap">
+                <table class="data">
+                    <thead><tr><th scope="col">Account</th><th scope="col" class="hide-sm">Statements</th><th scope="col" class="num">Balance</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+                    <tbody>
+                            <tr>
+                                <td class="primary-cell"><a class="serial" href="tx-1224175.html">№ 1&nbsp;224&nbsp;175</a></td>
+                                <td class="hide-sm muted">Monthly</td>
+                                <td class="num">62&nbsp;177,41&nbsp;kr</td>
+                                <td>
+                                    <div class="row-actions">
+                                        <a title="Deposit, withdraw or transfer" href="tx-1224175.html">Book</a>
+                                    </div>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-foot">Total <span class="num">62&nbsp;177,41&nbsp;kr</span> across all accounts, including shared ones.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="det-title">
+        <div class="panel-head"><h2 id="det-title">Particulars</h2></div>
+        <div class="panel-body">
+            <dl class="kv">
+                <dt>Personal ID</dt><dd class="mono">19640315-1518</dd>
+                <dt>Born</dt><dd>15 March 1964</dd>
+                <dt>Gender</dt><dd>Female</dd>
+                <dt>Address</dt><dd>Drottninggatan 15<br>5003 Bergen</dd>
+                <dt>Country</dt><dd>Norway</dd>
+                <dt>Phone</dt><dd class="mono">+46 70-114 24 34</dd>
+                <dt>Email</dt><dd>elin.persson14@example.com</dd>
+            </dl>
+        </div>
+    </section>
+</div>
+
+            </div>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap">
+            <span>© 2026 ManDem Bank · Internal banking system · Preview with sample customers</span>
+            <nav aria-label="Footer">
+                <a href="privacy.html">Privacy</a>
+            </nav>
+            <div class="microtext" aria-hidden="true">MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·</div>
+        </div>
+    </footer>
+
+    
+    <script src="site.js"></script>
+    <script src="guilloche.js"></script>
+
+    
+
+
+<script>
+// Preview only: nothing is sent anywhere. Forms open the page the real app would show next.
+document.addEventListener("submit", function (e) {
+  e.preventDefault();
+  var next = e.target.getAttribute("data-preview-next");
+  if (next) location.href = next;
+}, true);
+</script>
+</body></html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#13221b">
+    <title>Accounts · ManDem Bank</title>
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem("theme");
+                if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+            } catch (e) { }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;display=swap">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="site.css">
+</head>
+<body data-note="red">
+    <header class="band">
+        <div class="wrap">
+            <a class="logo" aria-label="ManDem Bank, overview" href="overview.html">
+                <canvas class="guilloche rosette" data-guilloche="rosette" style="color: var(--band-ink)" aria-hidden="true" width="34" height="34"></canvas>
+                <span class="names"><strong>ManDem Bank</strong><small>Teller desk</small></span>
+            </a>
+
+                <ul class="mainnav" aria-label="Main">
+                        <li><a style="--c: var(--note-blue)" href="overview.html"><span class="dot" aria-hidden="true"></span>Overview</a></li>
+                        <li><a style="--c: var(--note-green)" href="customers.html"><span class="dot" aria-hidden="true"></span>Customers</a></li>
+                        <li><a aria-current="page" style="--c: var(--note-red)" href="accounts.html"><span class="dot" aria-hidden="true"></span>Accounts</a></li>
+                </ul>
+                    <form class="cmdsearch" role="search" method="get" data-preview-next="accounts.html">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+                        <input name="searchText" id="global-search" placeholder="Find a customer" aria-label="Find a customer by name, city or customer number" autocomplete="off">
+                        <kbd aria-hidden="true">/</kbd>
+                    </form>
+                <div class="end">
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle="">
+                        <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg><svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+                    </button>
+                    <details class="usermenu">
+                        <summary aria-label="Account menu">
+                            <span class="avatar">RC</span>
+                            <span class="who"><strong>Richard Erdos Chalk</strong><span>Cashier</span></span>
+                        </summary>
+                        <div class="menu">
+                            <div class="menu-head"><strong>Richard Erdos Chalk</strong><span>Cashier · richard.erdos.chalk@gmail.se</span></div>
+                            <div class="menu-nav">
+                                    <a href="overview.html">Overview</a>
+                                    <a href="customers.html">Customers</a>
+                                    <a href="accounts.html">Accounts</a>
+                            </div>
+                            <a href="profile.html">Profile and security</a>
+                            <form method="post" data-preview-next="./">
+                                <button type="submit" class="destructive">Log out</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+        </div>
+        <div class="band-trim"><canvas class="guilloche" data-guilloche="band" style="color: var(--note)" aria-hidden="true" width="1280" height="7"></canvas></div>
+    </header>
+
+    <main role="main">
+            <div class="wrap page ">
+                
+<ol class="crumbs"><li><a href="overview.html">Overview</a></li><li>Accounts</li></ol>
+<div class="page-title">
+    <div>
+        <h1>Accounts</h1>
+        <p class="lede">An account number opens its ledger. "Monthly" or "Weekly" lists accounts with that statement cycle.</p>
+    </div>
+</div>
+
+<section class="panel">
+    <div class="panel-head">
+        <form method="get" class="toolbar w-100" role="search" data-preview-next="accounts.html">
+            <label class="field-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input name="searchText" placeholder="Account number or statement cycle" aria-label="Search accounts" autocomplete="off"></label>
+            <button class="btn btn-primary" type="submit">Search</button>
+            <span class="count num">1–50 of 98</span>
+        </form>
+    </div>
+
+        <div class="table-wrap">
+            <table class="data">
+                <thead>
+                    <tr>
+                            <th scope="col" class=""><a href="accounts.html">Account </a></th>
+                            <th scope="col" class="hide-sm"><a href="accounts.html">Statements </a></th>
+                            <th scope="col" class="hide-sm"><a href="accounts.html">Opened </a></th>
+                            <th scope="col" class="num"><a href="accounts.html">Balance </a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1204587.html">№ 1&nbsp;204&nbsp;587</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-09-18</td>
+                            <td class="num">107&nbsp;685,16&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1204603.html">№ 1&nbsp;204&nbsp;603</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-07-30</td>
+                            <td class="num">34&nbsp;069,34&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1204619.html">№ 1&nbsp;204&nbsp;619</a></td>
+                            <td class="hide-sm muted">Weekly</td>
+                            <td class="hide-sm mono muted">2025-06-10</td>
+                            <td class="num">14&nbsp;103,03&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1204635.html">№ 1&nbsp;204&nbsp;635</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-09-05</td>
+                            <td class="num">55&nbsp;972,96&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1205612.html">№ 1&nbsp;205&nbsp;612</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-07-17</td>
+                            <td class="num">59&nbsp;406,07&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1206589.html">№ 1&nbsp;206&nbsp;589</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-08-23</td>
+                            <td class="num">56&nbsp;470,14&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1207566.html">№ 1&nbsp;207&nbsp;566</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-08-10</td>
+                            <td class="num">86&nbsp;400,95&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1208543.html">№ 1&nbsp;208&nbsp;543</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-06-21</td>
+                            <td class="num">44&nbsp;728,33&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1209520.html">№ 1&nbsp;209&nbsp;520</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-07-28</td>
+                            <td class="num">103&nbsp;214,72&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1210497.html">№ 1&nbsp;210&nbsp;497</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-07-15</td>
+                            <td class="num">39&nbsp;287,06&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1211474.html">№ 1&nbsp;211&nbsp;474</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-05-26</td>
+                            <td class="num">19&nbsp;476,16&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1212451.html">№ 1&nbsp;212&nbsp;451</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-07-02</td>
+                            <td class="num">49&nbsp;894,37&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1213428.html">№ 1&nbsp;213&nbsp;428</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-06-19</td>
+                            <td class="num">18&nbsp;930,65&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1214405.html">№ 1&nbsp;214&nbsp;405</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-04-30</td>
+                            <td class="num">41&nbsp;490,43&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1215382.html">№ 1&nbsp;215&nbsp;382</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-06-06</td>
+                            <td class="num">38&nbsp;175,07&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1216359.html">№ 1&nbsp;216&nbsp;359</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-05-24</td>
+                            <td class="num">46&nbsp;884,15&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1217336.html">№ 1&nbsp;217&nbsp;336</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-04-04</td>
+                            <td class="num">10&nbsp;390,87&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1218313.html">№ 1&nbsp;218&nbsp;313</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-05-11</td>
+                            <td class="num">90&nbsp;996,73&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1219290.html">№ 1&nbsp;219&nbsp;290</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-04-28</td>
+                            <td class="num">60&nbsp;734,11&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1220267.html">№ 1&nbsp;220&nbsp;267</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-03-09</td>
+                            <td class="num">81&nbsp;862,52&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1221244.html">№ 1&nbsp;221&nbsp;244</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-04-15</td>
+                            <td class="num">90&nbsp;053,36&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1222221.html">№ 1&nbsp;222&nbsp;221</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-04-02</td>
+                            <td class="num">17&nbsp;795,32&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1223198.html">№ 1&nbsp;223&nbsp;198</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-02-11</td>
+                            <td class="num">63&nbsp;747,28&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1224175.html">№ 1&nbsp;224&nbsp;175</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-03-20</td>
+                            <td class="num">62&nbsp;177,41&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1225152.html">№ 1&nbsp;225&nbsp;152</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-03-07</td>
+                            <td class="num">45&nbsp;960,40&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1226129.html">№ 1&nbsp;226&nbsp;129</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-01-16</td>
+                            <td class="num">65&nbsp;153,78&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1227106.html">№ 1&nbsp;227&nbsp;106</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-02-22</td>
+                            <td class="num">21&nbsp;668,49&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1228083.html">№ 1&nbsp;228&nbsp;083</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-02-09</td>
+                            <td class="num">16&nbsp;147,57&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1229060.html">№ 1&nbsp;229&nbsp;060</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-12-21</td>
+                            <td class="num">29&nbsp;627,63&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1230037.html">№ 1&nbsp;230&nbsp;037</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-01-27</td>
+                            <td class="num">5&nbsp;051,91&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1231014.html">№ 1&nbsp;231&nbsp;014</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-01-14</td>
+                            <td class="num">49&nbsp;944,19&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1231991.html">№ 1&nbsp;231&nbsp;991</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-11-25</td>
+                            <td class="num">22&nbsp;618,95&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1232968.html">№ 1&nbsp;232&nbsp;968</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2025-01-01</td>
+                            <td class="num">46&nbsp;591,25&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1233945.html">№ 1&nbsp;233&nbsp;945</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-12-19</td>
+                            <td class="num">31&nbsp;090,73&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1234922.html">№ 1&nbsp;234&nbsp;922</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-10-30</td>
+                            <td class="num">55&nbsp;764,23&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1235899.html">№ 1&nbsp;235&nbsp;899</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-12-06</td>
+                            <td class="num">89&nbsp;454,84&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1236876.html">№ 1&nbsp;236&nbsp;876</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-11-23</td>
+                            <td class="num">37&nbsp;638,45&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1237853.html">№ 1&nbsp;237&nbsp;853</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-10-04</td>
+                            <td class="num">45&nbsp;572,55&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1238830.html">№ 1&nbsp;238&nbsp;830</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-11-10</td>
+                            <td class="num">26&nbsp;450,01&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1239807.html">№ 1&nbsp;239&nbsp;807</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-10-28</td>
+                            <td class="num">43&nbsp;784,34&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1240784.html">№ 1&nbsp;240&nbsp;784</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-09-08</td>
+                            <td class="num">80&nbsp;597,10&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1241761.html">№ 1&nbsp;241&nbsp;761</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-10-15</td>
+                            <td class="num">28&nbsp;919,72&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1242738.html">№ 1&nbsp;242&nbsp;738</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-10-02</td>
+                            <td class="num">42&nbsp;212,96&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1243715.html">№ 1&nbsp;243&nbsp;715</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-08-13</td>
+                            <td class="num">23&nbsp;422,22&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1244692.html">№ 1&nbsp;244&nbsp;692</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-09-19</td>
+                            <td class="num">55&nbsp;440,43&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1245669.html">№ 1&nbsp;245&nbsp;669</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-09-06</td>
+                            <td class="num">40&nbsp;715,79&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1246646.html">№ 1&nbsp;246&nbsp;646</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-07-18</td>
+                            <td class="num">45&nbsp;903,87&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1247623.html">№ 1&nbsp;247&nbsp;623</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-08-24</td>
+                            <td class="num">46&nbsp;530,80&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1248600.html">№ 1&nbsp;248&nbsp;600</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-08-11</td>
+                            <td class="num">22&nbsp;187,45&nbsp;kr</td>
+                        </tr>
+                        <tr>
+                            <td class="primary-cell"><a class="serial" href="tx-1249577.html">№ 1&nbsp;249&nbsp;577</a></td>
+                            <td class="hide-sm muted">Monthly</td>
+                            <td class="hide-sm mono muted">2024-06-22</td>
+                            <td class="num">63&nbsp;250,15&nbsp;kr</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+            <nav class="pager" aria-label="Pages">
+                <span>Page 1 of 2</span>
+                <div class="pages">
+                        <a aria-current="page" href="accounts.html">1</a>
+                        <a href="accounts-2.html">2</a>
+                        <a aria-label="Next page" href="accounts-2.html">›</a>
+                </div>
+            </nav>
+</section>
+
+            </div>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap">
+            <span>© 2026 ManDem Bank · Internal banking system · Preview with sample customers</span>
+            <nav aria-label="Footer">
+                <a href="privacy.html">Privacy</a>
+            </nav>
+            <div class="microtext" aria-hidden="true">MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·</div>
+        </div>
+    </footer>
+
+    
+    <script src="site.js"></script>
+    <script src="guilloche.js"></script>
+
+    
+
+
+<script>
+// Preview only: nothing is sent anywhere. Forms open the page the real app would show next.
+document.addEventListener("submit", function (e) {
+  e.preventDefault();
+  var next = e.target.getAttribute("data-preview-next");
+  if (next) location.href = next;
+}, true);
+</script>
+</body></html>

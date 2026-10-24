@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#13221b">
+    <title>Customers · ManDem Bank</title>
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem("theme");
+                if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+            } catch (e) { }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;display=swap">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="site.css">
+</head>
+<body data-note="green">
+    <header class="band">
+        <div class="wrap">
+            <a class="logo" aria-label="ManDem Bank, overview" href="overview.html">
+                <canvas class="guilloche rosette" data-guilloche="rosette" style="color: var(--band-ink)" aria-hidden="true" width="34" height="34"></canvas>
+                <span class="names"><strong>ManDem Bank</strong><small>Teller desk</small></span>
+            </a>
+
+                <ul class="mainnav" aria-label="Main">
+                        <li><a style="--c: var(--note-blue)" href="overview.html"><span class="dot" aria-hidden="true"></span>Overview</a></li>
+                        <li><a aria-current="page" style="--c: var(--note-green)" href="customers.html"><span class="dot" aria-hidden="true"></span>Customers</a></li>
+                        <li><a style="--c: var(--note-red)" href="accounts.html"><span class="dot" aria-hidden="true"></span>Accounts</a></li>
+                </ul>
+                    <form class="cmdsearch" role="search" method="get" data-preview-next="customers.html">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+                        <input name="searchText" id="global-search" placeholder="Find a customer" aria-label="Find a customer by name, city or customer number" autocomplete="off">
+                        <kbd aria-hidden="true">/</kbd>
+                    </form>
+                <div class="end">
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle="">
+                        <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg><svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+                    </button>
+                    <details class="usermenu">
+                        <summary aria-label="Account menu">
+                            <span class="avatar">RC</span>
+                            <span class="who"><strong>Richard Erdos Chalk</strong><span>Cashier</span></span>
+                        </summary>
+                        <div class="menu">
+                            <div class="menu-head"><strong>Richard Erdos Chalk</strong><span>Cashier · richard.erdos.chalk@gmail.se</span></div>
+                            <div class="menu-nav">
+                                    <a href="overview.html">Overview</a>
+                                    <a href="customers.html">Customers</a>
+                                    <a href="accounts.html">Accounts</a>
+                            </div>
+                            <a href="profile.html">Profile and security</a>
+                            <form method="post" data-preview-next="./">
+                                <button type="submit" class="destructive">Log out</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+        </div>
+        <div class="band-trim"><canvas class="guilloche" data-guilloche="band" style="color: var(--note)" aria-hidden="true" width="1280" height="7"></canvas></div>
+    </header>
+
+    <main role="main">
+            <div class="wrap page ">
+                
+<ol class="crumbs"><li><a href="overview.html">Overview</a></li><li>Customers</li></ol>
+<div class="page-title">
+    <div>
+        <h1>Customers</h1>
+        <p class="lede">Search by first name, surname and city, for example <em>anna uppsala</em>. A customer number opens the customer.</p>
+    </div>
+</div>
+
+<section class="panel">
+    <div class="panel-head">
+        <form method="get" class="toolbar w-100" role="search" data-preview-next="customers.html">
+            <label class="field-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input name="searchText" placeholder="Name, city or customer number" aria-label="Search customers" autocomplete="off"></label>
+            <button class="btn btn-primary" type="submit">Search</button>
+            <span class="count num">51–64 of 64</span>
+        </form>
+    </div>
+
+        <div class="table-wrap">
+            <table class="data">
+                <thead>
+                    <tr>
+                            <th scope="col" class="num">
+                                <a href="customers.html">No. </a>
+                            </th>
+                            <th scope="col" class="hide-sm">
+                                <a href="customers.html">Personal ID </a>
+                            </th>
+                            <th scope="col" class="">
+                                <a href="customers.html">Name </a>
+                            </th>
+                            <th scope="col" class="hide-sm">
+                                <a href="customers.html">Address </a>
+                            </th>
+                            <th scope="col" class="">
+                                <a href="customers.html">City </a>
+                            </th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td class="num"><span class="serial">51</span></td>
+                            <td class="hide-sm mono">19500323-2850</td>
+                            <td class="primary-cell"><a href="card-51.html">Lena Eriksson</a></td>
+                            <td class="hide-sm muted">Drottninggatan 11</td>
+                            <td>Oslo</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">52</span></td>
+                            <td class="hide-sm mono">19510424-2887</td>
+                            <td class="primary-cell"><a href="card-52.html">Nils Jonsson</a></td>
+                            <td class="hide-sm muted">Vasagatan 12</td>
+                            <td>København</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">53</span></td>
+                            <td class="hide-sm mono">19520525-2924</td>
+                            <td class="primary-cell"><a href="card-53.html">Ingrid Nilsson</a></td>
+                            <td class="hide-sm muted">Ågatan 13</td>
+                            <td>Göteborg</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">54</span></td>
+                            <td class="hide-sm mono">19530626-2961</td>
+                            <td class="primary-cell"><a href="card-54.html">Oskar Pettersson</a></td>
+                            <td class="hide-sm muted">Skolgatan 14</td>
+                            <td>Helsinki</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">55</span></td>
+                            <td class="hide-sm mono">19540727-2998</td>
+                            <td class="primary-cell"><a href="card-55.html">Elin Karlsson</a></td>
+                            <td class="hide-sm muted">Storgatan 15</td>
+                            <td>Bergen</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">56</span></td>
+                            <td class="hide-sm mono">19550828-3035</td>
+                            <td class="primary-cell"><a href="card-56.html">Gustav Gustafsson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 16</td>
+                            <td>Aarhus</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">57</span></td>
+                            <td class="hide-sm mono">19560901-3072</td>
+                            <td class="primary-cell"><a href="card-57.html">Maja Johansson</a></td>
+                            <td class="hide-sm muted">Drottninggatan 17</td>
+                            <td>Uppsala</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">58</span></td>
+                            <td class="hide-sm mono">19571002-3109</td>
+                            <td class="primary-cell"><a href="card-58.html">Axel Svensson</a></td>
+                            <td class="hide-sm muted">Vasagatan 18</td>
+                            <td>Stockholm</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">59</span></td>
+                            <td class="hide-sm mono">19581103-3146</td>
+                            <td class="primary-cell"><a href="card-59.html">Linnea Andersson</a></td>
+                            <td class="hide-sm muted">Ågatan 19</td>
+                            <td>Oslo</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">60</span></td>
+                            <td class="hide-sm mono">19591204-3183</td>
+                            <td class="primary-cell"><a href="card-60.html">Henrik Persson</a></td>
+                            <td class="hide-sm muted">Skolgatan 20</td>
+                            <td>København</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">61</span></td>
+                            <td class="hide-sm mono">19600105-3220</td>
+                            <td class="primary-cell"><a href="card-61.html">Anna Lindqvist</a></td>
+                            <td class="hide-sm muted">Storgatan 21</td>
+                            <td>Göteborg</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">62</span></td>
+                            <td class="hide-sm mono">19610206-3257</td>
+                            <td class="primary-cell"><a href="card-62.html">Erik Olsson</a></td>
+                            <td class="hide-sm muted">Kungsgatan 22</td>
+                            <td>Helsinki</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">63</span></td>
+                            <td class="hide-sm mono">19620307-3294</td>
+                            <td class="primary-cell"><a href="card-63.html">Maria Ek</a></td>
+                            <td class="hide-sm muted">Drottninggatan 23</td>
+                            <td>Bergen</td>
+                        </tr>
+                        <tr>
+                            <td class="num"><span class="serial">64</span></td>
+                            <td class="hide-sm mono">19630408-3331</td>
+                            <td class="primary-cell"><a href="card-64.html">Lars Larsson</a></td>
+                            <td class="hide-sm muted">Vasagatan 24</td>
+                            <td>Aarhus</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+            <nav class="pager" aria-label="Pages">
+                <span>Page 2 of 2</span>
+                <div class="pages">
+                        <a aria-label="Previous page" href="customers.html">‹</a>
+                        <a href="customers.html">1</a>
+                        <a aria-current="page" href="customers-2.html">2</a>
+                </div>
+            </nav>
+</section>
+
+            </div>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap">
+            <span>© 2026 ManDem Bank · Internal banking system · Preview with sample customers</span>
+            <nav aria-label="Footer">
+                <a href="privacy.html">Privacy</a>
+            </nav>
+            <div class="microtext" aria-hidden="true">MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·</div>
+        </div>
+    </footer>
+
+    
+    <script src="site.js"></script>
+    <script src="guilloche.js"></script>
+
+    
+
+
+<script>
+// Preview only: nothing is sent anywhere. Forms open the page the real app would show next.
+document.addEventListener("submit", function (e) {
+  e.preventDefault();
+  var next = e.target.getAttribute("data-preview-next");
+  if (next) location.href = next;
+}, true);
+</script>
+</body></html>

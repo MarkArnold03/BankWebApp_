@@ -1,0 +1,318 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#13221b">
+    <title>Account 1&nbsp;234&nbsp;922 · ManDem Bank</title>
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem("theme");
+                if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+            } catch (e) { }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;display=swap">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="site.css">
+</head>
+<body data-note="red">
+    <header class="band">
+        <div class="wrap">
+            <a class="logo" aria-label="ManDem Bank, overview" href="overview.html">
+                <canvas class="guilloche rosette" data-guilloche="rosette" style="color: var(--band-ink)" aria-hidden="true" width="34" height="34"></canvas>
+                <span class="names"><strong>ManDem Bank</strong><small>Teller desk</small></span>
+            </a>
+
+                <ul class="mainnav" aria-label="Main">
+                        <li><a style="--c: var(--note-blue)" href="overview.html"><span class="dot" aria-hidden="true"></span>Overview</a></li>
+                        <li><a style="--c: var(--note-green)" href="customers.html"><span class="dot" aria-hidden="true"></span>Customers</a></li>
+                        <li><a aria-current="page" style="--c: var(--note-red)" href="accounts.html"><span class="dot" aria-hidden="true"></span>Accounts</a></li>
+                </ul>
+                    <form class="cmdsearch" role="search" method="get" data-preview-next="customers.html">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+                        <input name="searchText" id="global-search" placeholder="Find a customer" aria-label="Find a customer by name, city or customer number" autocomplete="off">
+                        <kbd aria-hidden="true">/</kbd>
+                    </form>
+                <div class="end">
+                    <button class="icon-btn" type="button" aria-label="Switch between light and dark appearance" data-theme-toggle="">
+                        <svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg><svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+                    </button>
+                    <details class="usermenu">
+                        <summary aria-label="Account menu">
+                            <span class="avatar">RC</span>
+                            <span class="who"><strong>Richard Erdos Chalk</strong><span>Cashier</span></span>
+                        </summary>
+                        <div class="menu">
+                            <div class="menu-head"><strong>Richard Erdos Chalk</strong><span>Cashier · richard.erdos.chalk@gmail.se</span></div>
+                            <div class="menu-nav">
+                                    <a href="overview.html">Overview</a>
+                                    <a href="customers.html">Customers</a>
+                                    <a href="accounts.html">Accounts</a>
+                            </div>
+                            <a href="profile.html">Profile and security</a>
+                            <form method="post" data-preview-next="./">
+                                <button type="submit" class="destructive">Log out</button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+        </div>
+        <div class="band-trim"><canvas class="guilloche" data-guilloche="band" style="color: var(--note)" aria-hidden="true" width="1280" height="7"></canvas></div>
+    </header>
+
+    <main role="main">
+            <div class="wrap page ">
+                
+<ol class="crumbs">
+    <li><a href="overview.html">Overview</a></li>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="card-22.html">Customer № 22</a></li>
+    <li>Account № 1&nbsp;234&nbsp;922</li>
+</ol>
+
+<section class="panel account-head mb-4" aria-label="Account">
+    <div>
+        <div class="micro">Account · monthly statement · opened 30 Oct 2024</div>
+        <h1>№ 1&nbsp;234&nbsp;922</h1>
+    </div>
+    <dl class="balance-figure m-0">
+        <dt>Balance</dt>
+        <dd>55&nbsp;764,23<small>SEK</small></dd>
+    </dl>
+</section>
+
+
+<div class="grid-account">
+    <section class="panel" aria-labelledby="tx-title">
+        <div class="panel-head"><h2 id="tx-title">Ledger</h2><span class="micro">Newest first</span></div>
+            <div class="table-wrap">
+                <table class="data ledger">
+                    <thead><tr><th scope="col">Date</th><th scope="col">Transaction</th><th scope="col" class="num">Amount</th><th scope="col" class="num hide-sm">Balance</th></tr></thead>
+                    <tbody id="transactions">
+                            <tr data-transaction="406">
+        <td class="when">2026-10-22</td>
+        <td class="what"><strong>Household</strong><span class="sub">Remittance to Another Bank · AB · Acct 42376790</span></td>
+        <td class="amount ">−6&nbsp;480,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">55&nbsp;764,23&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="405">
+        <td class="when">2026-10-19</td>
+        <td class="what"><strong>Withdrawal in Cash</strong></td>
+        <td class="amount ">−1&nbsp;000,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">62&nbsp;244,23&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="404">
+        <td class="when">2026-10-16</td>
+        <td class="what"><strong>Pension</strong><span class="sub">Collection from Another Bank · ST · Acct 41219087</span></td>
+        <td class="amount in">+14&nbsp;250,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">63&nbsp;244,23&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="403">
+        <td class="when">2026-10-13</td>
+        <td class="what"><strong>Interest Credited</strong><span class="sub">Credit</span></td>
+        <td class="amount in">+24,48&nbsp;kr</td>
+        <td class="amount hide-sm muted">48&nbsp;994,23&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="402">
+        <td class="when">2026-10-10</td>
+        <td class="what"><strong>Withdrawal in Cash</strong></td>
+        <td class="amount ">−1&nbsp;000,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">48&nbsp;969,75&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="401">
+        <td class="when">2026-10-07</td>
+        <td class="what"><strong>Household</strong><span class="sub">Remittance to Another Bank · AB · Acct 40572754</span></td>
+        <td class="amount ">−6&nbsp;480,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">49&nbsp;969,75&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="400">
+        <td class="when">2026-10-04</td>
+        <td class="what"><strong>Insurrance</strong><span class="sub">Remittance to Another Bank · UV · Acct 45781587</span></td>
+        <td class="amount ">−845,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">56&nbsp;449,75&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="399">
+        <td class="when">2026-10-01</td>
+        <td class="what"><strong>Pension</strong><span class="sub">Collection from Another Bank · ST · Acct 49563605</span></td>
+        <td class="amount in">+14&nbsp;250,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">57&nbsp;294,75&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="398">
+        <td class="when">2026-09-28</td>
+        <td class="what"><strong>Household</strong><span class="sub">Remittance to Another Bank · AB · Acct 48309263</span></td>
+        <td class="amount ">−6&nbsp;480,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">43&nbsp;044,75&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="397">
+        <td class="when">2026-09-25</td>
+        <td class="what"><strong>Interest Credited</strong><span class="sub">Credit</span></td>
+        <td class="amount in">+24,75&nbsp;kr</td>
+        <td class="amount hide-sm muted">49&nbsp;524,75&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="396">
+        <td class="when">2026-09-22</td>
+        <td class="what"><strong>Withdrawal in Cash</strong></td>
+        <td class="amount ">−1&nbsp;000,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">49&nbsp;500,00&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="395">
+        <td class="when">2026-09-19</td>
+        <td class="what"><strong>Withdrawal in Cash</strong></td>
+        <td class="amount ">−500,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">50&nbsp;500,00&nbsp;kr</td>
+    </tr>
+    <tr data-transaction="394">
+        <td class="when">2026-09-15</td>
+        <td class="what"><strong>Credit in Cash</strong></td>
+        <td class="amount in">+51&nbsp;000,00&nbsp;kr</td>
+        <td class="amount hide-sm muted">51&nbsp;000,00&nbsp;kr</td>
+    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <p class="field-error text-center pb-3" id="load-error" role="alert" hidden="">Couldn't load more transactions. Try again.</p>
+    </section>
+
+    <section class="panel teller" id="teller" aria-label="Book a transaction" data-balance="55764.23">
+    <input type="radio" name="teller-tab" id="t-deposit" checked="">
+    <input type="radio" name="teller-tab" id="t-withdraw">
+    <input type="radio" name="teller-tab" id="t-transfer">
+    <div class="tabs" role="presentation">
+        <label for="t-deposit"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg> Deposit</label>
+        <label for="t-withdraw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path><path d="M4 20h16"></path></svg> Withdraw</label>
+        <label for="t-transfer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 3 8l4 4"></path><path d="M3 8h14"></path><path d="m17 12 4 4-4 4"></path><path d="M21 16H7"></path></svg> Transfer</label>
+    </div>
+
+    <form class="pane pane-deposit" method="post" novalidate="" data-preview-next="tx-1234922.html">
+        <div class="form-row">
+            <label for="d-amount">Cash paid in</label>
+            <div class="money-input"><input id="d-amount" name="Amount" inputmode="decimal" placeholder="0" autocomplete="off" data-sign="1"><span>SEK</span></div>
+            <span class="field-error"></span>
+        </div>
+        <p class="after">Balance after <b data-after="">55&nbsp;764,23 kr</b></p>
+        <button type="submit" class="btn btn-note btn-lg w-100" id="submit-deposit">Book deposit</button>
+        <p class="hint mt-2">Between 100 and 10 000 kr, at most two decimals.</p>
+    </form>
+
+    <form class="pane pane-withdraw" method="post" novalidate="" data-preview-next="tx-1234922.html">
+        <div class="form-row">
+            <label for="w-amount">Cash paid out</label>
+            <div class="money-input"><input id="w-amount" name="Amount" inputmode="decimal" placeholder="0" autocomplete="off" data-sign="-1"><span>SEK</span></div>
+            <span class="field-error"></span>
+        </div>
+        <p class="after">Balance after <b data-after="">55&nbsp;764,23 kr</b></p>
+        <button type="submit" class="btn btn-note btn-lg w-100" id="submit-withdraw">Book withdrawal</button>
+        <p class="hint mt-2">Between 100 and 10 000 kr. Never more than the balance.</p>
+    </form>
+
+    <form class="pane pane-transfer" method="post" novalidate="" data-preview-next="tx-1234922.html">
+        <div class="form-row">
+            <label for="t-amount">Amount to transfer</label>
+            <div class="money-input"><input id="t-amount" name="Amount" inputmode="decimal" placeholder="0" autocomplete="off" data-sign="-1"><span>SEK</span></div>
+            <span class="field-error"></span>
+        </div>
+        <div class="form-row">
+            <label for="t-to">To account number</label>
+            <input class="text-input" id="t-to" name="AccountToId" inputmode="numeric" placeholder="e.g. 1204603" autocomplete="off">
+            <span class="field-error"></span>
+        </div>
+        <p class="after">Balance after <b data-after="">55&nbsp;764,23 kr</b></p>
+        <button type="submit" class="btn btn-note btn-lg w-100" id="submit-transfer">Book transfer</button>
+        <p class="hint mt-2">Between 100 and 10 000 kr to another account at the bank.</p>
+    </form>
+</section>
+<script>
+    // Show the balance the account will have once the amount is booked.
+    (function () {
+        var panel = document.getElementById("teller");
+        if (!panel) return;
+        var balance = parseFloat(panel.getAttribute("data-balance"));
+        var fmt = new Intl.NumberFormat("sv-SE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        panel.querySelectorAll("input[data-sign]").forEach(function (input) {
+            var out = input.closest("form").querySelector("[data-after]");
+            function update() {
+                var v = parseFloat(input.value.replace(/\s/g, "").replace(",", "."));
+                var after = balance + (isNaN(v) ? 0 : v * parseInt(input.getAttribute("data-sign"), 10));
+                out.textContent = (after < 0 ? "−" : "") + fmt.format(Math.abs(after)) + " kr";
+                out.classList.toggle("neg", after < 0);
+            }
+            input.addEventListener("input", update);
+            update();
+        });
+    })();
+</script>
+
+</div>
+
+
+            </div>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap">
+            <span>© 2026 ManDem Bank · Internal banking system · Preview with sample customers</span>
+            <nav aria-label="Footer">
+                <a href="privacy.html">Privacy</a>
+            </nav>
+            <div class="microtext" aria-hidden="true">MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·MANDEMBANK·</div>
+        </div>
+    </footer>
+
+    
+    <script src="site.js"></script>
+    <script src="guilloche.js"></script>
+
+    
+    <script>
+        (function () {
+            var button = document.getElementById("load-more");
+            if (!button) return;
+            var list = document.getElementById("transactions");
+            var error = document.getElementById("load-error");
+
+            button.addEventListener("click", function () {
+                var skip = parseInt(button.getAttribute("data-skip"), 10);
+                button.disabled = true;
+                button.textContent = "Loading…";
+                error.hidden = true;
+
+                fetch(button.getAttribute("data-url") + skip + ".html")
+                    .then(function (r) {
+                        if (!r.ok) throw new Error(r.status);
+                        var more = r.headers.get("X-Has-More") === "true";
+                        return r.text().then(function (html) { return { html: html, more: (html.match(/data-transaction=/g) || []).length === 20 }; });
+                    })
+                    .then(function (result) {
+                        var before = list.children.length;
+                        list.insertAdjacentHTML("beforeend", result.html);
+                        button.setAttribute("data-skip", skip + (list.children.length - before));
+                        if (result.more) {
+                            button.disabled = false;
+                            button.textContent = "Load 20 more";
+                        } else {
+                            button.parentElement.remove();
+                        }
+                    })
+                    .catch(function () {
+                        error.hidden = false;
+                        button.disabled = false;
+                        button.textContent = "Load 20 more";
+                    });
+            });
+        })();
+    </script>
+
+
+
+<script>
+// Preview only: nothing is sent anywhere. Forms open the page the real app would show next.
+document.addEventListener("submit", function (e) {
+  e.preventDefault();
+  var next = e.target.getAttribute("data-preview-next");
+  if (next) location.href = next;
+}, true);
+</script>
+</body></html>
